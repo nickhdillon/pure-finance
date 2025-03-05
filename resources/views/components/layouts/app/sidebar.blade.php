@@ -93,7 +93,14 @@
         <flux:spacer />
 
         <flux:dropdown position="top" align="end">
-            <flux:profile :initials="auth()->user()->initials()" icon-trailing="chevron-down" />
+            @if (auth()->user()->avatar)
+                <flux:profile :initials="auth()->user()->initials()"
+                    :avatar="Storage::disk('s3')->url('avatars/' . auth()->user()->avatar)"
+                    icon-trailing="chevrons-up-down" />
+            @else
+                <flux:profile :initials="auth()->user()->initials()"
+                    icon-trailing="chevrons-up-down" />
+            @endif
 
             <flux:menu>
                 <flux:menu.radio.group>
@@ -102,7 +109,12 @@
                             <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
                                 <span
                                     class="flex h-full w-full items-center justify-center rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
-                                    {{ auth()->user()->initials() }}
+                                    @if (auth()->user()->avatar)
+                                        <img
+                                            src="{{ Storage::disk('s3')->url('avatars/' . auth()->user()->avatar) }}" />
+                                    @else
+                                        <p>{{ auth()->user()->initials() }}</p>
+                                    @endif
                                 </span>
                             </span>
 
