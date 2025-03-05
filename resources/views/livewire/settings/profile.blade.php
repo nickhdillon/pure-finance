@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\User;
-use Livewire\Attributes\On;
 use Livewire\Volt\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Validation\Rule;
@@ -38,7 +37,6 @@ new class extends Component {
         ];
     }
 
-    #[On('avatar-removed')]
     public function mount(): void
     {
         $user = Auth::user();
@@ -67,7 +65,7 @@ new class extends Component {
             ->user()
             ->update(['avatar' => $filename]);
 
-        $this->avatar = $this->getAvatarUrl($filename);
+        $this->redirectRoute('settings.profile', navigate: true);
     }
 
     public function removeAvatar(): void
@@ -80,7 +78,7 @@ new class extends Component {
 
         $user->update(['avatar' => null]);
 
-        $this->dispatch('avatar-removed');
+        $this->redirectRoute('settings.profile', navigate: true);
     }
 
     public function updateProfileInformation(): void
