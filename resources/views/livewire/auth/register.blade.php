@@ -50,8 +50,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
             required
             autofocus
             autocomplete="name"
-            placeholder="Full name"
-        />
+            placeholder="Full name" />
 
         <!-- Email Address -->
         <flux:input
@@ -60,8 +59,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
             type="email"
             required
             autocomplete="email"
-            placeholder="email@example.com"
-        />
+            placeholder="email@example.com" />
 
         <!-- Password -->
         <flux:input
@@ -71,7 +69,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
             required
             autocomplete="new-password"
             placeholder="Password"
-        />
+            viewable />
 
         <!-- Confirm Password -->
         <flux:input
@@ -81,7 +79,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
             required
             autocomplete="new-password"
             placeholder="Confirm password"
-        />
+            viewable />
 
         <div class="flex items-center justify-end">
             <flux:button type="submit" variant="primary" class="w-full">
