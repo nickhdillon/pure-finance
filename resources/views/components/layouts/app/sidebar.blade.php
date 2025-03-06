@@ -15,7 +15,7 @@
 
         <flux:navlist variant="outline">
             <flux:navlist.group class="grid">
-                <flux:navlist.item icon="home" :href="route('dashboard')"
+                <flux:navlist.item icon="layout-dashboard" :href="route('dashboard')"
                     :current="request()->routeIs('dashboard')" wire:navigate>
                     {{ __('Dashboard') }}
                 </flux:navlist.item>
@@ -23,6 +23,12 @@
         </flux:navlist>
 
         <flux:spacer />
+
+        <flux:navlist variant="outline">
+                <flux:navlist.item icon="folder-git-2" href="https://github.com/nickhdillon/pure-finance" target="_blank">
+                {{ __('Repository') }}
+                </flux:navlist.item>
+            </flux:navlist>
 
         <!-- Desktop User Menu -->
         <flux:dropdown position="bottom" align="start">
@@ -128,6 +134,14 @@
 
                 <flux:menu.separator />
 
+                <flux:radio.group x-data variant="segmented" size="sm" x-model="$flux.appearance">
+                    <flux:radio value="light" icon="sun" />
+                    <flux:radio value="dark" icon="moon" />
+                    <flux:radio value="system" icon="computer-desktop" />
+                </flux:radio.group>
+
+                <flux:menu.separator />
+
                 <flux:menu.radio.group>
                     <flux:menu.item href="/settings/profile" icon="cog" wire:navigate>Settings</flux:menu.item>
                 </flux:menu.radio.group>
@@ -146,6 +160,10 @@
 
     {{ $slot }}
 
+    @persist('toast')
+        <flux:toast />
+    @endpersist
+    
     @fluxScripts
 </body>
 

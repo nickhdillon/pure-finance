@@ -110,36 +110,36 @@ new class extends Component {
                     <label for="avatar"
                         class="relative @if ($avatar) cursor-normal! @else cursor-pointer @endif">
                         @if (!$avatar)
-                            <flux:input type="file" wire:model="avatar" class="hidden" id="avatar" />
+                        <flux:input type="file" wire:model="avatar" class="hidden" id="avatar" />
                         @endif
 
                         @if ($avatar)
-                            <img src="{{ $avatar }}" alt="Avatar" class="rounded-full size-24 mt-2" />
+                        <img src="{{ $avatar }}" alt="Avatar" class="rounded-full size-24 mt-2" id="avatar" />
                         @else
-                            <div
-                                class="flex items-center justify-center bg-zinc-100 hover:bg-zinc-200 duration-200 ease-in-out rounded-full border dark:bg-zinc-700 dark:hover:bg-zinc-800 size-24 mt-2">
-                                <svg wire:loading.remove wire:target="avatar" xmlns="http://www.w3.org/2000/svg"
-                                    fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                    class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
-                                </svg>
+                        <div
+                            class="flex items-center justify-center bg-zinc-100 hover:bg-zinc-200 duration-200 ease-in-out rounded-full border dark:bg-zinc-700 dark:hover:bg-zinc-800 size-24 mt-2">
+                            <svg wire:loading.remove wire:target="avatar" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
+                            </svg>
 
-                                <flux:icon.loading wire:loading wire:target="avatar" />
-                            </div>
+                            <flux:icon.loading wire:loading wire:target="avatar" />
+                        </div>
                         @endif
                     </label>
 
                     @if ($avatar)
-                        <div class="items-center space-y-2">
-                            <p>{{ Str::afterLast($avatar, '/') }}</p>
+                    <div class="items-center space-y-2">
+                        <p>{{ Str::afterLast($avatar, '/') }}</p>
 
-                            <flux:button variant="outline" type="button" wire:click="removeAvatar" size="sm">
-                                Remove
-                            </flux:button>
-                        </div>
+                        <flux:button variant="outline" type="button" wire:click="removeAvatar" size="sm">
+                            Remove
+                        </flux:button>
+                    </div>
                     @endif
                 </div>
             </div>
