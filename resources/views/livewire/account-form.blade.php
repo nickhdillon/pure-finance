@@ -2,7 +2,7 @@
 
 <div>
     <flux:modal.trigger name="{{ $account ? ('edit-account' . $account->id) : 'add-account' }}">
-        <flux:button icon="plus" variant="primary" size="sm">
+        <flux:button icon="plus" variant="primary" size="sm" class="h-7!">
             Add
         </flux:button>
     </flux:modal.trigger>
