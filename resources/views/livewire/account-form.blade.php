@@ -7,7 +7,7 @@
         </flux:button>
     </flux:modal.trigger>
 
-    <flux:modal name="{{ $account ? ('edit-account' . $account->id) : 'add-account' }}" class="w-85 sm:w-full">
+    <flux:modal name="{{ $account ? ('edit-account' . $account->id) : 'add-account' }}">
         <form wire:submit='submit' class="space-y-6">
             <flux:heading class="font-semibold text-xl -mt-1.5!">
                 Create Account
