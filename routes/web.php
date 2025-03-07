@@ -1,12 +1,15 @@
 <?php
 
 use Livewire\Volt\Volt;
+use App\Livewire\CategoryTable;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    Route::get('categories', CategoryTable::class)->name('categories');
 
     # ----- Settings -----
     Route::prefix('settings')->group(function () {

@@ -19,6 +19,11 @@
                     :current="request()->routeIs('dashboard')" wire:navigate>
                     {{ __('Dashboard') }}
                 </flux:navlist.item>
+
+                <flux:navlist.item icon="queue-list" :href="route('categories')"
+                    :current="request()->routeIs('categories')" wire:navigate>
+                    {{ __('Categories') }}
+                </flux:navlist.item>
             </flux:navlist.group>
         </flux:navlist>
 

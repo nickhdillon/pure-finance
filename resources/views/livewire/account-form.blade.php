@@ -9,7 +9,7 @@
 
     <flux:modal name="{{ $account ? ('edit-account' . $account->id) : 'add-account' }}">
         <form wire:submit='submit' class="space-y-6">
-            <flux:heading class="font-semibold text-xl -mt-1.5!">
+            <flux:heading size="lg" class="font-semibold -mt-1.5!">
                 Create Account
             </flux:heading>
 
