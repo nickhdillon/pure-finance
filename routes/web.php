@@ -1,6 +1,7 @@
 <?php
 
 use Livewire\Volt\Volt;
+use App\Livewire\TagTable;
 use App\Livewire\CategoryTable;
 use Illuminate\Support\Facades\Route;
 
@@ -10,6 +11,8 @@ Route::middleware(['auth'])->group(function () {
     })->name('dashboard');
 
     Route::get('categories', CategoryTable::class)->name('categories');
+
+    Route::get('tags', TagTable::class)->name('tags');
 
     # ----- Settings -----
     Route::prefix('settings')->group(function () {

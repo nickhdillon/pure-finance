@@ -30,7 +30,7 @@ class CategoryForm extends Component
                 Rule::in($this->parentCategories->pluck('id')->toArray())
             ],
             'name' => [
-                'required_if:modal_open,true',
+                'required',
                 'string',
                 'unique:categories,name,NULL,id,user_id,' . auth()->id()
             ],
@@ -42,7 +42,6 @@ class CategoryForm extends Component
         return [
             'parent_id.integer' => 'The parent category must be an integer.',
             'parent_id.in' => 'The selected parent category is invalid.',
-            'name.required_if' => 'The name field is required.',
             'name.unique' => 'The provided name has already been taken.'
         ];
     }
