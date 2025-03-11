@@ -13,12 +13,11 @@ class Accounts extends Component
 {
     public function render(): View
     {
+        $user_accounts = auth()->user()->accounts();
+
         return view('livewire.accounts', [
-            'accounts' => auth()
-                ->user()
-                ->accounts()
-                ->orderBy('name')
-                ->get()
+            'available_total' => $user_accounts->sum('balance'),
+            'accounts' => $user_accounts->orderBy('name')->get()
         ]);
     }
 }

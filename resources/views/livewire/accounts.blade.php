@@ -39,6 +39,30 @@
                         No accounts found...
                     </div>
                 @endforelse
+
+                <div class="flex flex-col p-3 text-sm rounded-b-[8px] w-full">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-medium">
+                                Available Total:
+                            </p>
+
+                            <p>
+                                ${{ Number::format($available_total ?? 0, 2) }}
+                            </p>
+                        </div>
+
+                        <div>
+                            <p class="font-medium">
+                                Cleared Total:
+                            </p>
+
+                            <p class="text-right">
+                                ${{ Number::format($account->cleared_balance ?? 0, 2) }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </x-slot:content>
     </x-card>
