@@ -30,7 +30,15 @@ beforeEach(function () {
 });
 
 it('can create a category', function () {
-    livewire(CategoryForm::class)
+    livewire(CategoryForm::class, [
+        'parent_categories' => auth()
+            ->user()
+            ->categories()
+            ->with('parent')
+            ->select(['id', 'name', 'parent_id'])
+            ->whereNull('parent_id')
+            ->get()
+    ])
         ->set('name', 'Test category')
         ->call('submit')
         ->assertDispatched('category-saved')
@@ -38,14 +46,50 @@ it('can create a category', function () {
 });
 
 it('can edit a category', function () {
-    livewire(CategoryForm::class, ['category' => auth()->user()->categories->first()])
+    livewire(CategoryForm::class, [
+        'parent_categories' => auth()
+            ->user()
+            ->categories()
+            ->with('parent')
+            ->select(['id', 'name', 'parent_id'])
+            ->whereNull('parent_id')
+            ->get()
+    ])
+        ->call('loadCategory', auth()->user()->categories->first()->toArray())
         ->set('name', 'Test category updated')
         ->call('submit')
         ->assertDispatched('category-saved')
         ->assertHasNoErrors();
 });
 
+it('can reset the form', function () {
+    livewire(CategoryForm::class, [
+        'parent_categories' => auth()
+            ->user()
+            ->categories()
+            ->with('parent')
+            ->select(['id', 'name', 'parent_id'])
+            ->whereNull('parent_id')
+            ->get()
+    ])
+        ->call('loadCategory', auth()->user()->categories->first()->toArray())
+        ->set('name', 'Test category')
+        ->call('resetForm')
+        ->assertSet('category', null)
+        ->assertSet('name', '')
+        ->assertSet('parent_id', null)
+        ->assertHasNoErrors();
+});
+
 test('component can render', function () {
-    livewire(CategoryForm::class)
+    livewire(CategoryForm::class, [
+        'parent_categories' => auth()
+            ->user()
+            ->categories()
+            ->with('parent')
+            ->select(['id', 'name', 'parent_id'])
+            ->whereNull('parent_id')
+            ->get()
+    ])
         ->assertHasNoErrors();
 });

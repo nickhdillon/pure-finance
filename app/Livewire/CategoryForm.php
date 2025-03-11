@@ -7,6 +7,7 @@ namespace App\Livewire;
 use Flux\Flux;
 use Livewire\Component;
 use App\Models\Category;
+use Livewire\Attributes\On;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Computed;
 use Illuminate\Contracts\View\View;
@@ -14,25 +15,25 @@ use Illuminate\Database\Eloquent\Collection;
 
 class CategoryForm extends Component
 {
-    public ?int $parent_id = null;
+    public ?array $category = null;
 
-    public ?Category $category = null;
+    public ?int $parent_id = null;
 
     public string $name = '';
 
     protected function rules(): array
     {
         return [
-            'parent_id' => [
-                'nullable',
-                'integer',
-                'numeric',
-                Rule::in($this->parentCategories->pluck('id')->toArray())
-            ],
             'name' => [
                 'required',
                 'string',
                 'unique:categories,name,NULL,id,user_id,' . auth()->id()
+            ],
+            'parent_id' => [
+                'nullable',
+                'integer',
+                'numeric',
+                Rule::in($this->parent_categories->pluck('id')->toArray())
             ],
         ];
     }
@@ -40,18 +41,23 @@ class CategoryForm extends Component
     protected function messages(): array
     {
         return [
+            'name.unique' => 'The provided name has already been taken.',
             'parent_id.integer' => 'The parent category must be an integer.',
             'parent_id.in' => 'The selected parent category is invalid.',
-            'name.unique' => 'The provided name has already been taken.'
         ];
     }
 
-    public function mount(): void
+    #[On('load-category')]
+    public function loadCategory(array $category): void
     {
-        if ($this->category) {
-            $this->name = $this->category->name;
-            $this->parent_id = $this->category->parent_id;
-        }
+        $this->category = $category;
+        $this->name = $this->category['name'];
+        $this->parent_id = $this->category['parent_id'];
+    }
+
+    public function resetForm(): void
+    {
+        $this->reset(['category', 'name', 'parent_id']);
     }
 
     #[Computed]
@@ -79,7 +85,7 @@ class CategoryForm extends Component
 
         $this->dispatch('category-saved');
 
-        if (!$this->category) $this->reset();
+        if (!$this->category) $this->reset(['name', 'parent_id']);
 
         Flux::toast(
             variant: 'success',

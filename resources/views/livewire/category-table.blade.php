@@ -5,13 +5,11 @@
         </flux:heading>
 
         <div>
-            <flux:modal.trigger name="add-category">
+            <flux:modal.trigger name="category-form">
                 <flux:button icon="plus" variant="primary" size="sm">
                     Add
                 </flux:button>
             </flux:modal.trigger>
-            
-            <livewire:category-form data-name="add-category" />
         </div>
     </div>
 
@@ -50,12 +48,10 @@
                             <flux:table.cell class="[&>div]:justify-end!">
                                 <div class="flex items-center ">
                                     <div>
-                                        <flux:modal.trigger name="edit-category-{{ $category->id }}">
+                                        <flux:modal.trigger name="category-form">
                                             <flux:button icon="pencil-square" variant="ghost" size="sm"
-                                                class="text-indigo-500!" />
+                                                class="text-indigo-500!" x-on:click="$dispatch('load-category', { category: {{ $category }} })" />
                                         </flux:modal.trigger>
-                
-                                        <livewire:category-form data-name="edit-category-{{ $category->id }}" :$category :key="$category->id" />
                                     </div>
 
                                     <div>
@@ -106,4 +102,6 @@
             </flux:table>
         </div>
     </x-headerless-card>
+
+    <livewire:category-form />
 </div>
