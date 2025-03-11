@@ -30,7 +30,6 @@ class CategoryTable extends Component
         Flux::toast(
             variant: 'success',
             text: "Successfully deleted the {$category?->name} category",
-            position: 'top-right'
         );
 
         Flux::modals()->close();

@@ -90,7 +90,6 @@ class CategoryForm extends Component
         Flux::toast(
             variant: 'success',
             text: "Category successfully " . ($this->category ? "updated" : "created"),
-            position: 'top-right'
         );
 
         Flux::modals()->close();

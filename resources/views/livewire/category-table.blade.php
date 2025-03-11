@@ -16,7 +16,7 @@
     <x-headerless-card>
         <div>
             <div class="p-3">
-                <flux:input icon="magnifying-glass" placeholder="Search categories ..." wire:model.live='search' clearable />
+                <flux:input icon="magnifying-glass" placeholder="Search categories..." wire:model.live='search' clearable />
             </div>
 
             <flux:table :paginate="$categories" class="border-t border-zinc-200 dark:border-white/20">

@@ -1,5 +1,5 @@
 @props([
-    'position' => 'bottom right',
+    'position' => 'top right',
 ])
 
 @php
@@ -12,7 +12,7 @@ $classes = Flux::classes()
 <ui-toast x-data x-on:toast-show.document="$el.showToast($event.detail)" wire:ignore>
     <template>
         <div popover="manual" {{ $attributes->class($classes)->only(['class']) }} data-position="{{ $position }}" data-variant="" data-flux-toast-dialog>
-            <div class="max-w-sm p-2 rounded-xl shadow-lg bg-white border border-zinc-200 border-b-zinc-300/80 dark:bg-zinc-700 dark:border-zinc-600">
+            <div class="max-w-sm p-1 rounded-xl shadow-lg bg-white border border-zinc-200 border-b-zinc-300/80 dark:bg-zinc-700 dark:border-zinc-600">
                 <div class="flex items-start gap-4">
                     <div class="flex-1 py-1.5 pl-2.5 flex gap-2">
                         {{-- Success icon --}}

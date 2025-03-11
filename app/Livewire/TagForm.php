@@ -57,7 +57,6 @@ class TagForm extends Component
         Flux::toast(
             variant: 'success',
             text: "Tag successfully " . ($this->tag ? "updated" : "created"),
-            position: 'top-right'
         );
 
         Flux::modals()->close();

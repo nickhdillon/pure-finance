@@ -52,7 +52,6 @@ class AccountForm extends Component
         Flux::toast(
             variant: 'success',
             text: "Account successfully " . ($this->account ? "updated" : "created"),
-            position: 'top-right'
         );
 
         Flux::modals()->close();

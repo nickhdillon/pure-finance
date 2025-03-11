@@ -30,7 +30,6 @@ class TagTable extends Component
         Flux::toast(
             variant: 'success',
             text: "Successfully deleted the {$tag?->name} tag",
-            position: 'top-right'
         );
 
         Flux::modals()->close();
