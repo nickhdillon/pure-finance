@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Tag;
 use App\Models\User;
+use App\Models\Transaction;
 use Illuminate\Database\Seeder;
 
 class TagSeeder extends Seeder
@@ -30,5 +31,11 @@ class TagSeeder extends Seeder
             ->create([
                 'name' => 'Entertainment',
             ]);
+
+        foreach (Transaction::get() as $transaction) {
+            Tag::get()->random(2)->each(function (Tag $tag) use ($transaction): void {
+                $transaction->tags()->attach($tag->id);
+            });
+        }
     }
 }

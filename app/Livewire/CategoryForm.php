@@ -33,7 +33,7 @@ class CategoryForm extends Component
                 'nullable',
                 'integer',
                 'numeric',
-                Rule::in($this->parent_categories->pluck('id')->toArray())
+                Rule::in($this->parentCategories()->pluck('id')->toArray())
             ],
         ];
     }
