@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tag_transaction', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('transaction_id')->constrained();
+            $table->foreignId('transaction_id')->constrained()->cascadeOnDelete();
             $table->foreignId('tag_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

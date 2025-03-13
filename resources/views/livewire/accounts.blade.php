@@ -1,4 +1,4 @@
-<div>
+<div x-on:transaction-deleted.window="$wire.$refresh">
     <x-card heading="Accounts">
         <x-slot:button>
             @livewire('account-form')
@@ -14,23 +14,23 @@
                         </p>
     
                         <div class="w-full">
-                            {{-- @if ($account->transactions()->count() === 0)
+                            @if ($account->transactions_count === 0)
                                 ${{ Number::format($account->initial_balance ?? 0, 2) }}
-                            @else --}}
-                            <div class="flex items-center justify-between">
-                                <span>
-                                    Available:
-    
-                                    ${{ Number::format($account->balance ?? 0, 2) }}
-                                </span>
-    
-                                <span>
-                                    Cleared:
-    
-                                    ${{ Number::format($account->cleared_balance ?? 0, 2) }}
-                                </span>
-                            </div>
-                            {{-- @endif --}}
+                            @else
+                                <div class="flex items-center justify-between">
+                                    <span>
+                                        Available:
+        
+                                        ${{ Number::format($account->balance ?? 0, 2) }}
+                                    </span>
+        
+                                    <span>
+                                        Cleared:
+        
+                                        ${{ Number::format($account->cleared_balance ?? 0, 2) }}
+                                    </span>
+                                </div>
+                            @endif
                         </div>
                     </a>
                 @empty
@@ -40,29 +40,31 @@
                     </div>
                 @endforelse
 
-                <div class="flex flex-col p-3 text-sm rounded-b-[8px] w-full">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="font-medium">
-                                Available Total:
-                            </p>
+                @if ($accounts->count() > 0)
+                    <div class="flex flex-col p-3 text-sm rounded-b-[8px] w-full">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="font-medium">
+                                    Available Total:
+                                </p>
 
-                            <p>
-                                ${{ Number::format($available_total ?? 0, 2) }}
-                            </p>
-                        </div>
+                                <p>
+                                    ${{ Number::format($available_total ?? 0, 2) }}
+                                </p>
+                            </div>
 
-                        <div>
-                            <p class="font-medium">
-                                Cleared Total:
-                            </p>
+                            <div>
+                                <p class="font-medium">
+                                    Cleared Total:
+                                </p>
 
-                            <p class="text-right">
-                                ${{ Number::format($account->cleared_balance ?? 0, 2) }}
-                            </p>
+                                <p class="text-right">
+                                    ${{ Number::format($cleared_total ?? 0, 2) }}
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endif
             </div>
         </x-slot:content>
     </x-card>
