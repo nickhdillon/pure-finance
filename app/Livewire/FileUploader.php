@@ -28,6 +28,8 @@ class FileUploader extends Component
 
     public string $s3_path = 'files';
 
+    public bool $disabled = false;
+
     protected function messages(): array
     {
         return [

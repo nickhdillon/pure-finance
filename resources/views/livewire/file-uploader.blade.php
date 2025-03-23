@@ -12,9 +12,13 @@
     }" x-on:dragenter.prevent="isDragging = true" x-on:dragleave.prevent="isDragging = false"
         x-on:dragover.prevent x-on:drop="handleDrop($event)" class="relative">
         <label for="files"
+            @disabled($disabled)
             class="flex flex-col items-center justify-center w-full h-48 transition-colors border border-dashed rounded-lg cursor-pointer bg-white inset-shadow-xs dark:bg-zinc-900 border-zinc-200 dark:border-zinc-500 dark:hover:border-emerald-600 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-950/50"
-            :class="isDragging ? '!border-emerald-500 !bg-emerald-50 dark:!bg-emerald-950/50' :
-                'border-zinc-300 dark:border-zinc-700'">
+            :class="{
+                'cursor-default! opacity-50 hover:border-zinc-200 dark:hover:border-zinc-500 hover:bg-white dark:hover:bg-zinc-900': {{ $disabled }},
+                'border-zinc-300 dark:border-zinc-700': !isDragging && !{{ $disabled }},
+                '!border-emerald-500 !bg-emerald-50 dark:!bg-emerald-950/50': isDragging && !{{ $disabled }}
+            }">
             <flux:icon.arrow-up-to-line wire:target='files' wire:loading.remove
                 class="!h-6 !w-6 !mb-3 !text-zinc-400" />
 

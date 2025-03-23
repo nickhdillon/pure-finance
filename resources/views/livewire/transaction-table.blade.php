@@ -9,8 +9,7 @@
         @if (auth()->user()->accounts()->count() > 0)
             <flux:button
                 href="
-                {{-- {{ $account ? route('account.transaction-form', $account->id) :  --}}
-                {{ route('transaction-form') }}"
+                {{ $account ? route('account.transaction-form', $account->id) : route('transaction-form') }}"
                 wire:navigate variant="primary" icon="plus" size="sm">
                 Add
             </flux:button>
@@ -164,12 +163,19 @@
 
                                 <flux:table.cell align="end">
                                     <div class="flex items-center">
-                                        {{-- <div>
-                                            <flux:modal.trigger name="category-form">
-                                                <flux:button icon="pencil-square" variant="ghost" size="sm"
-                                                    class="text-indigo-500!" x-on:click="$dispatch('load-category', { category: {{ $category }} })" />
-                                            </flux:modal.trigger>
-                                        </div> --}}
+                                        <div>
+                                            <flux:button
+                                                href="{{ $account 
+                                                    ? route('account.transaction-form', $account->id, $transaction->id) 
+                                                    : route('transaction-form', $transaction->id) 
+                                                }}"
+                                                wire:navigate
+                                                variant="ghost"
+                                                size="sm"
+                                                icon="pencil-square"
+                                                class="text-indigo-500!"
+                                                />
+                                        </div>
 
                                         <div>
                                             <flux:modal.trigger name="delete-transaction-{{ $transaction->id }}">

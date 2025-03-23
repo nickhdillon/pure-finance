@@ -14,6 +14,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('transactions', TransactionTable::class)->name('transactions');
 
+    Route::get('account/{account}/transaction-form/{transaction?}', TransactionForm::class)->name('account.transaction-form');
+
     Route::get('transaction-form/{transaction?}', TransactionForm::class)->name('transaction-form');
 
     Route::get('categories', CategoryTable::class)->name('categories');

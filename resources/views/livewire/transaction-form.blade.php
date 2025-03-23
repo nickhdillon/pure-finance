@@ -236,7 +236,8 @@
             <div x-cloak>
                 <x-card heading="Attachments" class="border-none bg-transparent! inset-shadow-lg!">                 
                     <x-slot:content>
-                        <livewire:file-uploader :files="$transaction?->attachments" />
+                        <livewire:file-uploader :files="$transaction?->attachments"
+                            :disabled="$type === TransactionType::CREDIT && $transfer_to" />
                     </x-slot:content>
                 </x-card>
             </div>
