@@ -1,5 +1,5 @@
 <x-layouts.app title="Dashboard">
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-6">
         @livewire('accounts')
 
         @livewire('transaction-table')

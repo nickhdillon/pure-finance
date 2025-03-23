@@ -37,7 +37,7 @@ class TransactionFactory extends Factory
             'type' => Arr::random(TransactionType::cases()),
             'transfer_to' => null,
             'amount' => $this->faker->randomFloat(2, 0, 100),
-            'payee' => $this->faker->text(30),
+            'payee' => $this->faker->company(),
             'date' => $transaction_date->format('Y-m-d'),
             'notes' => $this->faker->paragraph(4),
             'status' => Arr::random([true, false]),

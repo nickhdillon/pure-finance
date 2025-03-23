@@ -19,10 +19,6 @@ return new class extends Migration
             $table->foreignIdFor(Account::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Category::class)->constrained()->cascadeOnDelete();
             $table->string('type');
-            $table->foreignIdFor(Account::class, 'transfer_from')
-                ->nullable()
-                ->constrained('accounts')
-                ->cascadeOnDelete();
             $table->foreignIdFor(Account::class, 'transfer_to')
                 ->nullable()
                 ->constrained('accounts')

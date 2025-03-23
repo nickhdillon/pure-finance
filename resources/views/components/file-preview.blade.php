@@ -1,0 +1,22 @@
+@props(['file'])
+@use('App\Services\S3Service', 'S3Service')
+
+<div>
+    <flux:modal.trigger name="file-preview">
+        <img src="{{ S3Service::getS3Path($file['name']) }}" alt="{{ $file['name'] }}"
+            class="w-8 h-8 rounded-md" />
+    </flux:modal.trigger>
+
+    <flux:modal name="file-preview" class="max-h-full overflow-auto">
+        <div class="space-y-6">
+            <flux:heading size="lg" class="font-semibold -mt-1.5!">
+                {{ $file['name'] }}
+            </flux:heading>
+
+            <div class="flex justify-center">
+                <img src="{{ S3Service::getS3Path($file['name']) }}" alt="{{ $file['name'] }}"
+                    class="rounded-md max-h-[550px]" />
+            </div>
+        </div>
+    </flux:modal>
+</div>

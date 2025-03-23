@@ -24,7 +24,7 @@ class TransactionTable extends Component
 
     public string $search = '';
 
-    public string $status = '';
+    public bool $status;
 
     public string $transaction_type = '';
 
@@ -174,7 +174,7 @@ class TransactionTable extends Component
                 ->when($this->account, function (Builder $query): void {
                     $query->whereRelation('account', 'name', $this->account->name);
                 })
-                ->when($this->status, function (Builder $query): void {
+                ->when(isset($this->status), function (Builder $query): void {
                     $query->where('status', $this->status);
                 })
                 ->when(strlen($this->search) >= 1, function (Builder $query): void {

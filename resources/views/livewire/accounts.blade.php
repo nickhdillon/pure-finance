@@ -8,7 +8,7 @@
             <div class="divide-y divide-zinc-200 dark:divide-zinc-700">
                 @forelse ($accounts as $account)
                     <a href="/" wire:navigate
-                        class="flex flex-col p-3 text-sm duration-200 ease-in-out first:rounded-t-[8px] last:rounded-b-[8px] hover:bg-zinc-100/75 dark:hover:bg-zinc-600/50">
+                        class="flex flex-col p-3 text-sm duration-200 ease-in-out first:rounded-t-[8px] last:rounded-b-[8px] hover:bg-zinc-50/80 dark:hover:bg-zinc-600/50">
                         <p class="font-medium">
                             {{ $account->name }}
                         </p>
@@ -41,27 +41,25 @@
                 @endforelse
 
                 @if ($accounts->count() > 0)
-                    <div class="flex flex-col p-3 text-sm rounded-b-[8px] w-full">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="font-medium">
-                                    Available Total:
-                                </p>
+                    <div class="flex items-center justify-between p-3 text-sm rounded-b-[8px] w-full">
+                        <div class="flex items-center gap-1">
+                            <p class="font-medium">
+                                Available Total:
+                            </p>
 
-                                <p>
-                                    ${{ Number::format($available_total ?? 0, 2) }}
-                                </p>
-                            </div>
+                            <p>
+                                ${{ Number::format($available_total ?? 0, 2) }}
+                            </p>
+                        </div>
 
-                            <div>
-                                <p class="font-medium">
-                                    Cleared Total:
-                                </p>
+                        <div class="flex items-center gap-1">
+                            <p class="font-medium">
+                                Cleared Total:
+                            </p>
 
-                                <p class="text-right">
-                                    ${{ Number::format($cleared_total ?? 0, 2) }}
-                                </p>
-                            </div>
+                            <p>
+                                ${{ Number::format($cleared_total ?? 0, 2) }}
+                            </p>
                         </div>
                     </div>
                 @endif

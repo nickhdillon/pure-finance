@@ -62,7 +62,19 @@ select:focus[data-flux-control] {
 }
 
 [data-flux-pagination] {
-    @apply  !p-3;
+    @apply  !p-3 border-zinc-200 rounded-b-[8px];
+}
+
+.dark [data-flux-pagination] {
+    @apply  !p-3 border-zinc-700 rounded-b-[8px];
+}
+
+[data-flux-radio] {
+    @apply -mt-[1px];
+}
+
+[data-flux-checkbox] {
+    @apply -mt-[1px];
 }
 
 [x-cloak] {

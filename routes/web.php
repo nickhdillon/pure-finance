@@ -3,12 +3,18 @@
 use Livewire\Volt\Volt;
 use App\Livewire\TagTable;
 use App\Livewire\CategoryTable;
+use App\Livewire\TransactionForm;
+use App\Livewire\TransactionTable;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    Route::get('transactions', TransactionTable::class)->name('transactions');
+
+    Route::get('transaction-form/{transaction?}', TransactionForm::class)->name('transaction-form');
 
     Route::get('categories', CategoryTable::class)->name('categories');
 

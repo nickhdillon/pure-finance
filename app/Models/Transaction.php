@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\TransactionType;
 use App\Enums\RecurringFrequency;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -84,7 +85,17 @@ class Transaction extends Model
         return $this->belongsToMany(Tag::class);
     }
 
-    protected function recalculateAccountBalance(): void
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
+
+    public function children(): HasMany
+    {
+        return $this->hasMany(self::class, 'parent_id');
+    }
+
+    public function recalculateAccountBalance(): void
     {
         defer(function (): void {
             $total_credits = $this->account->transactions()

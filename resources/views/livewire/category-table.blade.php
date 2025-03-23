@@ -1,4 +1,4 @@
-<div class="space-y-4">
+<div class="space-y-4 mx-auto max-w-4xl">
     <div class="flex items-center justify-between">
         <flux:heading size="xl">
             Categories
@@ -13,14 +13,14 @@
         </div>
     </div>
 
-    <x-headerless-card>
-        <div>
+    <x-card>
+        <x-slot:content>
             <div class="p-3">
-                <flux:input icon="magnifying-glass" placeholder="Search categories..." wire:model.live.debounce.300ms='search' clearable />
+                <flux:input size="sm" icon="magnifying-glass" placeholder="Search categories..." wire:model.live.debounce.300ms='search' clearable />
             </div>
 
             <flux:table :paginate="$categories" class="border-t border-zinc-200 dark:border-white/20">
-                <flux:table.columns class="[&>tr>th]:px-3! bg-zinc-50 dark:bg-white/5">
+                <flux:table.columns class="[&>tr>th]:px-3! bg-zinc-50 dark:bg-zinc-800">
                     <flux:table.column>
                         Name
                     </flux:table.column>
@@ -34,14 +34,14 @@
                     </flux:table.column>
                 </flux:table.columns>
 
-                <flux:table.rows>
+                <flux:table.rows class="dark:bg-zinc-900">
                     @foreach ($categories as $category)
-                        <flux:table.row :key="$category->id" class="[&>td]:px-3!">
-                            <flux:table.cell class="whitespace-nowrap">
+                        <flux:table.row :key="$category->id" class="[&>td]:px-3! [&>td]:py-2!">
+                            <flux:table.cell class="whitespace-nowrap" variant="strong">
                                 {{ $category->name }}
                             </flux:table.cell>
 
-                            <flux:table.cell class="whitespace-nowrap">
+                            <flux:table.cell class="whitespace-nowrap" variant="strong">
                                 {{ $category->parent?->name }}
                             </flux:table.cell>
 
@@ -100,8 +100,8 @@
                     @endforeach
                 </flux:table.rows>
             </flux:table>
-        </div>
-    </x-headerless-card>
+        </x-slot:content>
+    </x-card>
 
     <livewire:category-form />
 </div>

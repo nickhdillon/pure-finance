@@ -12,7 +12,7 @@
     totalFilters() {
         total = $wire.selected_accounts.length + $wire.selected_categories.length;
 
-        if ($wire.status) total++;
+        if ($wire.status || $wire.status === false) total++;
 
         if ($wire.transaction_type) total++;
 
@@ -47,7 +47,7 @@
             </div>
         </div>
 
-        <div class="relative flex-1 mt-2 space-y-3">
+        <div class="relative flex-1 space-y-3">
             <div>
                 <div class="flex pb-0.5 items-center justify-between text-sm font-medium">
                     <p>
@@ -55,9 +55,9 @@
                     </p>
 
                     <div class="flex items-center justify-between">
-                        <flux:button variant="ghost" x-cloak x-show="$wire.status"
+                        <flux:button variant="ghost" x-cloak x-show="$wire.status || $wire.status === false"
                             class="w-14! h-6!"
-                            x-on:click="$wire.set('status', '')">
+                            x-on:click="$wire.set('status', null)">
                             Clear
                         </flux:button>
 
@@ -68,10 +68,10 @@
                 </div>
 
                 <div x-collapse x-show="showStatus" class="pt-2 border-t border-slate-300 dark:border-slate-700">
-                    <flux:radio.group wire:model.live="status" class="space-y-2!">
-                        <flux:radio value="cleared" label="Cleared" />
+                    <flux:radio.group wire:model.boolean.live="status" class="space-y-2.5!">
+                        <flux:radio value="true" label="Cleared" />
 
-                        <flux:radio value="pending" label="Pending" />
+                        <flux:radio value="false" label="Pending" />
                     </flux:radio.group>
                 </div>
             </div>
@@ -96,7 +96,7 @@
                 </div>
 
                 <div x-collapse x-show="showTypes" class="pt-2 border-t border-slate-300 dark:border-slate-700">
-                    <flux:radio.group wire:model.live="transaction_type" class="space-y-2!">
+                    <flux:radio.group wire:model.live="transaction_type" class="space-y-2.5!">
                         @foreach (TransactionType::cases() as $type)
                             <flux:radio value="{{ $type }}" label="{{ $type->label() }}" />
                         @endforeach
@@ -124,7 +124,7 @@
                         </div>
                     </div>
 
-                    <div x-collapse x-show="showAccounts" class="pt-2 border-t space-y-2 border-slate-300 dark:border-slate-700">
+                    <div x-collapse x-show="showAccounts" class="pt-2 border-t space-y-2.5 border-slate-300 dark:border-slate-700">
                         @foreach ($accounts as $account)
                             <flux:checkbox wire:model.live="selected_accounts" label="{{ $account }}"
                                 value="{{ $account }}" />
@@ -153,7 +153,7 @@
                 </div>
 
                 <div x-collapse x-show="showCategories"
-                    class="pt-2 border-t space-y-2 border-slate-300 dark:border-slate-700">
+                    class="pt-2 border-t space-y-2.5 border-slate-300 dark:border-slate-700">
                     @foreach ($categories as $category)
                         <flux:checkbox wire:model.live="selected_categories" label="{{ $category['name'] }}"
                             value="{{ $category['name'] }}" />
@@ -181,7 +181,7 @@
                 </div>
 
                 <div x-collapse x-show="showDates" class="pt-2 border-t border-slate-300 dark:border-slate-700 space-y-2">
-                    <flux:radio.group wire:model.live="date" class="space-y-2!">
+                    <flux:radio.group wire:model.live="date" class="space-y-2.5!">
                         <flux:radio value="{{ now()->subDays(7) }}" label="Last 7 Days" />
 
                         <flux:radio value="{{ now()->subDays(30) }}" label="Last 30 Days" />
