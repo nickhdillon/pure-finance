@@ -37,6 +37,13 @@
                             </flux:table.column>
                         @endif
 
+                        @if (in_array('payee', $columns))
+                            <flux:table.column sortable :sorted="$sort_col === 'payee'" :direction="$sort_direction"
+                            wire:click="sortBy('payee')">
+                                Payee
+                            </flux:table.column>
+                        @endif
+
                         @if (!$account && in_array('account', $columns))
                             <flux:table.column sortable :sorted="$sort_col === 'account'" :direction="$sort_direction"
                             wire:click="sortBy('account')">
@@ -65,13 +72,6 @@
                             </flux:table.column>
                         @endif
 
-                        @if (in_array('payee', $columns))
-                            <flux:table.column sortable :sorted="$sort_col === 'payee'" :direction="$sort_direction"
-                            wire:click="sortBy('payee')">
-                                Payee
-                            </flux:table.column>
-                        @endif
-
                         @if (in_array('status', $columns))
                             <flux:table.column sortable :sorted="$sort_col === 'status'" :direction="$sort_direction"
                             wire:click="sortBy('status')">
@@ -90,6 +90,12 @@
                                 @if (in_array('date', $columns))
                                     <flux:table.cell variant="strong" class="whitespace-nowrap">
                                         {{ Carbon\Carbon::parse($transaction->date)->format('M j, Y') }}
+                                    </flux:table.cell>
+                                @endif
+
+                                @if (in_array('payee', $columns))
+                                    <flux:table.cell variant="strong" class="whitespace-nowrap">
+                                        {{ $transaction->payee }}
                                     </flux:table.cell>
                                 @endif
 
@@ -139,12 +145,6 @@
                                         ])>
                                             ${{ Number::format($transaction->amount ?? 0, 2) }}
                                         </span>
-                                    </flux:table.cell>
-                                @endif
-
-                                @if (in_array('payee', $columns))
-                                    <flux:table.cell variant="strong" class="whitespace-nowrap">
-                                        {{ $transaction->payee }}
                                     </flux:table.cell>
                                 @endif
 

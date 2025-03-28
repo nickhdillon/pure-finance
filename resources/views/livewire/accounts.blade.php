@@ -42,7 +42,7 @@
 
                 @if ($accounts->count() > 0)
                     <div class="flex items-center justify-between p-3 text-sm rounded-b-[8px] w-full">
-                        <div class="flex items-center gap-1">
+                        <div class="flex flex-wrap items-center sm:gap-1">
                             <p class="font-medium">
                                 Available Total:
                             </p>
@@ -52,7 +52,7 @@
                             </p>
                         </div>
 
-                        <div class="flex items-center gap-1">
+                        <div class="flex flex-wrap justify-end items-center sm:gap-1">
                             <p class="font-medium">
                                 Cleared Total:
                             </p>
