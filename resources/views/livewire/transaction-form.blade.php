@@ -60,68 +60,9 @@
                                 </flux:field>
                             </template>
 
-                            <flux:field>
-                                <flux:label>Category</flux:label>
+                            <x-categories :$categories :disabled="$type === TransactionType::CREDIT && $transfer_to" />
 
-                                <flux:select variant="listbox" searchable placeholder="Select a category" clearable wire:model='category_id'>
-                                    @foreach ($categories as $category)
-                                        <x-slot name="search">
-                                            <div class="relative">
-                                                <flux:select.search class="px-4" placeholder="Search categories..." />
-                                            </div>
-
-                                            <div class="absolute top-1 right-1 pl-4">
-                                                <flux:button variant="ghost" size="sm" icon="plus" />
-                                            </div>
-                                        </x-slot>
-
-                                        <flux:select.option value="{{ $category['id'] }}" class="font-semibold">
-                                            {{ $category['name'] }}
-                                        </flux:select.option>
-
-                                        @foreach($category['children'] as $child)
-                                            <flux:select.option value="{{ $child['id'] }}" class="pl-7.5">
-                                                {{ $child['name'] }}
-                                            </flux:select.option>
-                                        @endforeach
-                                    @endforeach
-                                </flux:select>
-
-                                <flux:error name="category_id" />
-                            </flux:field>
-
-                            <flux:field>
-                                <flux:label>Tags</flux:label>
-
-                                <flux:select variant="listbox" searchable multiple placeholder="Select tags" clearable x-model="$wire.tags">
-                                    @foreach ($user_tags as $tag)
-                                        <x-slot name="search">
-                                            <div class="relative">
-                                                <flux:select.search class="px-4" placeholder="Search tags..." />
-                                            </div>
-
-                                            <div class="absolute top-1 right-1 pl-4">
-                                                <flux:button variant="ghost" size="sm" icon="plus" />
-                                            </div>
-                                        </x-slot>
-
-                                        <flux:select.option value="{{ $tag }}" class="font-semibold">
-                                            {{ $tag }}
-                                        </flux:select.option>
-                                    @endforeach
-                                </flux:select>
-
-                                <flux:error name="tags" />
-
-                                <div x-cloak x-show="$wire.tags.length" class="flex flex-wrap gap-1.5">
-                                    <template x-for="(tag, index) in $wire.tags" :key="index">
-                                        <flux:badge color="emerald">
-                                            <p x-text="tag"></p> 
-                                            <flux:badge.close x-on:click="$wire.tags.splice(index, 1)" />
-                                        </flux:badge>
-                                    </template>
-                                </div>
-                            </flux:field>
+                            <x-tags :$user_tags :disabled="$type === TransactionType::CREDIT && $transfer_to" />
                         </div>
 
                         <div class="space-y-5">
@@ -154,7 +95,7 @@
                                 <flux:error name="date" />
                             </flux:field>
 
-                            <div class="flex items-center gap-10">
+                            <div class="flex items-center justify-between w-[60%]">
                                 <flux:field>
                                     <flux:label>Status</flux:label>
 
@@ -237,7 +178,7 @@
                 <x-card heading="Attachments" class="border-none bg-transparent! inset-shadow-lg!">                 
                     <x-slot:content>
                         <livewire:file-uploader :files="$transaction?->attachments"
-                            :disabled="$type === TransactionType::CREDIT && $transfer_to" />
+                            :disabled="($type === TransactionType::CREDIT) && $transfer_to" />
                     </x-slot:content>
                 </x-card>
             </div>

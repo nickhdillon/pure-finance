@@ -1,7 +1,7 @@
 <div>
-    <flux:modal name="category-form" x-on:close="$wire.resetForm()">
-        <div x-cloak wire:loading.remove>
-            <form wire:submit='submit' class="space-y-6">
+    <flux:modal wire:model.self='show_category_form' name="category-form" x-on:close="$wire.resetForm()">
+        <div wire:loading.remove class="space-y-6">
+            <div class="space-y-6">
                 <flux:heading size="lg" class="font-semibold -mt-1.5!">
                     {{ ($category ? 'Edit' : 'Create') . ' Category' }}
                 </flux:heading>
@@ -9,7 +9,7 @@
                 <flux:field>
                     <flux:label>Name</flux:label>
 
-                    <flux:input type="text" wire:model='name' required />
+                    <flux:input type="text" wire:model='name' />
 
                     <flux:error name="name" />
                 </flux:field>
@@ -37,14 +37,14 @@
                         </flux:button>
                     </flux:modal.close>
 
-                    <flux:button type="submit" variant="primary" size="sm">
+                    <flux:button type="button" wire:click='submit' variant="primary" size="sm">
                         Save
                     </flux:button>
                 </div>
-            </form>
+            </div>
         </div>
 
-        <div x-cloak wire:loading.flex class="flex items-center justify-center w-full h-[250px]">
+        <div x-cloak wire:loading.flex class="flex items-center justify-center w-full h-[253px]">
             <flux:icon.loading />
         </div>
     </flux:modal>

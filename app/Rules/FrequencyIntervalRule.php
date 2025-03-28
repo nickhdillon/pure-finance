@@ -13,7 +13,7 @@ class FrequencyIntervalRule implements ValidationRule
 {
     public function __construct(
         protected Carbon $start_date,
-        protected ?Carbon $end_date = null,
+        protected ?Carbon $end_date,
         protected RecurringFrequency $frequency
     ) {}
 

@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Collection;
 
 class CategoryForm extends Component
 {
+    public bool $show_category_form = false;
+
     public ?array $category = null;
 
     public ?int $parent_id = null;
@@ -25,15 +27,15 @@ class CategoryForm extends Component
     {
         return [
             'name' => [
-                'required',
+                'required_if:show_category_form,true',
                 'string',
-                'unique:categories,name,NULL,id,user_id,' . auth()->id()
+                'unique:categories,name,NULL,id,user_id,' . auth()->id(),
             ],
             'parent_id' => [
                 'nullable',
                 'integer',
                 'numeric',
-                Rule::in($this->parentCategories()->pluck('id')->toArray())
+                Rule::in($this->parentCategories()->pluck('id')->toArray()),
             ],
         ];
     }
@@ -85,14 +87,16 @@ class CategoryForm extends Component
 
         $this->dispatch('category-saved');
 
-        if (!$this->category) $this->reset(['name', 'parent_id']);
+        if (! $this->category) {
+            $this->reset(['name', 'parent_id']);
+        }
 
         Flux::toast(
             variant: 'success',
-            text: "Category successfully " . ($this->category ? "updated" : "created"),
+            text: 'Category successfully ' . ($this->category ? 'updated' : 'created'),
         );
 
-        Flux::modals()->close();
+        Flux::modal('category-form')->close();
     }
 
     public function render(): View

@@ -50,7 +50,7 @@ class CategoryTable extends Component
                     $query->where('name', 'like', "%{$this->search}%");
                 })
                 ->orderBy('name')
-                ->paginate(15)
+                ->paginate(15),
         ]);
     }
 }

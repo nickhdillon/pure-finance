@@ -7,13 +7,13 @@ namespace App\Livewire;
 use Flux\Flux;
 use Carbon\Carbon;
 use App\Models\Tag;
-use App\Models\Account;
 use Livewire\Component;
+use App\Models\Account;
 use App\Models\Transaction;
 use Livewire\Attributes\On;
 use App\Enums\TransactionType;
-use Illuminate\Validation\Rule;
 use App\Actions\CreateTransfer;
+use Illuminate\Validation\Rule;
 use App\Enums\RecurringFrequency;
 use Illuminate\Support\Collection;
 use Illuminate\Contracts\View\View;
@@ -74,7 +74,7 @@ class TransactionForm extends Component
                 'nullable',
                 'int',
                 'different:account_id',
-                Rule::requiredIf(fn(): bool => $this->type === TransactionType::TRANSFER)
+                Rule::requiredIf(fn(): bool => $this->type === TransactionType::TRANSFER),
             ],
             'amount' => ['required', 'decimal:0,2', 'numeric'],
             'category_id' => ['required', 'int'],
@@ -87,7 +87,7 @@ class TransactionForm extends Component
             'frequency' => [
                 'nullable',
                 'required_if:is_recurring,true',
-                Rule::enum(RecurringFrequency::class)
+                Rule::enum(RecurringFrequency::class),
             ],
             'recurring_end' => array_filter([
                 'nullable',
@@ -222,7 +222,7 @@ class TransactionForm extends Component
         if ($this->transaction) {
             $validated_data['attachments'] = [
                 ...$this->transaction->attachments ?? [],
-                ...$this->attachments ?? []
+                ...$this->attachments ?? [],
             ];
         } else {
             $validated_data['attachments'] = $this->attachments;
@@ -244,13 +244,13 @@ class TransactionForm extends Component
             $transfer_action->handle(Account::find($this->transfer_to), $this->transaction ?: $new_transaction);
         }
 
-        if ($this->transaction?->children->count() === 0 || !$this->transaction) {
+        if ($this->transaction?->children->count() === 0 || ! $this->transaction) {
             $recurring_action->handle($this->transaction ?: $new_transaction);
         }
 
         Flux::toast(
             variant: 'success',
-            text: "Transaction successfully " . ($this->transaction ? "updated" : "created"),
+            text: 'Transaction successfully ' . ($this->transaction ? 'updated' : 'created'),
         );
 
         return redirect()->back();

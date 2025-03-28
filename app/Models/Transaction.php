@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Enums\TransactionType;
@@ -7,8 +9,8 @@ use App\Enums\RecurringFrequency;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Transaction extends Model
 {
@@ -34,7 +36,7 @@ class Transaction extends Model
         'is_recurring',
         'frequency',
         'recurring_end',
-        'parent_id'
+        'parent_id',
     ];
 
     /**
@@ -108,7 +110,7 @@ class Transaction extends Model
                 ->whereIn('type', [
                     TransactionType::DEBIT,
                     TransactionType::TRANSFER,
-                    TransactionType::WITHDRAWAL
+                    TransactionType::WITHDRAWAL,
                 ])
                 ->sum('amount');
 

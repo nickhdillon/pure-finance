@@ -8,8 +8,7 @@
 
         @if (auth()->user()->accounts()->count() > 0)
             <flux:button
-                href="
-                {{ $account ? route('account.transaction-form', $account->id) : route('transaction-form') }}"
+                href="{{ route('create-transaction-form') }}"
                 wire:navigate variant="primary" icon="plus" size="sm">
                 Add
             </flux:button>
@@ -121,7 +120,12 @@
 
                                 @if (in_array('amount', $columns))
                                     <flux:table.cell variant="strong" class="whitespace-nowrap">
-                                        @if (in_array($transaction->type, [TransactionType::DEBIT, TransactionType::TRANSFER, TransactionType::WITHDRAWAL]))
+                                        @if (in_array($transaction->type, [
+                                                TransactionType::DEBIT, 
+                                                TransactionType::TRANSFER, 
+                                                TransactionType::WITHDRAWAL
+                                            ])
+                                        )
                                             <span class="-mr-0.5">-</span>
                                         @else
                                             <span class="-mr-0.5 text-emerald-500">+</span>
@@ -165,16 +169,13 @@
                                     <div class="flex items-center">
                                         <div>
                                             <flux:button
-                                                href="{{ $account 
-                                                    ? route('account.transaction-form', $account->id, $transaction->id) 
-                                                    : route('transaction-form', $transaction->id) 
-                                                }}"
+                                                href="{{ route('edit-transaction-form', $transaction->id) }}"
                                                 wire:navigate
                                                 variant="ghost"
                                                 size="sm"
                                                 icon="pencil-square"
                                                 class="text-indigo-500!"
-                                                />
+                                            />
                                         </div>
 
                                         <div>

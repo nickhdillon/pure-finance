@@ -6,11 +6,11 @@ namespace App\Livewire;
 
 use Flux\Flux;
 use Carbon\Carbon;
-use App\Models\Account;
 use Livewire\Component;
+use App\Models\Account;
 use App\Models\Category;
-use App\Models\Transaction;
 use Livewire\Attributes\On;
+use App\Models\Transaction;
 use Livewire\WithPagination;
 use Illuminate\Support\Collection;
 use Illuminate\Contracts\View\View;
@@ -43,7 +43,7 @@ class TransactionTable extends Component
         'type',
         'amount',
         'payee',
-        'status'
+        'status',
     ];
 
     public string $date = '';
@@ -54,7 +54,9 @@ class TransactionTable extends Component
 
     public function mount(): void
     {
-        if (!$this->account) $this->accounts = $this->getAccounts();
+        if (! $this->account) {
+            $this->accounts = $this->getAccounts();
+        }
 
         $this->getCategories();
 
@@ -137,11 +139,11 @@ class TransactionTable extends Component
 
     public function toggleStatus(Transaction $transaction): void
     {
-        $transaction->update(['status' => !$transaction->status]);
+        $transaction->update(['status' => ! $transaction->status]);
 
         Flux::toast(
             variant: 'success',
-            text: "Successfully changed status",
+            text: 'Successfully changed status',
         );
 
         $this->dispatch('status-changed');
@@ -153,7 +155,7 @@ class TransactionTable extends Component
 
         Flux::toast(
             variant: 'success',
-            text: "Successfully deleted transaction",
+            text: 'Successfully deleted transaction',
         );
 
         $this->dispatch('transaction-deleted');
@@ -184,7 +186,7 @@ class TransactionTable extends Component
                             ->orWhere('amount', 'like', "%{$this->search}%")
                             ->orWhere('transactions.type', 'like', "%{$this->search}%");
 
-                        if (!$this->account) {
+                        if (! $this->account) {
                             $query->orWhereRelation('account', 'name', 'like', "%{$this->search}%");
                         }
                     });
@@ -193,14 +195,14 @@ class TransactionTable extends Component
                 ->when($this->transaction_type, function (Builder $query): void {
                     $query->where('transactions.type', $this->transaction_type);
                 })
-                ->when(!empty($this->selected_accounts), function (Builder $query): void {
+                ->when(! empty($this->selected_accounts), function (Builder $query): void {
                     $query->where(function (Builder $query): void {
                         foreach ($this->selected_accounts as $account) {
                             $query->orWhereRelation('account', 'name', 'like', $account);
                         }
                     });
                 })
-                ->when(!empty($this->selected_categories), function (Builder $query): void {
+                ->when(! empty($this->selected_categories), function (Builder $query): void {
                     $query->where(function (Builder $query): void {
                         foreach ($this->selected_categories as $selected_category) {
                             $category = Category::query()
@@ -209,7 +211,7 @@ class TransactionTable extends Component
                                 ->where('name', 'like', $selected_category)
                                 ->first();
 
-                            if (!$category->parent()->exists()) {
+                            if (! $category->parent()->exists()) {
                                 $query->orWhereRelation('category', 'name', 'like', $category->name)
                                     ->orWhereRelation('category', 'parent_id', $category->id);
                             } else {
@@ -223,7 +225,7 @@ class TransactionTable extends Component
                 })
                 ->whereDate('date', '<=', now()->timezone('America/Chicago'))
                 ->latest('id')
-                ->paginate(25)
+                ->paginate(25),
         ]);
     }
 }

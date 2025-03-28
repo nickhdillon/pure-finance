@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\Models\User;
@@ -20,7 +22,7 @@ class CategoryFactory extends Factory
         return [
             'user_id' => User::factory(),
             'name' => 'Coffee',
-            'parent_id' => null
+            'parent_id' => null,
         ];
     }
 }

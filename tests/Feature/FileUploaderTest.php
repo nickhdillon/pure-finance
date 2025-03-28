@@ -48,14 +48,14 @@ it('can pass in a file', function () {
             [
                 'name' => 'logo.png',
                 'size' => $file->getSize(),
-            ]
-        ]
+            ],
+        ],
     ])
         ->assertSet('uploaded_files', collect([
             [
                 'name' => 'logo.png',
                 'size' => $file->getSize(),
-            ]
+            ],
         ]))
         ->assertHasNoErrors();
 });

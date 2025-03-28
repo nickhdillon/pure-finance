@@ -29,7 +29,7 @@ beforeEach(function () {
 
         $categories->each(function (string $name) use ($user): void {
             Category::factory()->for($user)->create([
-                'name' => $name
+                'name' => $name,
             ]);
         });
     }
@@ -58,7 +58,7 @@ it('can create a transaction', function () {
 
 it('can edit a transaction', function () {
     livewire(TransactionForm::class, [
-        'transaction' => auth()->user()->transactions->first()
+        'transaction' => auth()->user()->transactions->first(),
     ])
         ->set('type', TransactionType::WITHDRAWAL)
         ->call('submit')
@@ -69,11 +69,11 @@ it('can make transaction recurring by month', function () {
     $transaction = Transaction::factory()
         ->for(auth()->user()->accounts()->first())
         ->create([
-            'type' => TransactionType::DEBIT
+            'type' => TransactionType::DEBIT,
         ]);
 
     livewire(TransactionForm::class, [
-        'transaction' => $transaction
+        'transaction' => $transaction,
     ])
         ->set('date', now())
         ->set('is_recurring', true)
@@ -87,11 +87,11 @@ it('can make transaction recurring by year', function () {
     $transaction = Transaction::factory()
         ->for(auth()->user()->accounts()->first())
         ->create([
-            'type' => TransactionType::CREDIT
+            'type' => TransactionType::CREDIT,
         ]);
 
     livewire(TransactionForm::class, [
-        'transaction' => $transaction
+        'transaction' => $transaction,
     ])
         ->set('date', now())
         ->set('is_recurring', true)
@@ -103,7 +103,7 @@ it('can make transaction recurring by year', function () {
 
 it('can see validation error if end date is before start date', function () {
     livewire(TransactionForm::class, [
-        'transaction' => auth()->user()->transactions->first()
+        'transaction' => auth()->user()->transactions->first(),
     ])
         ->set('date', now())
         ->set('is_recurring', true)
@@ -120,7 +120,7 @@ it('can push to attachments', function () {
     livewire(TransactionForm::class)
         ->call('pushToAttachments', [
             'name' => 'logo.png',
-            'size' => $file->getSize()
+            'size' => $file->getSize(),
         ])
         ->assertHasNoErrors();
 });
@@ -129,7 +129,7 @@ it('can delete an attachment', function () {
     $file = UploadedFile::fake()->image('pure-finance/files/logo.png');
 
     livewire(TransactionForm::class, [
-        'transaction' => auth()->user()->transactions->first()
+        'transaction' => auth()->user()->transactions->first(),
     ])
         ->call('deleteAttachment', 'logo.png')
         ->assertHasNoErrors();
@@ -138,7 +138,7 @@ it('can delete an attachment', function () {
 it('can transfer from one account to another', function () {
     auth()->user()->accounts()->create([
         'type' => AccountType::CHECKING,
-        'name' => 'Checking'
+        'name' => 'Checking',
     ]);
 
     livewire(TransactionForm::class)
@@ -157,7 +157,7 @@ it('can transfer from one account to another', function () {
 
 test('component can render with transaction', function () {
     livewire(TransactionForm::class, [
-        'transaction' => auth()->user()->transactions->first()
+        'transaction' => auth()->user()->transactions->first(),
     ])
         ->assertHasNoErrors();
 });
@@ -165,7 +165,7 @@ test('component can render with transaction', function () {
 test('component can render with account and transaction', function () {
     livewire(TransactionForm::class, [
         'account' => auth()->user()->accounts->first(),
-        'transaction' => auth()->user()->transactions->first()
+        'transaction' => auth()->user()->transactions->first(),
     ])
         ->assertHasNoErrors();
 });

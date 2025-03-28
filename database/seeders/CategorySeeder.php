@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Seeder;
 
 class CategorySeeder extends Seeder
 {
@@ -62,13 +64,12 @@ class CategorySeeder extends Seeder
                 $parent_index = 0;
 
                 $child_categories->each(
-                    function (string $child, int $index)
-                    use ($parent_categories, &$parent_index, $user): void {
+                    function (string $child, int $index) use ($parent_categories, &$parent_index, $user): void {
                         $parent = $parent_categories->get($parent_index);
 
                         $user->categories()->create([
                             'name' => $child,
-                            'parent_id' => $parent->id
+                            'parent_id' => $parent->id,
                         ]);
 
                         if (($index + 1) % 2 === 0) {

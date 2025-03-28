@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Livewire;
 
 use Flux\Flux;
-use App\Models\Account;
 use Livewire\Component;
+use App\Models\Account;
 use App\Enums\AccountType;
-use Illuminate\Validation\Rule;
 use Illuminate\Contracts\View\View;
+use Illuminate\Validation\Rule;
 
 class AccountForm extends Component
 {
@@ -47,11 +47,13 @@ class AccountForm extends Component
             ? $this->account->update($validated_data)
             : auth()->user()->accounts()->create($validated_data);
 
-        if (!$this->account) $this->reset();
+        if (! $this->account) {
+            $this->reset();
+        }
 
         Flux::toast(
             variant: 'success',
-            text: "Account successfully " . ($this->account ? "updated" : "created"),
+            text: 'Account successfully ' . ($this->account ? 'updated' : 'created'),
         );
 
         Flux::modals()->close();

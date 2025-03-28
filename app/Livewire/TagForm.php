@@ -11,6 +11,8 @@ use Illuminate\Contracts\View\View;
 
 class TagForm extends Component
 {
+    public bool $show_tag_form = false;
+
     public ?Tag $tag = null;
 
     public string $name = '';
@@ -19,9 +21,9 @@ class TagForm extends Component
     {
         return [
             'name' => [
-                'required',
+                'required_if:show_tag_form,true',
                 'string',
-                'unique:tags,name,NULL,id,user_id,' . auth()->id()
+                'unique:tags,name,NULL,id,user_id,' . auth()->id(),
             ],
         ];
     }
@@ -29,13 +31,15 @@ class TagForm extends Component
     protected function messages(): array
     {
         return [
-            'name.unique' => 'The provided name has already been taken.'
+            'name.unique' => 'The provided name has already been taken.',
         ];
     }
 
     public function mount(): void
     {
-        if ($this->tag) $this->name = $this->tag->name;
+        if ($this->tag) {
+            $this->name = $this->tag->name;
+        }
     }
 
     public function submit(): void
@@ -52,11 +56,13 @@ class TagForm extends Component
 
         $this->dispatch('tag-saved');
 
-        if (!$this->tag) $this->reset();
+        if (! $this->tag) {
+            $this->reset(['name']);
+        }
 
         Flux::toast(
             variant: 'success',
-            text: "Tag successfully " . ($this->tag ? "updated" : "created"),
+            text: 'Tag successfully ' . ($this->tag ? 'updated' : 'created'),
         );
 
         Flux::modals()->close();

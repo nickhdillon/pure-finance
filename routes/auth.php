@@ -1,7 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+declare(strict_types=1);
+
 use Livewire\Volt\Volt;
+use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
     Volt::route('login', 'auth.login')

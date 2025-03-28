@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Illuminate\Support\Str;
@@ -78,5 +80,10 @@ class User extends Authenticatable
     public function transactions(): HasManyThrough
     {
         return $this->hasManyThrough(Transaction::class, Account::class);
+    }
+
+    public function planned_expenses(): HasManyThrough
+    {
+        return $this->hasManyThrough(PlannedExpense::class, Category::class);
     }
 }

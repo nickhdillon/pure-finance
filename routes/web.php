@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 use Livewire\Volt\Volt;
 use App\Livewire\TagTable;
+use App\Models\Transaction;
 use App\Livewire\CategoryTable;
 use App\Livewire\TransactionForm;
 use App\Livewire\TransactionTable;
@@ -14,15 +17,19 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('transactions', TransactionTable::class)->name('transactions');
 
-    Route::get('account/{account}/transaction-form/{transaction?}', TransactionForm::class)->name('account.transaction-form');
+    Route::get('transaction-form', TransactionForm::class)
+        ->can('create', Transaction::class)
+        ->name('create-transaction-form');
 
-    Route::get('transaction-form/{transaction?}', TransactionForm::class)->name('transaction-form');
+    Route::get('transaction-form/{transaction?}', TransactionForm::class)
+        ->can('update', 'transaction')
+        ->name('edit-transaction-form');
 
     Route::get('categories', CategoryTable::class)->name('categories');
 
     Route::get('tags', TagTable::class)->name('tags');
 
-    # ----- Settings -----
+    // ----- Settings -----
     Route::prefix('settings')->group(function () {
         Route::redirect('/', 'settings.profile');
 

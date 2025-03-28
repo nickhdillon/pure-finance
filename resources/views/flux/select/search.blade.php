@@ -3,6 +3,7 @@
     'closable' => null,
     'loading' => null,
     'icon' => null,
+    'form' => null,
 ])
 
 @php
@@ -56,13 +57,15 @@ if ($loading) {
             </ui-close>
         </div>
     <?php elseif ($clearable): ?>
-        <div class="[[data-flux-select-search]:has([data-flux-loading])_&]:opacity-0 transition-opacity absolute top-0 bottom-0 flex items-center justify-center pr-1 right-0 [[data-flux-select-search]:has(input:placeholder-shown)_&]:hidden">
+        <div @class([
+            'right-6!' => $form,
+            '[[data-flux-select-search]:has([data-flux-loading])_&]:opacity-0 transition-opacity absolute top-0 bottom-0 flex items-center justify-center pr-1 right-0 [[data-flux-select-search]:has(input:placeholder-shown)_&]:hidden'
+        ])>
             <flux:button square variant="subtle" size="sm" tabindex="-1" aria-label="Clear command input"
                 x-on:click="$el.closest('[data-flux-select-search]').querySelector('input').value = ''; $el.closest('[data-flux-select-search]').querySelector('input').dispatchEvent(new Event('input', { bubbles: false })); $el.closest('[data-flux-select-search]').querySelector('input').focus()"
             >
                 <flux:icon.x-mark variant="micro" />
             </flux:button>
-        </div>
+        </div>        
     <?php endif; ?>
 </div>
-

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Enums\AccountType;
@@ -23,7 +25,7 @@ class Account extends Model
         'type',
         'name',
         'balance',
-        'initial_balance'
+        'initial_balance',
     ];
 
     /**
@@ -34,7 +36,7 @@ class Account extends Model
     protected function casts(): array
     {
         return [
-            'type' => AccountType::class
+            'type' => AccountType::class,
         ];
     }
 

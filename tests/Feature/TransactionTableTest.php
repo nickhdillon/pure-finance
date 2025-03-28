@@ -32,7 +32,7 @@ beforeEach(function () {
             'Dog Food',
             'Gifts',
             'Hotel',
-            'Water'
+            'Water',
         ]);
 
         $parent_categories = $parent_categories->map(function (string $parent) use ($user): Model {
@@ -46,7 +46,7 @@ beforeEach(function () {
 
             $user->categories()->create([
                 'name' => $child,
-                'parent_id' => $parent->id
+                'parent_id' => $parent->id,
             ]);
 
             if (($index + 1) % 2 === 0) {
@@ -137,7 +137,7 @@ it('can filter by transaction type', function () {
 it('can filter by selected accounts', function () {
     livewire(TransactionTable::class)
         ->set('selected_accounts', [
-            auth()->user()->accounts->first()->name
+            auth()->user()->accounts->first()->name,
         ])
         ->assertHasNoErrors();
 });
@@ -145,7 +145,7 @@ it('can filter by selected accounts', function () {
 it('can filter by selected parent with child categories', function () {
     livewire(TransactionTable::class)
         ->set('selected_categories', [
-            auth()->user()->categories()->where('parent_id', null)->first()->name
+            auth()->user()->categories()->where('parent_id', null)->first()->name,
         ])
         ->assertHasNoErrors();
 });
@@ -153,7 +153,7 @@ it('can filter by selected parent with child categories', function () {
 it('can filter by child category', function () {
     livewire(TransactionTable::class)
         ->set('selected_categories', [
-            auth()->user()->categories()->where('parent_id', !null)->first()->name
+            auth()->user()->categories()->where('parent_id', ! null)->first()->name,
         ])
         ->assertHasNoErrors();
 });

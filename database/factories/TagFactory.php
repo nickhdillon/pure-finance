@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\Models\User;
@@ -19,7 +21,7 @@ class TagFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'name' => $this->faker->text(6)
+            'name' => $this->faker->text(6),
         ];
     }
 }

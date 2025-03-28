@@ -18,7 +18,7 @@ class FileUploader extends Component
 
     #[Validate([
         'files' => ['required', 'array'],
-        'files.*' => ['file', 'max:12288', 'mimes:jpg,jpeg,png,heic,svg,avif,webp']
+        'files.*' => ['file', 'max:12288', 'mimes:jpg,jpeg,png,heic,svg,avif,webp'],
     ])]
     public ?array $files = [];
 
@@ -35,7 +35,7 @@ class FileUploader extends Component
         return [
             'files.*.file' => 'File must be a valid file',
             'files.*.max' => 'File must be less than 12MB',
-            'files.*.mimes' => 'File must be of type: jpg, jpeg, png, heic, svg, avif, webp'
+            'files.*.mimes' => 'File must be of type: jpg, jpeg, png, heic, svg, avif, webp',
         ];
     }
 

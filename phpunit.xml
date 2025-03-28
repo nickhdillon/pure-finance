@@ -17,6 +17,7 @@
 
         <exclude>
             <directory>app/Models</directory>
+            <directory>app/Policies</directory>
             <directory>app/Providers</directory>
             <file>app/Http/Controllers/Controller.php</file>
         </exclude>

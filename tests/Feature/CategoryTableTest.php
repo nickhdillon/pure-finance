@@ -21,7 +21,7 @@ beforeEach(function () {
 
         $categories->each(function (string $name) use ($user): void {
             Category::factory()->for($user)->create([
-                'name' => $name
+                'name' => $name,
             ]);
         });
     }

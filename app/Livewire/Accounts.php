@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
-use App\Models\Account;
 use Livewire\Component;
+use App\Models\Account;
 use Livewire\Attributes\On;
 use App\Enums\TransactionType;
 use Illuminate\Contracts\View\View;
@@ -40,7 +40,7 @@ class Accounts extends Component
             'accounts' => $accounts,
             'available_total' => $accounts->sum('balance'),
             'cleared_total' => $accounts->sum('initial_balance') +
-                ($accounts->sum('cleared_deposits') ?? 0) - ($accounts->sum('cleared_debits') ?? 0)
+                ($accounts->sum('cleared_deposits') ?? 0) - ($accounts->sum('cleared_debits') ?? 0),
         ]);
     }
 }

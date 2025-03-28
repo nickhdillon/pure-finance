@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
+use App\Enums\RecurringFrequency;
+use App\Enums\TransactionType;
 use App\Models\Account;
 use App\Models\Category;
-use Illuminate\Support\Arr;
-use App\Enums\TransactionType;
-use App\Enums\RecurringFrequency;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Transaction>
@@ -43,7 +45,7 @@ class TransactionFactory extends Factory
             'status' => Arr::random([true, false]),
             'is_recurring' => Arr::random([true, false]),
             'frequency' => $frequency,
-            'recurring_end' => $recurring_end->format('Y-m-d')
+            'recurring_end' => $recurring_end->format('Y-m-d'),
         ];
     }
 }

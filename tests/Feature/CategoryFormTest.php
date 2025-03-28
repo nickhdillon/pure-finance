@@ -21,7 +21,7 @@ beforeEach(function () {
 
         $categories->each(function (string $name) use ($user): void {
             Category::factory()->for($user)->create([
-                'name' => $name
+                'name' => $name,
             ]);
         });
     }
@@ -37,7 +37,7 @@ it('can create a category', function () {
             ->with('parent')
             ->select(['id', 'name', 'parent_id'])
             ->whereNull('parent_id')
-            ->get()
+            ->get(),
     ])
         ->set('name', 'Test category')
         ->call('submit')
@@ -53,7 +53,7 @@ it('can edit a category', function () {
             ->with('parent')
             ->select(['id', 'name', 'parent_id'])
             ->whereNull('parent_id')
-            ->get()
+            ->get(),
     ])
         ->call('loadCategory', auth()->user()->categories->first()->toArray())
         ->set('name', 'Test category updated')
@@ -70,7 +70,7 @@ it('can reset the form', function () {
             ->with('parent')
             ->select(['id', 'name', 'parent_id'])
             ->whereNull('parent_id')
-            ->get()
+            ->get(),
     ])
         ->call('loadCategory', auth()->user()->categories->first()->toArray())
         ->set('name', 'Test category')
@@ -89,7 +89,7 @@ test('component can render', function () {
             ->with('parent')
             ->select(['id', 'name', 'parent_id'])
             ->whereNull('parent_id')
-            ->get()
+            ->get(),
     ])
         ->assertHasNoErrors();
 });
