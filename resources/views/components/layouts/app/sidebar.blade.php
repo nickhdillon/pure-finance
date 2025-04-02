@@ -25,7 +25,7 @@
                     {{ __('Accounts') }}
                 </flux:navlist.item>
 
-                <flux:navlist.item icon="dollar-sign" :href="route('planned-spending')"
+                <flux:navlist.item icon="currency-dollar" :href="route('planned-spending')"
                     :current="request()->routeIs('planned-spending')" wire:navigate>
                     {{ __('Planned Spending') }}
                 </flux:navlist.item>
