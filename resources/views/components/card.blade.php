@@ -4,7 +4,7 @@
     @if ($heading) 
         <div class="flex w-full items-center px-4 py-3 justify-between">
             <flux:heading class="text-xl">
-                {{ $heading }}
+                {!! $heading !!}
             </flux:heading>
     
             @if ($button) 

@@ -8,12 +8,16 @@ use App\Models\Transaction;
 use App\Livewire\CategoryTable;
 use App\Livewire\TransactionForm;
 use App\Livewire\TransactionTable;
+use App\Livewire\PlannedExpenseView;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    Route::get('planned-expense/{expense}', PlannedExpenseView::class)
+        ->name('planned-expense-view');
 
     Route::get('transactions', TransactionTable::class)->name('transactions');
 

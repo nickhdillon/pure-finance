@@ -1,14 +1,8 @@
 <div>
-    <flux:modal.trigger name="{{ $expense ? ('edit-expense' . $expense->id) : 'add-expense' }}">
-        <flux:button icon="plus" variant="primary" size="sm">
-            Add
-        </flux:button>
-    </flux:modal.trigger>
-
     <flux:modal name="{{ $expense ? ('edit-expense' . $expense->id) : 'add-expense' }}">
         <form wire:submit='submit' class="space-y-6">
             <flux:heading size="lg" class="font-semibold -mt-1.5!">
-                Create Expense
+                {{ $expense ? 'Edit' : 'Create' }} Expense
             </flux:heading>
 
             <flux:field>
@@ -19,24 +13,12 @@
                 <flux:error name="name" />
             </flux:field>
 
-            {{-- <flux:field>
-                <flux:label>Account Type</flux:label>
-
-                <flux:select variant="listbox" placeholder="Select account type" wire:model='type' clearable required>
-                    @foreach (AccountType::cases() as $account_type)
-                        <flux:select.option value="{{ $account_type->value }}">
-                            {{ $account_type->label() }}
-                        </flux:select.option>
-                    @endforeach
-                </flux:select>
-
-                <flux:error name="account_type" />
-            </flux:field> --}}
+            <x-categories :$categories />
 
             <flux:field>
                 <flux:label>Monthly Amount</flux:label>
 
-                <flux:input type="number" wire:model='monthly_amount' required />
+                <flux:input type="number" wire:model='monthly_amount' placeholder="100.00" step="0.01" required />
 
                 <flux:error name="monthly_amount" />
             </flux:field>
