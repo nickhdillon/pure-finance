@@ -1,14 +1,14 @@
 <?php
 
-use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rules;
+use Livewire\Volt\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Locked;
-use Livewire\Volt\Component;
+use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Auth\Events\PasswordReset;
 
 new #[Layout('components.layouts.auth')] class extends Component {
     #[Locked]

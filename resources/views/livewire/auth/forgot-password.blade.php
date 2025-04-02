@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Password;
-use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
+use Livewire\Attributes\Layout;
+use Illuminate\Support\Facades\Password;
 
 new #[Layout('components.layouts.auth')] class extends Component {
     public string $email = '';
@@ -36,8 +36,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
             type="email"
             required
             autofocus
-            placeholder="email@example.com"
-        />
+            placeholder="email@example.com" />
 
         <flux:button variant="primary" type="submit" class="w-full">{{ __('Email password reset link') }}</flux:button>
     </form>

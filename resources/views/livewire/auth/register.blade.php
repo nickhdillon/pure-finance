@@ -1,12 +1,13 @@
 <?php
 
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
-use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
+use Livewire\Attributes\Layout;
+use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Events\Registered;
+use App\Actions\CreateDefaultCategories;
 
 new #[Layout('components.layouts.auth')] class extends Component {
     public string $name = '';
@@ -17,7 +18,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
     /**
      * Handle an incoming registration request.
      */
-    public function register(): void
+    public function register(CreateDefaultCategories $action): void
     {
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -28,6 +29,8 @@ new #[Layout('components.layouts.auth')] class extends Component {
         $validated['password'] = Hash::make($validated['password']);
 
         event(new Registered(($user = User::create($validated))));
+
+        $action->handle($user);
 
         Auth::login($user);
 
