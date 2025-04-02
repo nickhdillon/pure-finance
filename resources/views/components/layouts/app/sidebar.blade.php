@@ -20,6 +20,16 @@
                     {{ __('Dashboard') }}
                 </flux:navlist.item>
 
+                <flux:navlist.item icon="user" :href="route('accounts')"
+                    :current="request()->routeIs('accounts')" wire:navigate>
+                    {{ __('Accounts') }}
+                </flux:navlist.item>
+
+                <flux:navlist.item icon="dollar-sign" :href="route('planned-spending')"
+                    :current="request()->routeIs('planned-spending')" wire:navigate>
+                    {{ __('Planned Spending') }}
+                </flux:navlist.item>
+
                 <flux:navlist.item icon="scroll-text" :href="route('transactions')"
                     :current="request()->routeIs('transactions')" wire:navigate>
                     {{ __('Transactions') }}

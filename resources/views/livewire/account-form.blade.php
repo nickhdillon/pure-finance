@@ -1,16 +1,10 @@
 @use('App\Enums\AccountType', 'AccountType')
 
 <div>
-    <flux:modal.trigger name="{{ $account ? ('edit-account' . $account->id) : 'add-account' }}">
-        <flux:button icon="plus" variant="primary" size="sm">
-            Add
-        </flux:button>
-    </flux:modal.trigger>
-
     <flux:modal name="{{ $account ? ('edit-account' . $account->id) : 'add-account' }}">
         <form wire:submit='submit' class="space-y-6">
             <flux:heading size="lg" class="font-semibold -mt-1.5!">
-                Create Account
+                {{ $account ? 'Edit' : 'Create' }} Account
             </flux:heading>
 
             <flux:field>
@@ -38,7 +32,7 @@
             <flux:field>
                 <flux:label>Initial Balance</flux:label>
 
-                <flux:input type="number" wire:model='initial_balance' placeholder="100.00" step="0.01" required />
+                <flux:input type="number" wire:model='initial_balance' placeholder="100.00" step="0.01" :disabled="$account" required />
 
                 <flux:error name="name" />
             </flux:field>

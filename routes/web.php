@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 use Livewire\Volt\Volt;
 use App\Livewire\TagTable;
+use App\Livewire\Accounts;
 use App\Models\Transaction;
 use App\Livewire\CategoryTable;
 use App\Livewire\TransactionForm;
+use App\Livewire\AccountOverview;
+use App\Livewire\PlannedSpending;
 use App\Livewire\TransactionTable;
 use App\Livewire\PlannedExpenseView;
 use Illuminate\Support\Facades\Route;
@@ -15,6 +18,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    Route::get('accounts', Accounts::class)->name('accounts');
+
+    Route::get('account-overview/{account}', AccountOverview::class)
+        ->name('account-overview');
+
+    Route::get('planned-spending', PlannedSpending::class)->name('planned-spending');
 
     Route::get('planned-expense/{expense}', PlannedExpenseView::class)
         ->name('planned-expense-view');

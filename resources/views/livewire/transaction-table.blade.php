@@ -166,7 +166,7 @@
                                 @endif
 
                                 <flux:table.cell align="end">
-                                    <div class="flex items-center">
+                                    <div class="flex items-center justify-end">
                                         <div>
                                             <flux:button
                                                 href="{{ route('edit-transaction-form', $transaction->id) }}"
