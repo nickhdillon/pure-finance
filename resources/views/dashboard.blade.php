@@ -1,4 +1,4 @@
-<x-layouts.app title="Dashboard">
+<x-layouts.app>
     <div class="flex flex-col gap-6">
         @livewire('accounts')
 
