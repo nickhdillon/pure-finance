@@ -23,18 +23,28 @@
                 <flux:error name="monthly_amount" />
             </flux:field>
 
-            <div class="flex gap-2">
-                <flux:spacer />
+            <div class="flex gap-2 items-center justify-between">
+                <div>
+                    <flux:modal.trigger name="delete-expense">
+                        <flux:button variant="danger" size="sm">
+                            Delete
+                        </flux:button>
+                    </flux:modal.trigger>
 
-                <flux:modal.close>
-                    <flux:button variant="ghost" size="sm">
-                        Cancel
+                    <x-delete-modal name="delete-expense" heading="expense" />
+                </div>
+
+                <div>
+                    <flux:modal.close>
+                        <flux:button variant="ghost" size="sm">
+                            Cancel
+                        </flux:button>
+                    </flux:modal.close>
+
+                    <flux:button type="submit" variant="primary" size="sm">
+                        Save
                     </flux:button>
-                </flux:modal.close>
-
-                <flux:button type="submit" variant="primary" size="sm">
-                    Save
-                </flux:button>
+                </div>
             </div>
         </form>
     </flux:modal>

@@ -85,6 +85,18 @@ class PlannedSpendingForm extends Component
         Flux::modals()->close();
     }
 
+    public function delete(): void
+    {
+        $this->expense?->delete();
+
+        Flux::toast(
+            variant: 'success',
+            text: 'Expense successfully deleted',
+        );
+
+        $this->redirectRoute('planned-spending', navigate: true);
+    }
+
     public function render(): View
     {
         return view('livewire.planned-spending-form');

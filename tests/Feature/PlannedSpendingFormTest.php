@@ -48,6 +48,14 @@ it('can edit an expense', function () {
         ->assertHasNoErrors();
 });
 
+it('can delete an expense', function () {
+    livewire(PlannedSpendingForm::class, ['expense' => PlannedExpense::factory()->create()])
+        ->call('delete')
+        ->assertHasNoErrors();
+
+    $this->assertDatabaseCount('planned_expenses', 0);
+});
+
 test('component can render', function () {
     livewire(PlannedSpendingForm::class)
         ->assertHasNoErrors();
