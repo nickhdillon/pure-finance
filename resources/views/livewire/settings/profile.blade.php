@@ -5,7 +5,9 @@ use Livewire\Volt\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
+use Livewire\Features\SupportRedirects\Redirector;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 new class extends Component {
@@ -68,7 +70,7 @@ new class extends Component {
         $this->redirectRoute('settings.profile', navigate: true);
     }
 
-    public function removeAvatar(): void
+    public function removeAvatar(): RedirectResponse|Redirector
     {
         $user = Auth::user();
 
@@ -78,7 +80,7 @@ new class extends Component {
 
         $user->update(['avatar' => null]);
 
-        $this->redirectRoute('settings.profile', navigate: true);
+        return redirect(route('settings.profile'));
     }
 
     public function updateProfileInformation(): void
@@ -114,10 +116,10 @@ new class extends Component {
                         @endif
 
                         @if ($avatar)
-                        <img src="{{ $avatar }}" alt="Avatar" class="rounded-full size-24 mt-2" id="avatar" />
+                        <img src="{{ $avatar }}" alt="Avatar" class="rounded-xl size-24 mt-2" id="avatar" />
                         @else
                         <div
-                            class="flex items-center justify-center bg-zinc-100 hover:bg-zinc-200 duration-200 ease-in-out rounded-full border dark:bg-zinc-700 dark:hover:bg-zinc-800 size-24 mt-2">
+                            class="flex items-center justify-center bg-zinc-100 hover:bg-zinc-200 duration-200 ease-in-out rounded-xl border dark:bg-zinc-700 dark:hover:bg-zinc-800 size-24 mt-2">
                             <svg wire:loading.remove wire:target="avatar" xmlns="http://www.w3.org/2000/svg"
                                 fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                 class="size-6">
