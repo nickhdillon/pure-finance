@@ -35,6 +35,14 @@ it('can update an account', function () {
     $this->assertDatabaseCount('accounts', 1);
 });
 
+it('can delete an account', function () {
+    livewire(AccountForm::class, ['account' => Account::first()])
+        ->call('delete')
+        ->assertHasNoErrors();
+
+    $this->assertDatabaseCount('accounts', 0);
+});
+
 test('component can render', function () {
     livewire(AccountForm::class)
         ->assertHasNoErrors();

@@ -8,8 +8,8 @@ use Flux\Flux;
 use Livewire\Component;
 use App\Models\Account;
 use App\Enums\AccountType;
-use Illuminate\Contracts\View\View;
 use Illuminate\Validation\Rule;
+use Illuminate\Contracts\View\View;
 
 class AccountForm extends Component
 {
@@ -59,6 +59,18 @@ class AccountForm extends Component
         Flux::modals()->close();
 
         $this->dispatch('account-saved');
+    }
+
+    public function delete(): void
+    {
+        $this->account?->delete();
+
+        Flux::toast(
+            variant: 'success',
+            text: 'Account successfully deleted',
+        );
+
+        $this->redirectRoute('accounts', navigate: true);
     }
 
     public function render(): View
