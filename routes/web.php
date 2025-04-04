@@ -22,6 +22,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('accounts', Accounts::class)->name('accounts');
 
     Route::get('account-overview/{account}', AccountOverview::class)
+        ->can('update', 'account')
         ->name('account-overview');
 
     Route::get('planned-spending', PlannedSpending::class)->name('planned-spending');
