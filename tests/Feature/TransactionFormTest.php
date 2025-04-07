@@ -53,7 +53,8 @@ it('can create a transaction', function () {
         ->set('notes', '')
         ->set('status', true)
         ->call('submit')
-        ->assertHasNoErrors();
+        ->assertHasNoErrors()
+        ->assertRedirect();
 });
 
 it('can edit a transaction', function () {
@@ -62,7 +63,8 @@ it('can edit a transaction', function () {
     ])
         ->set('type', TransactionType::WITHDRAWAL)
         ->call('submit')
-        ->assertHasNoErrors();
+        ->assertHasNoErrors()
+        ->assertRedirect();
 });
 
 it('can make transaction recurring by month', function () {
@@ -80,7 +82,8 @@ it('can make transaction recurring by month', function () {
         ->set('frequency', RecurringFrequency::MONTHLY)
         ->set('recurring_end', now()->addMonth())
         ->call('submit')
-        ->assertHasNoErrors();
+        ->assertHasNoErrors()
+        ->assertRedirect();
 });
 
 it('can make transaction recurring by year', function () {
@@ -98,7 +101,8 @@ it('can make transaction recurring by year', function () {
         ->set('frequency', RecurringFrequency::YEARLY)
         ->set('recurring_end', now()->addYear())
         ->call('submit')
-        ->assertHasNoErrors();
+        ->assertHasNoErrors()
+        ->assertRedirect();
 });
 
 it('can see validation error if end date is before start date', function () {
@@ -111,7 +115,8 @@ it('can see validation error if end date is before start date', function () {
         ->set('recurring_end', now()->subWeek())
         ->call('submit')
         ->assertSee('The end date must be after the start date.')
-        ->assertHasErrors();
+        ->assertHasErrors()
+        ->assertNoRedirect();
 });
 
 it('can push to attachments', function () {
@@ -126,7 +131,7 @@ it('can push to attachments', function () {
 });
 
 it('can delete an attachment', function () {
-    $file = UploadedFile::fake()->image('pure-finance/files/logo.png');
+    UploadedFile::fake()->image('pure-finance/files/logo.png');
 
     livewire(TransactionForm::class, [
         'transaction' => auth()->user()->transactions->first(),
@@ -152,7 +157,8 @@ it('can transfer from one account to another', function () {
         ->set('notes', '')
         ->set('status', true)
         ->call('submit')
-        ->assertHasNoErrors();
+        ->assertHasNoErrors()
+        ->assertRedirect();
 });
 
 test('component can render with transaction', function () {
