@@ -39,6 +39,7 @@ new class extends Component {
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore(Auth::id())],
+            'preferred_homepage' => ['nullable', 'string'],
             'avatar' => ['nullable', 'image', 'max:190000', 'mimes:jpg,jpeg,png'],
         ];
     }
