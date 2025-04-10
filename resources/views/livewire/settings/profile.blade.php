@@ -40,7 +40,6 @@ new class extends Component {
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore(Auth::id())],
             'preferred_homepage' => ['nullable', 'string'],
-            'avatar' => ['nullable', 'image', 'max:190000', 'mimes:jpg,jpeg,png'],
         ];
     }
 
@@ -69,7 +68,9 @@ new class extends Component {
 
     public function updatedAvatar(): void
     {
-        $this->validateOnly('avatar');
+        $this->validate([
+            'avatar' => ['nullable', 'image', 'max:190000', 'mimes:jpg,jpeg,png']
+        ]);
 
         /** @var TemporaryUploadedFile $avatar */
         $avatar = $this->avatar;
@@ -100,7 +101,7 @@ new class extends Component {
 
     public function updateProfileInformation(): void
     {
-        $this->validateOnly('name', 'email', 'preferred_homepage');
+        $this->validate();
 
         auth()
             ->user()
