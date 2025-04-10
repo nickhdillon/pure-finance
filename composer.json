@@ -10,7 +10,8 @@
         "laravel/tinker": "^2.10.1",
         "league/flysystem-aws-s3-v3": "^3.0",
         "livewire/flux-pro": "^2.0.5",
-        "livewire/volt": "^1.6.7"
+        "livewire/volt": "^1.6.7",
+        "spatie/image": "^3.8"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.15",
