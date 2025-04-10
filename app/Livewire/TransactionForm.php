@@ -201,16 +201,30 @@ class TransactionForm extends Component
     }
 
     #[On('file-deleted')]
-    public function deleteAttachment(string $file_name): void
+    public function deleteAttachment(string $file_id): void
     {
         if ($this->transaction) {
             $this->transaction->attachments = collect($this->transaction->attachments)
-                ->reject(fn(array $attachment): bool => $attachment['name'] === $file_name)
+                ->reject(fn(array $attachment): bool => $attachment['id'] === $file_id)
                 ->values()
                 ->all();
 
             $this->transaction->save();
         }
+    }
+
+    public function delete(Transaction $transaction): void
+    {
+        $transaction->delete();
+
+        Flux::toast(
+            variant: 'success',
+            text: 'Successfully deleted transaction',
+        );
+
+        Flux::modals()->close();
+
+        $this->redirectRoute('account-overview', $this->account_id);
     }
 
     public function submit(

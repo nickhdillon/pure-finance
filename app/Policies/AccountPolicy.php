@@ -9,7 +9,6 @@ use App\Models\Account;
 
 class AccountPolicy
 {
-
     /**
      * Determine whether the user can view the model.
      */

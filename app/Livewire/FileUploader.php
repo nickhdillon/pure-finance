@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Livewire;
 
 use Livewire\Component;
+use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use Livewire\WithFileUploads;
 use Livewire\Attributes\Validate;
@@ -65,7 +66,10 @@ class FileUploader extends Component
         $this->validate();
 
         foreach ($this->files as $file) {
+            $uuid = Str::uuid()->toString();
+
             $this->uploaded_files->push([
+                'id' => $uuid,
                 'name' => $file->getClientOriginalName(),
                 'size' => $this->formatFileSize($file->getSize()),
             ]);
@@ -77,23 +81,24 @@ class FileUploader extends Component
             );
 
             $this->dispatch('file-uploaded', file: [
+                'id' => $uuid,
                 'name' => $file->getClientOriginalName(),
                 'size' => $this->formatFileSize($file->getSize()),
             ]);
         }
     }
 
-    public function removeFile(string $file_name): void
+    public function removeFile(string $file_name, string $file_id): void
     {
         if (Storage::disk('s3')->exists("{$this->s3_path}/{$file_name}")) {
             Storage::disk('s3')->delete("{$this->s3_path}/{$file_name}");
         }
 
         $this->uploaded_files = $this->uploaded_files
-            ->reject(fn(array $file): bool => $file['name'] === $file_name)
+            ->reject(fn(array $file): bool => $file['id'] === $file_id)
             ->values();
 
-        $this->dispatch('file-deleted', $file_name);
+        $this->dispatch('file-deleted', $file_id);
     }
 
     #[On('file-deleted')]

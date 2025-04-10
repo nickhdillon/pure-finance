@@ -140,6 +140,15 @@ it('can delete an attachment', function () {
         ->assertHasNoErrors();
 });
 
+it('can delete a transaction', function () {
+    livewire(TransactionForm::class, [
+        'account' => auth()->user()->accounts()->first()
+    ])
+        ->call('delete', Transaction::first()->id)
+        ->assertHasNoErrors()
+        ->assertRedirect();
+});
+
 it('can transfer from one account to another', function () {
     auth()->user()->accounts()->create([
         'type' => AccountType::CHECKING,

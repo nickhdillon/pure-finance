@@ -18,7 +18,7 @@
     <x-card>
         <x-slot:content>
             <div class="p-3">
-                <flux:input size="sm" icon="magnifying-glass" placeholder="Search tags..." wire:model.live.debounce.300ms='search' clearable />
+                <flux:input icon="magnifying-glass" placeholder="Search tags..." wire:model.live.debounce.300ms='search' clearable />
             </div>
 
             @if ($tags->count() > 0)

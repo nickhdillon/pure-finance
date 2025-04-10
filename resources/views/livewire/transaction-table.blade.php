@@ -17,8 +17,8 @@
 
     <x-card>
         <x-slot:content>                
-            <div class="px-3 py-2 gap-2.5 flex items-center justify-between dark:bg-zinc-900 rounded-t-[8px]">
-                <flux:input size="sm" icon="magnifying-glass" placeholder="Search transactions..." wire:model.live.debounce.300ms='search' clearable />
+            <div class="p-3 gap-2.5 flex items-center justify-between dark:bg-zinc-900 rounded-t-[8px]">
+                <flux:input icon="magnifying-glass" placeholder="Search transactions..." wire:model.live.debounce.300ms='search' clearable />
 
                 <div class="flex items-center">
                     <x-filters :$account :$accounts :$categories />
@@ -29,7 +29,7 @@
 
             @if ($transactions->count() > 0)
                 <flux:table :paginate="$transactions" class="border-t border-zinc-200 dark:border-white/20">
-                    <flux:table.columns class="[&>tr>th]:px-3! bg-zinc-50 dark:bg-zinc-800">
+                    <flux:table.columns class="[&>tr>th]:!px-3 hidden sm:table-header-group bg-zinc-50 dark:bg-zinc-800">
                         @if (in_array('date', $columns))
                             <flux:table.column sortable :sorted="$sort_col === 'date'" :direction="$sort_direction"
                             wire:click="sortBy('date')">
@@ -84,7 +84,17 @@
                         </flux:table.column>
                     </flux:table.columns>
 
-                    <flux:table.rows class="dark:bg-zinc-900">
+                    <flux:table.rows class="sm:hidden dark:bg-zinc-900">
+                        @foreach ($transactions as $transaction)
+                            <flux:table.row :key="$transaction->id">
+                                <flux:table.cell class="!p-0">
+                                    <x-transaction :$transaction />
+                                </flux:table.cell>
+                            </flux:table.row>                        
+                        @endforeach
+                    </flux:table.rows>
+
+                    <flux:table.rows class="hidden sm:table-row-group dark:bg-zinc-900">
                         @foreach ($transactions as $transaction)
                             <flux:table.row :key="$transaction->id" class="[&>td]:px-3!">
                                 @if (in_array('date', $columns))
@@ -167,16 +177,28 @@
 
                                 <flux:table.cell align="end">
                                     <div class="flex items-center justify-end">
-                                        <div>
-                                            <flux:button
-                                                href="{{ route('edit-transaction-form', $transaction->id) }}"
-                                                wire:navigate
-                                                variant="ghost"
-                                                size="sm"
-                                                icon="pencil-square"
-                                                class="text-indigo-500!"
-                                            />
-                                        </div>
+                                        @if ($transaction->attachments) 
+                                            <flux:modal.trigger name="attachments">
+                                                <div x-data="{ attachments: @js($transaction->attachments) }">
+                                                    <flux:button
+                                                        icon="photo"
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        class="!text-zinc-600 dark:!text-zinc-100"
+                                                        x-on:click="$dispatch('load-attachments', { attachments })"
+                                                    />
+                                                </div>
+                                            </flux:modal.trigger>
+                                        @endif
+
+                                        <flux:button
+                                            href="{{ route('edit-transaction-form', $transaction->id) }}"
+                                            wire:navigate
+                                            variant="ghost"
+                                            size="sm"
+                                            icon="pencil-square"
+                                            class="text-indigo-500!"
+                                        />
 
                                         <div>
                                             <flux:modal.trigger name="delete-transaction-{{ $transaction->id }}">
@@ -225,4 +247,6 @@
             @endif
         </x-slot:content>
     </x-card>
+
+    <livewire:attachments />
 </div>

@@ -18,7 +18,7 @@
             </x-slot:button>
 
             <x-slot:content>
-                <div class="p-3 flex items-center text-sm justify-between">
+                <div class="p-3 flex items-start text-sm justify-between">
                     <div class="flex flex-col space-y-2">
                         <p>
                             <span class="font-medium">
@@ -39,7 +39,13 @@
 
                     <div class="flex flex-col">
                         @if ($account->transactions()->count() === 0)
-                            ${{ Number::format($account->initial_balance ?? 0, 2) }}
+                            <p>
+                                <span class="font-medium">
+                                    Initial Balance:
+                                </span>
+
+                                ${{ Number::format($account->initial_balance ?? 0, 2) }}
+                            </p>
                         @else
                             <div class="space-y-2">
                                 <p>

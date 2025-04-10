@@ -48,17 +48,17 @@
         </label>
 
         @if ($uploaded_files)
-            <div class="space-y-2.5">
-                @foreach ($uploaded_files->reverse() as $file)
-                    <div wire:key="{{ $file['name'] }}-{{ $file['size'] }}" wire:transition.duration.300ms
-                        class="flex items-center shadow-xs mt-2.5 justify-between p-[7px] border border-zinc-200 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-900">
+            <div>
+                @foreach ($uploaded_files as $file)
+                    <div wire:key="{{ $file['id'] }}"
+                        class="flex items-center shadow-xs mt-1.5 justify-between p-[7px] border border-zinc-200 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-900">
                         <div class="flex items-center space-x-2">
                             <div>
                                 <x-file-preview :$file />
                             </div>
 
-                            <div class="flex flex-col -space-y-1">
-                                <p class="text-[13px] text-zinc-600 dark:text-zinc-300">
+                            <div class="flex flex-col space-y-0.5">
+                                <p class="text-[13px] break-all max-w-[240px] sm:!max-w-[1000px] leading-3 text-zinc-600 dark:text-zinc-300">
                                     {{ $file['name'] }}
                                 </p>
 
@@ -68,7 +68,7 @@
                             </div>
                         </div>
 
-                        <flux:button icon="x-mark" variant="ghost" class="h-7! w-7! text-red-500! rounded-md" type="button" wire:click="removeFile('{{ $file['name'] }}')" />
+                        <flux:button icon="x-mark" variant="ghost" class="h-7! w-7! text-red-500! rounded-md" type="button" wire:click="removeFile('{{ $file['name'] }}', '{{ $file['id'] }}')" />
                     </div>
                 @endforeach
             </div>

@@ -1,6 +1,6 @@
 @props(['columns'])
 
-<div wire:ignore>
+<div wire:ignore class="hidden sm:block">
     <flux:dropdown>
         <flux:button icon="view-columns" variant="ghost" />
 

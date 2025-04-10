@@ -95,7 +95,7 @@
                                 <flux:error name="date" />
                             </flux:field>
 
-                            <div class="flex items-center justify-between w-[60%]">
+                            <div class="flex items-center justify-between sm:w-[60%]">
                                 <flux:field>
                                     <flux:label>Status</flux:label>
 
@@ -183,8 +183,46 @@
                 </x-card>
             </div>
                 
-            <div class="flex justify-end col-start-2">
-                <div class="space-x-1 text-sm text-white">
+            <div class="flex justify-between col-start-2">
+                @if ($transaction)
+                    <div>
+                        <flux:modal.trigger name="delete-transaction-{{ $transaction->id }}">
+                            <flux:button variant="danger" size="sm">
+                                Delete
+                            </flux:button>
+                        </flux:modal.trigger>
+
+                        <flux:modal name="delete-transaction-{{ $transaction->id }}" class="min-w-[22rem]">
+                            <div class="space-y-6 text-left">
+                                <div class="space-y-4!">
+                                    <flux:heading size="lg" class="font-semibold -mt-1.5!">
+                                        Delete Transaction?
+                                    </flux:heading>
+
+                                    <flux:subheading>
+                                        Are you sure you want to delete this transaction?
+                                    </flux:subheading>
+                                </div>
+
+                                <div class="flex gap-2">
+                                    <flux:spacer />
+
+                                    <flux:modal.close>
+                                        <flux:button variant="ghost" size="sm">
+                                            Cancel
+                                        </flux:button>
+                                    </flux:modal.close>
+
+                                    <flux:button type="button" wire:click="delete({{ $transaction->id }})" variant="danger" size="sm">
+                                        Confirm
+                                    </flux:button>
+                                </div>
+                            </div>
+                        </flux:modal>
+                    </div>
+                @endif
+
+                <div class="space-x-1 ml-auto text-sm text-white">
                     <flux:button href="{{ route('dashboard') }}" wire:navigate variant="outline" class="!px-4" size="sm">
                         Cancel
                     </flux:button>

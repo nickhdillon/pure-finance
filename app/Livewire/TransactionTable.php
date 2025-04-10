@@ -171,6 +171,7 @@ class TransactionTable extends Component
                     'account:id,name,user_id',
                     'category:id,name,parent_id',
                     'category.parent:id,name',
+                    'tags:id,name'
                 ])
                 ->whereRelation('account', 'user_id', auth()->id())
                 ->when($this->account, function (Builder $query): void {

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Str;
 use App\Livewire\FileUploader;
 use Illuminate\Http\UploadedFile;
 use function Pest\Livewire\livewire;
@@ -33,9 +34,11 @@ it('can format file size', function () {
 it('can upload and remove a file', function () {
     $file = UploadedFile::fake()->image('files/logo.png');
 
+    $uuid = Str::uuid()->toString();
+
     livewire(FileUploader::class)
         ->set('files', $file)
-        ->call('removeFile', 'logo.png')
+        ->call('removeFile', 'logo.png', $uuid)
         ->assertDispatched('file-deleted')
         ->assertHasNoErrors();
 });
@@ -43,9 +46,12 @@ it('can upload and remove a file', function () {
 it('can pass in a file', function () {
     $file = UploadedFile::fake()->image('files/logo.png');
 
+    $uuid = Str::uuid()->toString();
+
     livewire(FileUploader::class, [
         'files' => [
             [
+                'id' => $uuid,
                 'name' => 'logo.png',
                 'size' => $file->getSize(),
             ],
@@ -53,6 +59,7 @@ it('can pass in a file', function () {
     ])
         ->assertSet('uploaded_files', collect([
             [
+                'id' => $uuid,
                 'name' => 'logo.png',
                 'size' => $file->getSize(),
             ],
