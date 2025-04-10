@@ -100,7 +100,7 @@ new class extends Component {
 
     public function updateProfileInformation(): void
     {
-        $this->validate();
+        $this->validateOnly('name', 'email', 'preferred_homepage');
 
         auth()
             ->user()
