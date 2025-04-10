@@ -162,17 +162,35 @@ new class extends Component {
                 </div>
             </div>
 
-            <flux:input wire:model="name" :label="__('Name')" type="text" required autofocus autocomplete="name" />
+            <flux:field>
+                <flux:label>Name</flux:label>
 
-            <flux:input wire:model="email" :label="__('Email')" type="email" required autocomplete="email" />
+                <flux:input type="text" wire:model='name' required />
 
-            <flux:select :label="__('Preferred Homepage')" variant="listbox" placeholder="Select a page" wire:model="preferred_homepage" clearable>
-                @foreach ($routes as $key => $value)
-                <flux:select.option value="{{ $key }}">
-                    {{ $value }}
-                </flux:select.option>
-                @endforeach
-            </flux:select>
+                <flux:error name="name" />
+            </flux:field>
+
+            <flux:field>
+                <flux:label>Email</flux:label>
+
+                <flux:input type="email" wire:model='email' required />
+
+                <flux:error name="email" />
+            </flux:field>
+
+            <flux:field>
+                <flux:label>Name</flux:label>
+
+                <flux:select :label="__('Preferred Homepage')" variant="listbox" placeholder="Select a page" wire:model="preferred_homepage" clearable>
+                    @foreach ($routes as $key => $value)
+                    <flux:select.option value="{{ $key }}">
+                        {{ $value }}
+                    </flux:select.option>
+                    @endforeach
+                </flux:select>
+
+                <flux:error name="preferred_homepage" />
+            </flux:field>
 
             <div class="flex items-center gap-4">
                 <div class="flex items-center justify-end">
