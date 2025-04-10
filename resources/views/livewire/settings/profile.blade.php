@@ -13,9 +13,13 @@ use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 new class extends Component {
     use WithFileUploads;
 
+    public array $routes = [];
+
     public string $name = '';
 
     public string $email = '';
+
+    public string $preferred_homepage = '';
 
     public TemporaryUploadedFile|string|null $avatar = null;
 
@@ -41,9 +45,19 @@ new class extends Component {
 
     public function mount(): void
     {
+        $this->routes = [
+            'dashboard' => 'Dashboard',
+            'accounts' => 'Accounts',
+            'planned-spending' => 'Planned Spending',
+            'transactions' => 'Transactions',
+            'categories' => 'Categories',
+            'tags' => 'Tags',
+        ];
+
         $user = Auth::user();
         $this->name = $user->name;
         $this->email = $user->email;
+        $this->preferred_homepage = $user->preferred_homepage ?? 'dashboard';
         $this->avatar = $this->getAvatarUrl($user->avatar);
     }
 
@@ -92,6 +106,7 @@ new class extends Component {
             ->update([
                 'name' => $this->name,
                 'email' => $this->email,
+                'preferred_homepage' => $this->preferred_homepage
             ]);
 
         $this->dispatch('profile-updated', name: $this->name);
@@ -119,7 +134,7 @@ new class extends Component {
                         <img src="{{ $avatar }}" alt="Avatar" class="rounded-xl size-24 mt-2" id="avatar" />
                         @else
                         <div
-                            class="flex items-center justify-center bg-zinc-100 hover:bg-zinc-200 duration-200 ease-in-out rounded-xl border dark:bg-zinc-700 dark:hover:bg-zinc-800 size-24 mt-2">
+                            class="flex items-center justify-center bg-zinc-100 hover:bg-zinc-200 duration-200 ease-in-out rounded-xl border dark:border-white/10 dark:bg-white/10 dark:hover:bg-zinc-800 size-24 mt-2">
                             <svg wire:loading.remove wire:target="avatar" xmlns="http://www.w3.org/2000/svg"
                                 fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                 class="size-6">
@@ -146,12 +161,17 @@ new class extends Component {
                 </div>
             </div>
 
-            <flux:input wire:model="name" :label="__('Name')" type="text" required autofocus
-                autocomplete="name" />
+            <flux:input wire:model="name" :label="__('Name')" type="text" required autofocus autocomplete="name" />
 
-            <div>
-                <flux:input wire:model="email" :label="__('Email')" type="email" required autocomplete="email" />
-            </div>
+            <flux:input wire:model="email" :label="__('Email')" type="email" required autocomplete="email" />
+
+            <flux:select :label="__('Preferred Homepage')" variant="listbox" placeholder="Select a page" wire:model="preferred_homepage" clearable>
+                @foreach ($routes as $key => $value)
+                <flux:select.option value="{{ $key }}">
+                    {{ $value }}
+                </flux:select.option>
+                @endforeach
+            </flux:select>
 
             <div class="flex items-center gap-4">
                 <div class="flex items-center justify-end">
