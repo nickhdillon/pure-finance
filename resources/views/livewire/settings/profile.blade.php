@@ -160,6 +160,8 @@ new class extends Component {
                     </div>
                     @endif
                 </div>
+
+                <flux:error name="avatar" />
             </div>
 
             <flux:field>
@@ -179,9 +181,9 @@ new class extends Component {
             </flux:field>
 
             <flux:field>
-                <flux:label>Name</flux:label>
+                <flux:label>Preferred Homepage</flux:label>
 
-                <flux:select :label="__('Preferred Homepage')" variant="listbox" placeholder="Select a page" wire:model="preferred_homepage" clearable>
+                <flux:select variant="listbox" placeholder="Select a page" wire:model="preferred_homepage">
                     @foreach ($routes as $key => $value)
                     <flux:select.option value="{{ $key }}">
                         {{ $value }}
