@@ -14,9 +14,16 @@ class Attachments extends Component
 
     public array $attachments = [];
 
+    public function mount(): void
+    {
+        $this->attachments = [];
+    }
+
     #[On('load-attachments')]
     public function loadAttachments(?array $attachments = null): void
     {
+        $this->attachments = [];
+
         $this->attachments = $attachments;
     }
 

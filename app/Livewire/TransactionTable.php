@@ -212,7 +212,7 @@ class TransactionTable extends Component
                                 ->where('name', 'like', $selected_category)
                                 ->first();
 
-                            if (! $category->parent()->exists()) {
+                            if (! $category?->parent()?->exists()) {
                                 $query->orWhereRelation('category', 'name', 'like', $category->name)
                                     ->orWhereRelation('category', 'parent_id', $category->id);
                             } else {

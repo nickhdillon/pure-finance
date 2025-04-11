@@ -49,7 +49,7 @@
 
                 <div class="flex items-center">
                     @if (in_array($transaction->type, [TransactionType::DEBIT, TransactionType::TRANSFER, TransactionType::WITHDRAWAL]))
-                        <span class="text-zinc-700">-</span>
+                        <span class="text-zinc-700 dark:text-zinc-200">-</span>
                     @else
                         <span class="text-emerald-500">+</span>
                     @endif
