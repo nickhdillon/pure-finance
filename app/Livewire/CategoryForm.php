@@ -82,10 +82,7 @@ class CategoryForm extends Component
                 ->where('id', $this->category['id'])
                 ->update($validated_data);
         } else {
-            auth()->user()->categories()->create(
-                ...$validated_data,
-                ...['name' => trim($this->name)]
-            );
+            auth()->user()->categories()->create($validated_data);
         }
 
         $this->dispatch('category-saved');
