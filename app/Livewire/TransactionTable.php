@@ -209,14 +209,16 @@ class TransactionTable extends Component
                             $category = Category::query()
                                 ->with('parent')
                                 ->select(['id', 'name', 'parent_id'])
+                                ->whereRelation('user', 'id', auth()->id())
                                 ->where('name', 'like', $selected_category)
                                 ->first();
+                            dd($category);
 
-                            if (! $category?->parent()?->exists()) {
-                                $query->orWhereRelation('category', 'name', 'like', $category?->name)
-                                    ->orWhereRelation('category', 'parent_id', $category?->id);
+                            if (! $category?->parent()->exists()) {
+                                $query->orWhereRelation('category', 'name', 'like', $category->name)
+                                    ->orWhereRelation('category', 'parent_id', $category->id);
                             } else {
-                                $query->orWhereRelation('category', 'name', 'like', $category?->name);
+                                $query->orWhereRelation('category', 'name', 'like', $category->name);
                             }
                         }
                     });
