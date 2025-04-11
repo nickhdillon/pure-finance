@@ -26,7 +26,7 @@
             <flux:button icon="funnel" variant="ghost" x-on:click="slideOverOpen = true" class="!-mx-2 sm:!mx-auto" />
 
             <span x-cloak x-show="totalFilters() > 0"
-                class="absolute top-1 right-1 flex items-center justify-center w-[19px] h-[19px] -mt-2 -mr-2 text-xs bg-emerald-600 rounded-full text-slate-200"
+                class="absolute top-1 right-0 sm:right-1 flex items-center justify-center w-[19px] h-[19px] -mt-2 -mr-2 text-xs bg-emerald-600 rounded-full text-slate-200"
                 x-text="totalFilters()">
             </span>
         </div>
