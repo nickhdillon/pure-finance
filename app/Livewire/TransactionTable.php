@@ -206,10 +206,9 @@ class TransactionTable extends Component
                 ->when(! empty($this->selected_categories), function (Builder $query): void {
                     $query->where(function (Builder $query): void {
                         foreach ($this->selected_categories as $selected_category) {
-                            dd($selected_category);
                             $category = Category::query()
-                                ->with('parent')
-                                ->select(['id', 'name', 'parent_id'])
+                                ->with(['user', 'parent'])
+                                ->select(['id', 'user_id', 'name', 'parent_id'])
                                 ->whereRelation('user', 'id', auth()->id())
                                 ->where('name', 'like', $selected_category)
                                 ->first();
