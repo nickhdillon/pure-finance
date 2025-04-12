@@ -1,4 +1,4 @@
-<div class="space-y-4" x-on:account-saved="$wire.$refresh" x-on:transaction-deleted.window="$wire.$refresh">
+<div class="space-y-4" x-on:account-saved="$wire.$refresh" x-on:transaction-deleted.window="$wire.$refresh" x-on:status-changed.window="$wire.$refresh">
     <flux:heading size="xl">
         Account Overview
     </flux:heading>

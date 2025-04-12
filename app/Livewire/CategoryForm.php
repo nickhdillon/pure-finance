@@ -70,6 +70,7 @@ class CategoryForm extends Component
             ->categories()
             ->select(['id', 'name'])
             ->whereNull('parent_id')
+            ->orderby('name')
             ->get();
     }
 

@@ -28,6 +28,7 @@ class Accounts extends Component
                 $query->whereIn('type', [TransactionType::DEBIT, TransactionType::TRANSFER, TransactionType::WITHDRAWAL])
                     ->where('status', true);
             }], 'amount')
+            ->orderBy('name')
             ->get()
             ->map(function (Account $account): Account {
                 $account->cleared_balance = $account->initial_balance +
