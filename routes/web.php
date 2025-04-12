@@ -26,6 +26,7 @@ Route::middleware(['auth'])->group(function () {
         ->name('account-overview');
 
     Route::get('account/{account}/transaction-form', TransactionForm::class)
+        ->can('update', 'account')
         ->name('account.transaction-form');
 
     Route::get('planned-spending', PlannedSpending::class)->name('planned-spending');
