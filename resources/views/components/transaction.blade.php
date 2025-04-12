@@ -24,7 +24,7 @@
         </flux:button>
     </div>
 
-    <a href="{{ route('edit-transaction-form', $transaction->id) }}" @class([
+    <a href="{{ route('edit-transaction', $transaction->id) }}" @class([
         'flex flex-col p-3 py-2.5 text-sm bg-white dark:bg-zinc-900 transform transition-transform duration-300',
         'border-r-2 !border-r-emerald-500' => $transaction->status === true,
         'border-r-2 !border-r-amber-500' => $transaction->status === false,
