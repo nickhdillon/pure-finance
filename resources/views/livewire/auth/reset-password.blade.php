@@ -100,7 +100,8 @@ new #[Layout('components.layouts.auth')] class extends Component {
             type="password"
             required
             autocomplete="new-password"
-            placeholder="Confirm password" />
+            placeholder="Confirm password"
+            viewable />
 
         <div class="flex items-center justify-end">
             <flux:button type="submit" variant="primary" class="w-full">
