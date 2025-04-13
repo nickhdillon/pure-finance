@@ -114,6 +114,8 @@ class TransactionForm extends Component
             ->getTransactionTypes()
             ->getUserTags();
 
+        $this->date = today('America/Chicago');
+
         if ($this->account) {
             $this->account_id = $this->account->id;
         }
