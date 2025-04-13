@@ -90,7 +90,7 @@
                             <flux:field>
                                 <flux:label>Date</flux:label>
 
-                                <flux:date-picker wire:model='date' clearable with-today selectable-header />
+                                <flux:date-picker wire:model='date' clearable with-today />
 
                                 <flux:error name="date" />
                             </flux:field>
