@@ -8,19 +8,19 @@
     </flux:label>
 
     <flux:select variant="listbox" searchable multiple placeholder="Select tags" clearable x-model="$wire.tags">
+        <x-slot name="search" class="relative">
+            <flux:select.search form class="px-4" placeholder="Search tags..." />
+
+            <div class="absolute top-1 right-0 pr-1">
+                <flux:modal.trigger name="add-tag">
+                    <flux:button square variant="subtle" size="sm" aria-label="Tag form">
+                        <flux:icon.plus variant="micro" />
+                    </flux:button>
+                </flux:modal.trigger>
+            </div>
+        </x-slot>
+        
         @foreach ($user_tags as $tag)
-            <x-slot name="search" class="relative">
-                <flux:select.search form class="px-4" placeholder="Search tags..." />
-
-                <div class="absolute top-1 right-0 pr-1">
-                    <flux:modal.trigger name="add-tag">
-                        <flux:button square variant="subtle" size="sm" aria-label="Tag form">
-                            <flux:icon.plus variant="micro" />
-                        </flux:button>
-                    </flux:modal.trigger>
-                </div>
-            </x-slot>
-
             <flux:select.option value="{{ $tag }}" class="font-semibold">
                 {{ $tag }}
             </flux:select.option>
