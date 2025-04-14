@@ -67,6 +67,30 @@ it('can edit a transaction', function () {
         ->assertRedirect();
 });
 
+it('can set the category on event', function () {
+    $category = auth()->user()->categories()->create([
+        'name' => 'Test'
+    ]);
+
+    livewire(TransactionForm::class)
+        ->call('setCategory')
+        ->assertSet('category_id', $category->id)
+        ->assertHasNoErrors();
+});
+
+it('can push a tag on event', function () {
+    $tag = auth()->user()->tags()->create([
+        'name' => 'Test'
+    ]);
+
+    livewire(TransactionForm::class)
+        ->call('pushTag')
+        ->assertSet('tags', [
+            0 => $tag->name
+        ])
+        ->assertHasNoErrors();
+});
+
 it('can make transaction recurring by month', function () {
     $transaction = Transaction::factory()
         ->for(auth()->user()->accounts()->first())

@@ -56,6 +56,8 @@ class TagForm extends Component
 
         $this->dispatch('tag-saved');
 
+        $this->dispatch('set-tags');
+
         if (! $this->tag) {
             $this->reset(['name']);
         }

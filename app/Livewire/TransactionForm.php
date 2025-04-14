@@ -165,6 +165,21 @@ class TransactionForm extends Component
         return $this;
     }
 
+    #[On('set-category')]
+    public function setCategory(): self
+    {
+        $this->category_id = auth()
+            ->user()
+            ->categories()
+            ->with(['children:id,parent_id,name'])
+            ->latest('id')
+            ->select(['id', 'name'])
+            ->first()
+            ->id;
+
+        return $this;
+    }
+
     public function getTransactionTypes(): self
     {
         $this->transaction_types = collect(TransactionType::cases())
@@ -185,6 +200,21 @@ class TransactionForm extends Component
             ->orderBy('name')
             ->pluck('name')
             ->toArray();
+
+        return $this;
+    }
+
+    #[On('set-tags')]
+    public function pushTag(): self
+    {
+        $tag = auth()
+            ->user()
+            ->tags()
+            ->latest('id')
+            ->select(['id', 'name'])
+            ->first();
+
+        $this->tags[] = $tag->name;
 
         return $this;
     }

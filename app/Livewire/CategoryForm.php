@@ -88,6 +88,8 @@ class CategoryForm extends Component
 
         $this->dispatch('category-saved');
 
+        $this->dispatch('set-category');
+
         if (! $this->category) {
             $this->reset(['name', 'parent_id']);
         }
