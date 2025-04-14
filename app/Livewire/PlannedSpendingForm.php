@@ -44,7 +44,7 @@ class PlannedSpendingForm extends Component
         }
     }
 
-    #[On('category-saved')]
+    #[On('category-saved'), On('planned-expense-saved')]
     public function getCategories(): self
     {
         $this->categories = auth()
