@@ -8,6 +8,7 @@ use Livewire\Component;
 use App\Models\Transaction;
 use App\Enums\TransactionType;
 use App\Models\PlannedExpense;
+use Illuminate\Support\Collection;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -25,9 +26,12 @@ class PlannedExpenseView extends Component
 
     public float $percentage_spent = 0;
 
-    public array $monthly_totals = [];
+    public Collection $monthly_totals;
 
-    public bool $has_non_zero_spending = false;
+    public function mount(): void
+    {
+        $this->monthly_totals = collect();
+    }
 
     private function applyCategoryFilter(Builder $query): void
     {
@@ -102,10 +106,7 @@ class PlannedExpenseView extends Component
                 'month' => now()->subMonths($i)->format('M'),
                 'total_spent' => ceil(abs(($data->total_deposits ?? 0) - ($data->total_debits ?? 0))),
             ]];
-        })->values()->toArray();
-
-        $this->has_non_zero_spending = collect($this->monthly_totals)
-            ->contains(fn(array $month): bool => $month['total_spent'] > 0);
+        });
     }
 
     public function render(): View

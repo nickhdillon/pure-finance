@@ -22,7 +22,7 @@
                     Spending in category: {{ $expense->category->name }}
                 </h3>
 
-                <div class="flex flex-col justify-between">
+                <div class="flex flex-col sm:flex-row justify-between">
                     <div class="flex flex-col w-full">
                         <div class="flex flex-col px-4 py-3 space-y-2 text-sm">
                             <h3 class="font-medium uppercase">
@@ -86,46 +86,38 @@
                         </div>
                     </div>
 
-                    @if ($has_non_zero_spending)
-                        <div class="w-full px-4 py-3">
-                            <h3 class="mb-2 text-sm font-medium uppercase">
-                                Last 6 Months
-                            </h3>
+                    <div class="w-full px-4 py-3">
+                        <h3 class="mb-2 sm:pl-8 text-sm font-medium uppercase">
+                            Last 6 Months
+                        </h3>
 
-                            <flux:chart wire:model="monthly_totals" class="aspect-2/1 sm:aspect-3/1">
-                                <flux:chart.svg>
-                                    <flux:chart.line field="total_spent" class="text-emerald-500 dark:text-emerald-400" curve="none" />
-                                    <flux:chart.area field="total_spent" class="text-emerald-200/50 dark:text-emerald-400/30" curve="none" />
+                        <div wire:ignore class="relative sm:items-center flex flex-col my-8 text-sm">
+                            <div class="flex items-end mb-2">
+                                @foreach ($monthly_totals->reverse() as $month)
+                                    <div class="w-[40px] mx-2 sm:mx-3" wire:key="{{ $month['total_spent'] }}">
+                                        <div style="height: {{ $month['total_spent'] }}px"
+                                            class="relative bg-emerald-500 shadow-sm max-h-[250px] rounded-t-lg">
+                                            <div class="absolute top-0 left-0 right-0 -mt-6 text-sm text-center">
+                                                ${{ $month['total_spent'] }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
 
-                                    <flux:chart.axis axis="y" position="left" tick-prefix="$" :format="[
-                                        'notation' => 'compact',
-                                        'compactDisplay' => 'short',
-                                        'maximumFractionDigits' => 1,
-                                    ]">
-                                        <flux:chart.axis.grid />
-                                        <flux:chart.axis.tick />
-                                    </flux:chart.axis>
-
-                                    <flux:chart.axis axis="x" field="month">
-                                        <flux:chart.axis.tick />
-                                        <flux:chart.axis.line />
-                                    </flux:chart.axis>
-
-                                    <flux:chart.zero-line />
-                                </flux:chart.svg>
-
-                                <flux:chart.tooltip>
-                                    <flux:chart.tooltip.heading field="month" />
-                                    <flux:chart.tooltip.value field="total_spent" label="Total Spent" :format="[
-                                        'style' => 'currency', 
-                                        'currency' => 'USD',
-                                        'notation' => 'compact'
-                                        ]"
-                                    />
-                                </flux:chart.tooltip>
-                            </flux:chart>
+                            <div class="flex items-end">
+                                @foreach ($monthly_totals->reverse() as $month)
+                                    <div class="w-[40px] mx-2 sm:mx-3" wire:key="{{ $month['month'] }}">
+                                        <div class="relative">
+                                            <div class="absolute top-0 left-0 right-0 mt-1 text-sm text-center">
+                                                {{ $month['month'] }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
-                    @endif
+                    </div>
                 </div>
             </div>
         </x-slot:content>
