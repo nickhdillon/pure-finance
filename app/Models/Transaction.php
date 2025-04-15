@@ -7,15 +7,17 @@ namespace App\Models;
 use App\Enums\TransactionType;
 use App\Enums\RecurringFrequency;
 use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Transaction extends Model
 {
     /** @use HasFactory<\Database\Factories\TransactionFactory> */
     use HasFactory;
+    use Sluggable;
 
     /**
      * The attributes that are mass assignable.
@@ -29,6 +31,7 @@ class Transaction extends Model
         'transfer_to',
         'amount',
         'payee',
+        'slug',
         'date',
         'notes',
         'attachments',
@@ -54,6 +57,20 @@ class Transaction extends Model
             'is_recurring' => 'bool',
             'frequency' => RecurringFrequency::class,
             'recurring_end' => 'date',
+        ];
+    }
+
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'payee'
+            ]
         ];
     }
 

@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\AccountType;
 use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,6 +15,7 @@ class Account extends Model
 {
     /** @use HasFactory<\Database\Factories\AccountFactory> */
     use HasFactory;
+    use Sluggable;
 
     /**
      * The attributes that are mass assignable.
@@ -24,6 +26,7 @@ class Account extends Model
         'user_id',
         'type',
         'name',
+        'slug',
         'balance',
         'initial_balance',
     ];
@@ -37,6 +40,20 @@ class Account extends Model
     {
         return [
             'type' => AccountType::class,
+        ];
+    }
+
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'name'
+            ]
         ];
     }
 

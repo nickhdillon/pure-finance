@@ -21,17 +21,17 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('accounts', Accounts::class)->name('accounts');
 
-    Route::get('account-overview/{account}', AccountOverview::class)
+    Route::get('account-overview/{account:slug}', AccountOverview::class)
         ->can('update', 'account')
         ->name('account-overview');
 
-    Route::get('account/{account}/transaction-form', TransactionForm::class)
+    Route::get('account/{account:slug}/transaction-form', TransactionForm::class)
         ->can('update', 'account')
         ->name('account.transaction-form');
 
     Route::get('planned-spending', PlannedSpending::class)->name('planned-spending');
 
-    Route::get('planned-expense/{expense}', PlannedExpenseView::class)
+    Route::get('planned-expense/{expense:slug}', PlannedExpenseView::class)
         ->name('planned-expense-view');
 
     Route::get('transactions', TransactionTable::class)->name('transactions');
@@ -40,7 +40,7 @@ Route::middleware(['auth'])->group(function () {
         ->can('create', Transaction::class)
         ->name('create-transaction');
 
-    Route::get('transaction-form/{transaction?}', TransactionForm::class)
+    Route::get('transaction-form/{transaction:slug?}', TransactionForm::class)
         ->can('update', 'transaction')
         ->name('edit-transaction');
 

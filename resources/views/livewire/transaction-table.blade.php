@@ -8,7 +8,7 @@
 
         @if (auth()->user()->accounts()->count() > 0)
             <flux:button
-                href="{{ $account ? route('account.transaction-form', $account->id) : route('create-transaction') }}"
+                href="{{ $account ? route('account.transaction-form', $account) : route('create-transaction') }}"
                 wire:navigate variant="primary" icon="plus" size="sm">
                 Add
             </flux:button>
@@ -192,7 +192,7 @@
                                         @endif
 
                                         <flux:button
-                                            href="{{ route('edit-transaction', $transaction->id) }}"
+                                            href="{{ route('edit-transaction', $transaction) }}"
                                             wire:navigate
                                             variant="ghost"
                                             size="sm"

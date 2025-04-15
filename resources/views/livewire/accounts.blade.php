@@ -15,7 +15,7 @@
         <x-slot:content>
             <div class="divide-y divide-zinc-200 dark:divide-zinc-700">
                 @forelse ($accounts as $account)
-                    <a href="{{ route('account-overview', $account->id) }}" wire:navigate
+                    <a href="{{ route('account-overview', $account) }}" wire:navigate
                         class="flex flex-col p-3 text-sm duration-200 ease-in-out first:rounded-t-[8px] last:rounded-b-[8px] hover:bg-zinc-50/80 dark:hover:bg-zinc-600/50">
                         <p class="font-medium">
                             {{ $account->name }}

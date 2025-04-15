@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Models\Category;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,6 +22,7 @@ class PlannedExpenseFactory extends Factory
     {
         return [
             'name' => Category::first()->name,
+            'slug' => Str::slug(Category::first()->name),
             'category_id' => Category::first(),
             'monthly_amount' => $this->faker->randomFloat(2, 0, 100),
         ];

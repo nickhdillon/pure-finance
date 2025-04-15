@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Enums\AccountType;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Enums\AccountType;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Account>
@@ -27,6 +28,7 @@ class AccountFactory extends Factory
             'user_id' => User::factory(),
             'type' => $type,
             'name' => $type->label(),
+            'slug' => Str::slug($type->label()),
             'balance' => $this->faker->randomFloat(2, 500, 50000),
             'initial_balance' => 100000,
         ];
