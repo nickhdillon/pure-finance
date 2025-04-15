@@ -300,7 +300,7 @@ class TransactionForm extends Component
             text: 'Transaction successfully ' . ($this->transaction ? 'updated' : 'created'),
         );
 
-        return redirect()->route('account-overview', $this->account);
+        return redirect()->route('account-overview', $this->account ?? Account::find($this->account_id));
     }
 
     public function render(): View
