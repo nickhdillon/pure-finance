@@ -122,6 +122,7 @@ class TransactionForm extends Component
 
         if ($this->transaction) {
             $this->account_id = $this->transaction->account->id;
+            $this->account = $this->transaction->account;
             $this->payee = $this->transaction->payee;
             $this->type = $this->transaction->type;
             $this->transfer_to = $this->transaction->transfer_to;
@@ -256,7 +257,7 @@ class TransactionForm extends Component
 
         Flux::modals()->close();
 
-        $this->redirectRoute('account-overview', $this->account_id);
+        $this->redirectRoute('account-overview', $this->account);
     }
 
     public function submit(
@@ -299,7 +300,7 @@ class TransactionForm extends Component
             text: 'Transaction successfully ' . ($this->transaction ? 'updated' : 'created'),
         );
 
-        return redirect()->route('account-overview', $this->account_id);
+        return redirect()->route('account-overview', $this->account);
     }
 
     public function render(): View

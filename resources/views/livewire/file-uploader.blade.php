@@ -43,7 +43,7 @@
                 JPG, JPEG, PNG, HEIC, SVG, AVIF, or WEBP
             </p>
 
-            <input id="files" name="files" type="file" x-ref="input" wire:model="files"
+            <input id="files" name="files" type="file" :key="$input_uuid . 'file'" x-ref="input" wire:model="files"
                 accept=".jpg, .jpeg, .png, .heic, .svg, .avif, .webp" class="hidden cursor-pointer" multiple />
         </label>
 

@@ -17,6 +17,8 @@ class FileUploader extends Component
 {
     use WithFileUploads;
 
+    public string $input_uuid = '';
+
     #[Validate([
         'files' => ['required', 'array'],
         'files.*' => ['file', 'max:12288', 'mimes:jpg,jpeg,png,heic,svg,avif,webp'],
@@ -42,6 +44,8 @@ class FileUploader extends Component
 
     public function mount(): void
     {
+        $this->input_uuid = (string) Str::uuid();
+
         $this->uploaded_files = collect();
 
         if ($this->files) {

@@ -45,6 +45,7 @@ beforeEach(function () {
 it('can create a transaction', function () {
     livewire(TransactionForm::class)
         ->set('account_id', auth()->user()->accounts->first()->id)
+        ->set('account', auth()->user()->accounts->first())
         ->set('payee', 'Test payee')
         ->set('type', TransactionType::DEPOSIT)
         ->set('amount', 100)
@@ -181,6 +182,7 @@ it('can transfer from one account to another', function () {
 
     livewire(TransactionForm::class)
         ->set('account_id', auth()->user()->accounts->first()->id)
+        ->set('account', auth()->user()->accounts->first())
         ->set('payee', 'Test payee')
         ->set('type', TransactionType::TRANSFER)
         ->set('transfer_to', auth()->user()->accounts->last()->id)
