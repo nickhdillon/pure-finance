@@ -44,8 +44,6 @@ class FileUploader extends Component
 
     public function mount(): void
     {
-        $this->input_uuid = (string) Str::uuid();
-
         $this->uploaded_files = collect();
 
         if ($this->files) {
@@ -53,6 +51,12 @@ class FileUploader extends Component
                 $this->uploaded_files->push($file);
             }
         }
+    }
+
+    private function resetFileInput(): void
+    {
+        $this->input_uuid = (string) Str::uuid();
+        $this->reset('files');
     }
 
     public function formatFileSize(int $bytes): string
@@ -90,6 +94,8 @@ class FileUploader extends Component
                 'size' => $this->formatFileSize($file->getSize()),
             ]);
         }
+
+        $this->resetFileInput();
     }
 
     public function removeFile(string $file_name, string $file_id): void
@@ -103,6 +109,8 @@ class FileUploader extends Component
             ->values();
 
         $this->dispatch('file-deleted', $file_id);
+
+        $this->resetFileInput();
     }
 
     #[On('file-deleted')]
