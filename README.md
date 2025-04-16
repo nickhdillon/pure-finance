@@ -2,6 +2,8 @@
 
 A fun and easy way to track your finances! Manage your expenses, income, and budget with ease.
 
+![Screenshot](screenshot.png)
+
 ## Features
 
 Track Expenses & Income: Keep tabs on where your money goes.
