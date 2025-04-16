@@ -1,4 +1,4 @@
-# 💰 Pure Finance
+# Pure Finance
 
 A fun and easy way to track your finances! Manage your expenses, income, and budget with ease.
 
