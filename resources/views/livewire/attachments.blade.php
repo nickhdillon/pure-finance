@@ -11,7 +11,7 @@
                 <div x-cloak wire:loading.remove wire:target='loadAttachments'
                 class="flex flex-col justify-center space-y-5">
                     @foreach ($attachments as $attachment)
-                        <img src="{{ S3Service::getS3Path($attachment['name']) }}" alt="{{ $attachment['name'] }}"
+                        <img src="{{ S3Service::getS3Path($attachment['name']) }}" alt="{{ $attachment['original_name'] }}"
                             class="rounded-lg max-h-[550px]" />
                     @endforeach
                 </div>

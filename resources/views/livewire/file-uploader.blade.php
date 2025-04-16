@@ -59,7 +59,7 @@
 
                             <div class="flex flex-col space-y-0.5">
                                 <p class="text-[13px] break-all max-w-[240px] sm:!max-w-[1000px] leading-3 text-zinc-600 dark:text-zinc-300">
-                                    {{ $file['name'] }}
+                                    {{ $file['original_name'] }}
                                 </p>
 
                                 <span class="text-xs text-zinc-400">

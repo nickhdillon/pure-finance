@@ -40,13 +40,15 @@ beforeEach(function () {
                     'name' => Storage::disk('s3')->putFile(
                         'attachments',
                         UploadedFile::fake()->image('test1.jpg')
-                    )
+                    ),
+                    'original_name' => 'test.jpg'
                 ],
                 [
                     'name' => Storage::disk('s3')->putFile(
                         'attachments',
                         UploadedFile::fake()->image('test2.jpg')
-                    )
+                    ),
+                    'original_name' => 'test.jpg'
                 ]
             ]
         ])->count(10))

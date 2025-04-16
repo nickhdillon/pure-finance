@@ -12,6 +12,7 @@ use Livewire\Attributes\Validate;
 use Illuminate\Support\Collection;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Laravel\Facades\Image;
 
 class FileUploader extends Component
 {
@@ -76,21 +77,25 @@ class FileUploader extends Component
         foreach ($this->files as $file) {
             $uuid = Str::uuid()->toString();
 
+            $converted_image = Image::read($file)->encodeByExtension('jpg');
+
+            $file_name = Str::beforeLast($file->getClientOriginalName(), '.') . '.jpg';
+
+            $unique_file_name = now()->timestamp . '_' . $file_name;
+
             $this->uploaded_files->push([
                 'id' => $uuid,
-                'name' => $file->getClientOriginalName(),
-                'size' => $this->formatFileSize($file->getSize()),
+                'name' => $unique_file_name,
+                'original_name' => $file_name,
+                'size' => $this->formatFileSize($converted_image->size()),
             ]);
 
-            $file->storePubliclyAs(
-                'files',
-                $file->getClientOriginalName(),
-                's3'
-            );
+            Storage::disk('s3')->put("{$this->s3_path}/{$unique_file_name}", $converted_image, 'public');
 
             $this->dispatch('file-uploaded', file: [
                 'id' => $uuid,
-                'name' => $file->getClientOriginalName(),
+                'name' => $unique_file_name,
+                'original_name' => $file_name,
                 'size' => $this->formatFileSize($file->getSize()),
             ]);
         }

@@ -13,18 +13,20 @@ beforeEach(function () {
 });
 
 it('can upload a file', function () {
-    $file = UploadedFile::fake()->image('files/logo.png');
+    $file = UploadedFile::fake()->image('files/logo.jpg');
 
     livewire(FileUploader::class)
         ->set('files', $file)
         ->assertDispatched('file-uploaded')
         ->assertHasNoErrors();
 
-    Storage::disk('s3')->assertExists('files/logo.png');
+    $file_name = now()->timestamp . '_logo.jpg';
+
+    Storage::disk('s3')->assertExists("files/{$file_name}");
 });
 
 it('can format file size', function () {
-    $file = UploadedFile::fake()->image('files/logo.png');
+    $file = UploadedFile::fake()->image('files/logo.jpg');
 
     livewire(FileUploader::class)
         ->call('formatFileSize', $file->getSize())
@@ -32,19 +34,21 @@ it('can format file size', function () {
 });
 
 it('can upload and remove a file', function () {
-    $file = UploadedFile::fake()->image('files/logo.png');
+    $file = UploadedFile::fake()->image('files/logo.jpg');
 
     $uuid = Str::uuid()->toString();
 
+    $file_name = now()->timestamp . '_logo.jpg';
+
     livewire(FileUploader::class)
         ->set('files', $file)
-        ->call('removeFile', 'logo.png', $uuid)
+        ->call('removeFile', $file_name, $uuid)
         ->assertDispatched('file-deleted')
         ->assertHasNoErrors();
 });
 
 it('can pass in a file', function () {
-    $file = UploadedFile::fake()->image('files/logo.png');
+    $file = UploadedFile::fake()->image('files/logo.jpg');
 
     $uuid = Str::uuid()->toString();
 
@@ -52,7 +56,8 @@ it('can pass in a file', function () {
         'files' => [
             [
                 'id' => $uuid,
-                'name' => 'logo.png',
+                'name' => 'logo.jpg',
+                'original_name' => 'logo.jpg',
                 'size' => $file->getSize(),
             ],
         ],
@@ -60,7 +65,8 @@ it('can pass in a file', function () {
         ->assertSet('uploaded_files', collect([
             [
                 'id' => $uuid,
-                'name' => 'logo.png',
+                'name' => 'logo.jpg',
+                'original_name' => 'logo.jpg',
                 'size' => $file->getSize(),
             ],
         ]))
