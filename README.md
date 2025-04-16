@@ -14,13 +14,14 @@ Secure & Private: Your financial data stays yours.
 
 ## Installation
 
-After cloning this repo, run the following commands from your project root:
+After cloning this repo, create a local MySQL database with the name `pure_finance`, and connect to it.
+
+Then, run the following commands from your project root:
 
 ```
 cp .env.example .env
 composer install
 php artisan key:generate
-touch database/database.sqlite
 php artisan migrate --seed
 php artisan flux:activate
 npm install
