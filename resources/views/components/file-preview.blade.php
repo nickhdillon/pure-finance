@@ -4,7 +4,7 @@
 <div>
     <flux:modal.trigger name="file-preview-{{ $file['name'] }}">
         <img src="{{ S3Service::getS3Path($file['name']) }}" alt="{{ $file['original_name'] }}"
-            class="w-8 h-8 rounded-md" />
+            class="w-8 h-8 rounded-[5px]" />
     </flux:modal.trigger>
 
     <flux:modal name="file-preview-{{ $file['name'] }}" class="max-h-full overflow-auto">

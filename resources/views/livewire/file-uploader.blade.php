@@ -14,7 +14,7 @@
         <label for="files"
             @disabled($disabled)
             @class([
-                'flex flex-col items-center justify-center w-full h-48 transition-colors border border-dashed rounded-lg cursor-pointer bg-white inset-shadow-xs dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 dark:hover:border-emerald-600 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-950/50',
+                'flex flex-col items-center justify-center w-full h-48 transition-colors border border-dashed rounded-[8px] cursor-pointer bg-white inset-shadow-xs dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 dark:hover:border-emerald-600 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-950/50',
                 'cursor-default! opacity-50 hover:border-zinc-200 dark:hover:border-zinc-500 hover:bg-white dark:hover:bg-zinc-900' => $disabled
             ])
             :class="{
@@ -51,7 +51,7 @@
             <div>
                 @foreach ($uploaded_files as $file)
                     <div wire:key="{{ $file['id'] }}"
-                        class="flex items-center shadow-xs mt-1.5 justify-between p-[7px] border border-zinc-200 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-900">
+                        class="flex items-center shadow-xs mt-1.5 justify-between p-[7px] border border-zinc-200 dark:border-zinc-700 rounded-[8px] bg-white dark:bg-zinc-900">
                         <div class="flex items-center space-x-2">
                             <div>
                                 <x-file-preview :$file />
