@@ -95,7 +95,7 @@
                                 <flux:error name="date" />
                             </flux:field>
 
-                            <div class="flex items-center justify-between sm:w-[60%]">
+                            <div class="flex items-center gap-4 justify-between w-full sm:w-[90%] md:w-[80%] lg:w-[70%] xl:w-[60%]">
                                 <flux:field>
                                     <flux:label>Status</flux:label>
 
