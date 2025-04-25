@@ -26,7 +26,7 @@
             <flux:button icon="funnel" variant="ghost" x-on:click="slideOverOpen = true" class="!-mx-2 sm:!mx-auto" />
 
             <span x-cloak x-show="totalFilters() > 0"
-                class="absolute top-1 right-0 sm:right-1 flex items-center justify-center w-[19px] h-[19px] -mt-2 -mr-2 text-xs bg-emerald-600 rounded-full text-slate-200"
+                class="absolute top-1 right-0 sm:right-1 flex items-center justify-center w-[19px] h-[19px] -mt-2 -mr-2 text-xs bg-emerald-600 rounded-full text-zinc-200"
                 x-text="totalFilters()">
             </span>
         </div>
@@ -67,7 +67,7 @@
                     </div>
                 </div>
 
-                <div x-collapse x-show="showStatus" class="pt-2 border-t border-slate-300 dark:border-slate-700">
+                <div x-collapse x-show="showStatus" class="pt-2 border-t border-zinc-300 dark:border-zinc-700">
                     <flux:radio.group wire:model.boolean.live="status" class="space-y-2.5!">
                         <flux:radio value="true" label="Cleared" />
 
@@ -95,7 +95,7 @@
                     </div>
                 </div>
 
-                <div x-collapse x-show="showTypes" class="pt-2 border-t border-slate-300 dark:border-slate-700">
+                <div x-collapse x-show="showTypes" class="pt-2 border-t border-zinc-300 dark:border-zinc-700">
                     <flux:radio.group wire:model.live="transaction_type" class="space-y-2.5!">
                         @foreach (TransactionType::cases() as $type)
                             <flux:radio value="{{ $type }}" label="{{ $type->label() }}" />
@@ -124,7 +124,7 @@
                         </div>
                     </div>
 
-                    <div x-collapse x-show="showAccounts" class="pt-2 border-t space-y-2.5 border-slate-300 dark:border-slate-700">
+                    <div x-collapse x-show="showAccounts" class="pt-2 border-t space-y-2.5 border-zinc-300 dark:border-zinc-700">
                         @foreach ($accounts as $account)
                             <flux:checkbox wire:model.live="selected_accounts" label="{{ $account }}"
                                 value="{{ $account }}" />
@@ -153,7 +153,7 @@
                 </div>
 
                 <div x-collapse x-show="showCategories"
-                    class="pt-2 border-t space-y-2.5 border-slate-300 dark:border-slate-700">
+                    class="pt-2 border-t space-y-2.5 border-zinc-300 dark:border-zinc-700">
                     @foreach ($categories as $category)
                         <flux:checkbox wire:model.live="selected_categories" label="{{ $category['name'] }}"
                             value="{{ $category['name'] }}" />
@@ -180,7 +180,7 @@
                     </div>
                 </div>
 
-                <div x-collapse x-show="showDates" class="pt-2 border-t border-slate-300 dark:border-slate-700 space-y-2">
+                <div x-collapse x-show="showDates" class="pt-2 border-t border-zinc-300 dark:border-zinc-700 space-y-2">
                     <flux:radio.group wire:model.live="date" class="space-y-2.5!">
                         <flux:radio value="{{ now()->subDays(7) }}" label="Last 7 Days" />
 
