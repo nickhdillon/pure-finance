@@ -18,7 +18,7 @@
             <flux:field>
                 <flux:label>Monthly Amount</flux:label>
 
-                <flux:input type="number" wire:model='monthly_amount' placeholder="100.00" step="0.01" required />
+                <flux:input type="text" inputmode="decimal" wire:model='monthly_amount' placeholder="100.00" step="0.01" required />
 
                 <flux:error name="monthly_amount" />
             </flux:field>
