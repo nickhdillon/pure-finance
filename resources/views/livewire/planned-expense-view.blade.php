@@ -129,7 +129,7 @@
 
                     <flux:modal name="expense-transactions" x-on:close="$wire.resetTransactions()">
                         <div wire:loading.remove class="space-y-4 text-sm">
-                            <flux:heading size="lg" class="font-semibold -mt-1!">
+                            <flux:heading size="lg" class="font-semibold -mt-1.5!">
                                 Transactions for {{ $selected_month }}
                             </flux:heading>
 
