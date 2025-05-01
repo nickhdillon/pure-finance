@@ -168,7 +168,7 @@ class TransactionTable extends Component
         return view('livewire.transaction-table', [
             'transactions' => Transaction::query()
                 ->with([
-                    'account:id,name,user_id',
+                    'account:id,name,user_id,slug',
                     'category:id,name,parent_id',
                     'category.parent:id,name',
                     'tags:id,name'

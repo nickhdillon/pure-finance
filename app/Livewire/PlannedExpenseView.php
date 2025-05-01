@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
+use Carbon\Carbon;
 use Livewire\Component;
 use App\Models\Transaction;
+use Livewire\Attributes\On;
 use App\Enums\TransactionType;
 use App\Models\PlannedExpense;
 use Illuminate\Support\Collection;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
 class PlannedExpenseView extends Component
 {
@@ -27,6 +30,10 @@ class PlannedExpenseView extends Component
     public float $percentage_spent = 0;
 
     public Collection $monthly_totals;
+
+    public EloquentCollection $transactions;
+
+    public string $selected_month = '';
 
     public function mount(): void
     {
@@ -109,6 +116,44 @@ class PlannedExpenseView extends Component
         });
     }
 
+    #[On('load-transactions')]
+    public function loadTransactions(?string $month = null): void
+    {
+        $this->reset('transactions');
+
+        $timezone = 'America/Chicago';
+
+        $now = now($timezone);
+
+        if ($month) {
+            $month_number = Carbon::parse($month)->month;
+
+            $year = $month_number > $now->month ? $now->year - 1 : $now->year;
+
+            $start = Carbon::createFromDate($year, $month_number, 1, $timezone)->startOfMonth();
+            $end = (clone $start)->endOfMonth();
+        } else {
+            $start = $now->startOfMonth();
+            $end = (clone $start)->endOfMonth();
+        }
+
+        $this->transactions = Transaction::query()
+            ->with(['category:id,name,parent_id', 'category.parent:id,name'])
+            ->select(['id', 'category_id', 'type', 'amount', 'payee', 'slug', 'date'])
+            ->where(fn(Builder $query) => $this->applyCategoryFilter($query))
+            ->whereBetween('date', [$start, $end])
+            ->latest('date')
+            ->get();
+
+        $this->selected_month = (clone $start)->format('F') . " ({$this->transactions->count()})";
+    }
+
+    public function resetTransactions(): void
+    {
+        $this->reset('transactions');
+    }
+
+    #[On('planned-expense-saved')]
     public function render(): View
     {
         $this->getCurrentMonthData();

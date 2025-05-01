@@ -40,7 +40,7 @@ Route::middleware(['auth'])->group(function () {
         ->can('create', Transaction::class)
         ->name('create-transaction');
 
-    Route::get('transaction-form/{transaction:slug?}', TransactionForm::class)
+    Route::get('transaction-form/{transaction:slug}', TransactionForm::class)
         ->can('update', 'transaction')
         ->name('edit-transaction');
 

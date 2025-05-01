@@ -112,7 +112,7 @@
                                 @if (!$account && in_array('account', $columns))
                                     <flux:table.cell variant="strong" class="whitespace-nowrap">
                                         <flux:button
-                                            href="https://google.com"
+                                            href="{{ route('account-overview', $transaction->account) }}"
                                             wire:navigate
                                             variant="ghost"
                                             class="text-emerald-500! hover:text-emerald-600! dark:hover:text-emerald-400! hover:bg-transparent! p-0! h-0!"
