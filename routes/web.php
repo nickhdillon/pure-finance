@@ -44,7 +44,6 @@ Route::middleware(['auth'])->group(function () {
         ->name('savings-goal-view');
 
     Route::get('savings-goal-form', SavingsGoalForm::class)
-        ->can('create', 'savings_goal')
         ->name('create-savings-goal');
 
     Route::get('savings-goal-form/{savings_goal:slug}', SavingsGoalForm::class)
