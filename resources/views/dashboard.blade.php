@@ -4,6 +4,8 @@
 
         @livewire('planned-spending')
 
+        @livewire('savings-goals')
+
         @livewire('transaction-table')
     </div>
 </x-layouts.app>

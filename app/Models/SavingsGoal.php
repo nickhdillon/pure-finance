@@ -1,34 +1,35 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Models;
 
-use App\Enums\AccountType;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Account extends Model
+class SavingsGoal extends Model
 {
-    /** @use HasFactory<\Database\Factories\AccountFactory> */
+    /** @use HasFactory<\Database\Factories\SavingsGoalFactory> */
     use HasFactory;
     use Sluggable;
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $fillable = [
-        'user_id',
-        'type',
+        'account_id',
         'name',
         'slug',
-        'balance',
-        'initial_balance',
+        'goal_amount',
+        'amount_saved',
+        'monthly_contribution',
+        'last_contributed',
+        'target',
+        'target_month',
+        'target_year',
     ];
 
     /**
@@ -39,7 +40,8 @@ class Account extends Model
     protected function casts(): array
     {
         return [
-            'type' => AccountType::class,
+            'target' => 'bool',
+            'last_contributed' => 'datetime'
         ];
     }
 
@@ -57,18 +59,13 @@ class Account extends Model
         ];
     }
 
-    public function user(): BelongsTo
+    public function account(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Account::class);
     }
 
     public function transactions(): HasMany
     {
-        return $this->hasMany(Transaction::class);
-    }
-
-    public function savings_goals(): HasMany
-    {
-        return $this->hasMany(SavingsGoal::class);
+        return $this->hasMany(SavingsGoalTransaction::class);
     }
 }

@@ -7,7 +7,6 @@ use App\Models\Account;
 use App\Models\Category;
 use App\Models\Transaction;
 use App\Models\PlannedExpense;
-
 use App\Livewire\PlannedExpenseView;
 use function Pest\Livewire\livewire;
 

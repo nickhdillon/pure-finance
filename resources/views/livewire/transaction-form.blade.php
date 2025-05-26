@@ -82,7 +82,7 @@
                                     Amount
                                 </flux:label>
 
-                                <flux:input icon="currency-dollar" icon-variant="outline" type="text" inputmode="decimal" placeholder="100.00" step="0.01" wire:model='amount' required />
+                                <flux:input icon="currency-dollar" icon-variant="outline" type="number" inputmode="decimal" placeholder="100.00" step="0.01" wire:model='amount' required />
 
                                 <flux:error name="amount" />
                             </flux:field>

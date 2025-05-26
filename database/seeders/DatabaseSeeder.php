@@ -19,6 +19,8 @@ class DatabaseSeeder extends Seeder
             TransactionSeeder::class,
             TagSeeder::class,
             PlannedExpenseSeeder::class,
+            SavingsGoalSeeder::class,
+            SavingsGoalTransactionSeeder::class
         ]);
     }
 }

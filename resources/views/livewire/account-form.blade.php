@@ -32,7 +32,7 @@
             <flux:field>
                 <flux:label>Initial Balance</flux:label>
 
-                <flux:input type="text" inputmode="decimal" wire:model='initial_balance' placeholder="100.00" step="0.01" :disabled="$account" required />
+                <flux:input type="number" inputmode="decimal" wire:model='initial_balance' placeholder="100.00" step="0.01" :disabled="$account" required />
 
                 <flux:error name="name" />
             </flux:field>

@@ -6,9 +6,11 @@
             Delete {{ Str::headline($heading) }}?
         </flux:heading>
 
-        <flux:text class="mt-2">
-            <p>You're about to delete this {{ $heading }}.</p>
-            <p>This action cannot be reversed.</p>
+        <flux:text class="mt-2 flex flex-wrap">
+            <p>
+                You're about to delete this {{ $heading }}.
+                This action cannot be reversed.
+            </p>
         </flux:text>
 
         <div class="flex mt-6 gap-2">

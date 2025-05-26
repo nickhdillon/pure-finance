@@ -87,4 +87,9 @@ class User extends Authenticatable
     {
         return $this->hasManyThrough(PlannedExpense::class, Category::class);
     }
+
+    public function savings_goals(): HasManyThrough
+    {
+        return $this->hasManyThrough(SavingsGoal::class, Account::class);
+    }
 }

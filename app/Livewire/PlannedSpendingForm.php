@@ -74,9 +74,8 @@ class PlannedSpendingForm extends Component
 
         $this->dispatch('planned-expense-saved');
 
-        if (! $this->expense) {
-            $this->reset();
-        }
+        if (! $this->expense) $this->reset();
+
         Flux::toast(
             variant: 'success',
             text: 'Expense successfully ' . ($this->expense ? 'updated' : 'created'),

@@ -30,6 +30,11 @@
                     {{ __('Planned Spending') }}
                 </flux:navlist.item>
 
+                <flux:navlist.item icon="target" :href="route('savings-goals')"
+                    :current="request()->routeIs('savings-goals')" wire:navigate>
+                    {{ __('Savings Goals') }}
+                </flux:navlist.item>
+
                 <flux:navlist.item icon="scroll-text" :href="route('transactions')"
                     :current="request()->routeIs('transactions')" wire:navigate>
                     {{ __('Transactions') }}

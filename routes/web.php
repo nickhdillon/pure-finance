@@ -6,10 +6,13 @@ use Livewire\Volt\Volt;
 use App\Livewire\TagTable;
 use App\Livewire\Accounts;
 use App\Models\Transaction;
+use App\Livewire\SavingsGoals;
 use App\Livewire\CategoryTable;
 use App\Livewire\TransactionForm;
 use App\Livewire\AccountOverview;
 use App\Livewire\PlannedSpending;
+use App\Livewire\SavingsGoalForm;
+use App\Livewire\SavingsGoalView;
 use App\Livewire\TransactionTable;
 use App\Livewire\PlannedExpenseView;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +36,20 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('planned-expense/{expense:slug}', PlannedExpenseView::class)
         ->name('planned-expense-view');
+
+    Route::get('savings-goals', SavingsGoals::class)->name('savings-goals');
+
+    Route::get('savings-goal/{savings_goal:slug}', SavingsGoalView::class)
+        ->can('view', 'savings_goal')
+        ->name('savings-goal-view');
+
+    Route::get('savings-goal-form', SavingsGoalForm::class)
+        ->can('create', 'savings_goal')
+        ->name('create-savings-goal');
+
+    Route::get('savings-goal-form/{savings_goal:slug}', SavingsGoalForm::class)
+        ->can('update', 'savings_goal')
+        ->name('edit-savings-goal');
 
     Route::get('transactions', TransactionTable::class)->name('transactions');
 
