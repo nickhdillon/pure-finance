@@ -6,6 +6,7 @@ use Livewire\Volt\Volt;
 use App\Livewire\TagTable;
 use App\Livewire\Accounts;
 use App\Models\Transaction;
+use App\Livewire\BillCalendar;
 use App\Livewire\SavingsGoals;
 use App\Livewire\CategoryTable;
 use App\Livewire\TransactionForm;
@@ -49,6 +50,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('savings-goal-form/{savings_goal:slug}', SavingsGoalForm::class)
         ->can('update', 'savings_goal')
         ->name('edit-savings-goal');
+
+    Route::get('bill-calendar', BillCalendar::class)->name('bill-calendar');
 
     Route::get('transactions', TransactionTable::class)->name('transactions');
 

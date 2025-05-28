@@ -35,6 +35,11 @@
                     {{ __('Savings Goals') }}
                 </flux:navlist.item>
 
+                <flux:navlist.item icon="calendar-days" :href="route('bill-calendar')"
+                    :current="request()->routeIs('bill-calendar')" wire:navigate>
+                    {{ __('Bill Calendar') }}
+                </flux:navlist.item>
+
                 <flux:navlist.item icon="scroll-text" :href="route('transactions')"
                     :current="request()->routeIs('transactions')" wire:navigate>
                     {{ __('Transactions') }}
