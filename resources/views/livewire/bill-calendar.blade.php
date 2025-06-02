@@ -4,65 +4,76 @@
             Bill Calendar
         </flux:heading>
 
-        <flux:button
-            href="#"
-            wire:navigate variant="primary" icon="plus" size="sm">
-            Add
-        </flux:button>
+        <flux:modal.trigger name="bill-form">
+            <flux:button icon="plus" variant="primary" size="sm">
+                Add
+            </flux:button>
+        </flux:modal.trigger>
     </div>
 
     <x-card>
-        <x-slot:content>                
+        <x-slot:content>            
             <div class="p-3 gap-2.5 flex items-center justify-between dark:bg-zinc-900 rounded-t-[8px]">
                 <flux:heading class="text-xl" x-text="monthLabel"></flux:heading>
 
                 <flux:button.group>
-                    <flux:button x-on:click="changeMonth(-1)" class="px-2!" variant="outline" size="sm">
+                    <flux:button x-on:click="changeMonth(-1)" class="h-7! sm:h-8! px-1.5! sm:px-2!" variant="outline" size="sm">
                         <flux:icon.chevron-left icon-variant="outline" class="h-[14px] w-[14px] stroke-2" />
                     </flux:button>
 
-                    <flux:button size="sm" x-on:click="goToToday" class="px-4!">
-                        Today
+                    <flux:button size="sm" x-on:click="goToToday" class="h-7! sm:h-8! px-2! sm:px-4!">
+                        <span class="hidden sm:block">Today</span>
+
+                        <flux:icon.calendar icon-variant="outline" class="sm:hidden h-4 w-4 stroke-2" />
                     </flux:button>
 
-                    <flux:button x-on:click="changeMonth(1)" class="px-2!" variant="outline" size="sm">
+                    <flux:button x-on:click="changeMonth(1)" class="h-7! sm:h-8! px-1.5! sm:px-2!" variant="outline" size="sm">
                         <flux:icon.chevron-right icon-variant="outline" class="h-[14px] w-[14px] stroke-2" />
                     </flux:button>
                 </flux:button.group>
             </div>
 
-            <div class="grid grid-cols-7 border-y border-zinc-200 dark:border-white/20 text-center font-medium bg-zinc-100 text-sm dark:bg-zinc-800 py-2">
+            <div class="grid grid-cols-7 border-y border-zinc-200 dark:border-white/20 text-center font-medium bg-zinc-100 sm:text-sm dark:bg-zinc-800 text-xs py-1 sm:py-2">
                 <template x-for="(day, index) in dayNames" :key="index">
                     <div>
-                        <div class="text-zinc-800 dark:text-zinc-100 text-sm font-medium text-center lg:hidden" x-text="day.substring(0,3)"></div>
-                        <div class="text-zinc-800 dark:text-zinc-100 text-sm font-medium text-center hidden lg:block" x-text="day"></div>
+                        <div class="text-zinc-800 dark:text-zinc-100 text-xs sm:text-sm font-medium text-center sm:hidden" x-text="day.substring(0,1)"></div>
+                        <div class="text-zinc-800 dark:text-zinc-100 text-xs sm:text-sm font-medium text-center hidden sm:block lg:hidden" x-text="day.substring(0,3)"></div>
+                        <div class="text-zinc-800 dark:text-zinc-100 text-xs sm:text-sm font-medium text-center hidden lg:block" x-text="day"></div>
                     </div>
                 </template>
             </div>
 
             <div class="rounded-b-[8px] overflow-hidden">
-                <div class="grid grid-cols-7 gap-px bg-zinc-200 dark:bg-zinc-600">
+                <div class="grid grid-cols-7 gap-y-px sm:gap-x-px sm:bg-zinc-200 sm:dark:bg-zinc-600">
                     <template x-for="(day, index) in days" :key="index">
-                        <div class="p-1 h-[140px] overflow-scroll text-sm text-left flex flex-col"
+                        <div class="p-1 h-[40px] sm:h-[140px] sm:overflow-scroll text-sm text-left flex flex-col"
                             :class="{
                                 'bg-white dark:bg-zinc-900': !day.blank,
                                 'text-zinc-400 dark:text-zinc-500 bg-striped dark:bg-striped': day.blank,
                             }"
                         >
                             <div class="flex flex-col h-full">
-                                <div class="sticky top-0 z-10 font-medium py-0.5 px-1 shrink-0 w-fit rounded-full" 
+                                <div class="sticky mx-auto sm:mx-0 top-0 z-10 font-medium p-0.5 aspect-square flex items-center justify-center shrink-0 w-fit text-xs rounded-full" 
                                     :class="day.isToday ? 'bg-emerald-500 text-white' : ''" 
                                     x-text="day.day">
                                 </div>
                 
-                                <div class="overflow-y-auto p-1 gap-1 flex flex-col">
+                                <div class="overflow-y-auto p-1 gap-1 flex-col hidden sm:flex">
                                     <template x-for="bill in day.bills" :key="bill.id">
-                                        <flux:modal.trigger name="bill-details">
-                                            <flux:button type="button" class="text-xs bg-emerald-100! dark:bg-emerald-900! text-emerald-800! h-auto! dark:text-emerald-100! px-1! py-0.5! rounded! justify-start! border-none! cursor-pointer">
-                                                <p x-text="bill.name" class="truncate"></p>
-                                            </flux:button>
+                                        <flux:modal.trigger x-on:click="$flux.modal('bill-form').show(); $dispatch('load-bill', { bill_id: bill.id })">
+                                            <button type="button" class="text-xs text-left px-1 py-0.5 rounded cursor-pointer"
+                                            :class="`${bill.bgColor} ${bill.textColor}`"
+                                            >
+                                                <p x-text="bill.name" class="truncate font-medium"></p>
+                                            </button>
                                         </flux:modal.trigger>
                                     </template>
+                                </div>
+
+                                <div class="flex items-center justify-center mt-auto mb-0.5 sm:hidden">
+                                    <span x-cloak x-show="day.bills.length"
+                                        class="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-300"
+                                    ></span>
                                 </div>
                             </div>
                         </div>
@@ -72,7 +83,7 @@
         </x-slot:content>
     </x-card>
 
-    <x-bill-details />
+    <livewire:bill-form />
 </div>
 
 @script
@@ -84,21 +95,10 @@
                 dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
                 days: [],
                 monthLabel: '',
-                bills: [
-                    { id: 1, name: 'Electricity', dueDate: '2025-05-03' },
-                    { id: 4, name: 'Test', dueDate: '2025-05-03' },
-                    { id: 6, name: 'Test 2', dueDate: '2025-05-03' },
-                    { id: 7, name: 'Test 3', dueDate: '2025-05-03' },
-                    { id: 8, name: 'Test 4', dueDate: '2025-05-03' },
-                    { id: 9, name: 'Test 5', dueDate: '2025-05-03' },
-                    { id: 10, name: 'Test 6', dueDate: '2025-05-03' },
-                    { id: 11, name: 'Test 7', dueDate: '2025-05-03' },
-                    { id: 12, name: 'Test 8', dueDate: '2025-05-03' },
-                    { id: 2, name: 'Water', dueDate: '2025-05-12' },
-                    { id: 3, name: 'Internet', dueDate: '2025-05-22' },
-                ],
+                bills: @js($bills),
 
                 init() {
+                    this.bills = this.bills.map(b => ({ ...b, date: this.formatDate(new Date(b.date)) }));
                     this.current = this.getMonthStart(new Date());
                     this.refresh();
                 },
@@ -108,7 +108,7 @@
                     this.refresh();
                 },
 
-                formatDate(date) {
+                formatDate(date) {                    
                     return date.toISOString().split('T')[0];
                 },
 
@@ -161,7 +161,7 @@
                             blank: false,
                             day: i,
                             date: dateStr,
-                            bills: this.bills.filter(b => b.dueDate === dateStr),
+                            bills: this.bills.filter(b => b.date === dateStr),
                             isToday: dateStr === this.formatDate(this.today),
                         });
                     }

@@ -20,7 +20,8 @@ class DatabaseSeeder extends Seeder
             TagSeeder::class,
             PlannedExpenseSeeder::class,
             SavingsGoalSeeder::class,
-            SavingsGoalTransactionSeeder::class
+            SavingsGoalTransactionSeeder::class,
+            BillSeeder::class
         ]);
     }
 }

@@ -92,4 +92,9 @@ class User extends Authenticatable
     {
         return $this->hasManyThrough(SavingsGoal::class, Account::class);
     }
+
+    public function bills(): HasMany
+    {
+        return $this->hasMany(Bill::class);
+    }
 }
