@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Enums\BillColor;
+use App\Enums\BillAlert;
 use App\Models\Category;
 use Illuminate\Support\Arr;
 use App\Enums\RecurringFrequency;
@@ -30,8 +30,11 @@ class BillFactory extends Factory
                 ->format('Y-m-d'),
             'frequency' => Arr::random(RecurringFrequency::cases()),
             'notes' => $this->faker->paragraph(4),
-            'color' => Arr::random(BillColor::cases()),
             'paid' => Arr::random([true, false]),
+            'first_alert' => Arr::random(BillAlert::cases()),
+            'first_alert_time' => $this->faker->dateTimeBetween('00:00', '23:00')->format('g A'),
+            'second_alert' => Arr::random(BillAlert::cases()),
+            'second_alert_time' => $this->faker->dateTimeBetween('00:00', '23:00')->format('g A'),
         ];
     }
 }

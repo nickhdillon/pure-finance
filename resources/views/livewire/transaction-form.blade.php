@@ -151,7 +151,7 @@
                             <flux:field>
                                 <flux:label>Frequency</flux:label>
 
-                                <flux:select variant="listbox" searchable placeholder="Select a frequency..." clearable wire:model='frequency'>
+                                <flux:select variant="listbox" placeholder="Select a frequency..." clearable wire:model='frequency'>
                                     @foreach (RecurringFrequency::cases() as $frequency)
                                         <flux:select.option value="{{ $frequency->value }}">
                                             Every {{ $frequency->label() }}

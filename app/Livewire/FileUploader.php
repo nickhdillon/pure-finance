@@ -20,6 +20,8 @@ class FileUploader extends Component
 
     public string $input_uuid = '';
 
+    public bool $flyout = false;
+
     #[Validate([
         'files' => ['required', 'array'],
         'files.*' => ['file', 'max:12288', 'mimes:jpg,jpeg,png,heic,svg,avif,webp'],

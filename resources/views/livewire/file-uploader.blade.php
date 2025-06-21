@@ -14,15 +14,17 @@
         <label for="files"
             @disabled($disabled)
             @class([
-                'flex flex-col items-center justify-center w-full h-48 transition-colors border border-dashed rounded-[8px] cursor-pointer bg-white inset-shadow-xs dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 dark:hover:border-emerald-600 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-950/50',
-                'cursor-default! opacity-50 hover:border-zinc-200 dark:hover:border-zinc-500 hover:bg-white dark:hover:bg-zinc-900' => $disabled
+                'dark:bg-white/10! dark:hover:bg-emerald-950/50! dark:border-white/10! dark:hover:border-emerald-600!' => $flyout,
+                'cursor-default! opacity-50 hover:border-zinc-200 dark:hover:border-zinc-500 hover:bg-white dark:hover:bg-zinc-900' => $disabled,
+                'flex flex-col items-center justify-center w-full h-48 transition-colors border rounded-[8px] cursor-pointer bg-white inset-shadow-xs border-zinc-200 dark:hover:border-emerald-600 hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 dark:bg-zinc-900 dark:border-zinc-700 border-dashed shadow-xs'
             ])
             :class="{
                 'border-zinc-300 dark:border-zinc-700': !isDragging,
-                '!border-emerald-500 !bg-emerald-50 dark:!bg-emerald-950/50': isDragging
-            }">
+                'border-emerald-500! bg-emerald-50! dark:bg-emerald-950/50!': isDragging
+            }"
+        >
             <flux:icon.arrow-up-to-line wire:target='files' wire:loading.remove
-                class="!h-6 !w-6 !mb-3 !text-zinc-400" />
+                class="h-6! w-6! mb-3! text-zinc-400!" />
 
             <div class="flex items-center justify-center mb-4 space-x-1.5 text-sm italic font-medium text-zinc-500"
                 wire:target='files' wire:loading.flex>
@@ -50,15 +52,18 @@
         @if ($uploaded_files)
             <div>
                 @foreach ($uploaded_files as $file)
-                    <div wire:key="{{ $file['id'] }}"
-                        class="flex items-center shadow-xs mt-1.5 justify-between p-[7px] border border-zinc-200 dark:border-zinc-700 rounded-[8px] bg-white dark:bg-zinc-900">
+                    <div wire:key="{{ $file['id'] }}-file"
+                        @class([
+                            'dark:bg-white/10! dark:border-zinc-600!' => $flyout,
+                            'flex items-center shadow-xs mt-1.5 justify-between p-[7px] border border-zinc-200 dark:border-zinc-700 rounded-[8px] bg-white dark:bg-zinc-900'
+                        ])>
                         <div class="flex items-center space-x-2">
                             <div>
                                 <x-file-preview :$file />
                             </div>
 
                             <div class="flex flex-col space-y-0.5">
-                                <p class="text-[13px] break-all max-w-[240px] sm:!max-w-[1000px] leading-3 text-zinc-600 dark:text-zinc-300">
+                                <p class='text-[13px] break-all max-w-[240px] sm:!max-w-[1000px] leading-3 text-zinc-600 dark:text-zinc-300'>
                                     {{ $file['original_name'] }}
                                 </p>
 

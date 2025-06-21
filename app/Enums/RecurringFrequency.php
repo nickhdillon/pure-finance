@@ -7,12 +7,16 @@ namespace App\Enums;
 enum RecurringFrequency: string
 {
     case MONTHLY = 'month';
+    case QUARTERLY = 'quarter';
+    case SEMI_ANNUALLY = 'semi_annual';
     case YEARLY = 'year';
 
     public function label(): string
     {
         return match ($this) {
             self::MONTHLY => 'Month',
+            self::QUARTERLY => '3 Months',
+            self::SEMI_ANNUALLY => '6 Months',
             self::YEARLY => 'Year',
         };
     }

@@ -83,6 +83,10 @@ select:focus[data-flux-control] {
     @apply -mt-[1px];
 }
 
+.borderless-select>button {
+    @apply  !border-none !shadow-none !rounded-none !bg-transparent;
+}
+
 [x-cloak] {
     display: none !important;
 }

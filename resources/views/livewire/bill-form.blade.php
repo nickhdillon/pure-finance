@@ -1,9 +1,9 @@
-@use('App\Enums\BillColor', 'BillColor')
+@use('App\Enums\BillAlert', 'BillAlert')
 @use('App\Enums\RecurringFrequency', 'RecurringFrequency')
 
 <div>
-    <flux:modal name="bill-form" variant="flyout" class="w-[325px]!" x-on:close="$wire.resetForm()">
-        <div wire:loading.remove class="space-y-6 relative">
+    <flux:modal wire:model.self="show_bill_form" name="bill-form" variant="flyout" class="w-[325px]!" x-on:close="$wire.resetForm()">
+        <div class="space-y-6 relative">
             <flux:heading size="lg">
                 {{ ($bill ? 'Edit' : 'Create') . ' Bill' }}
             </flux:heading>
@@ -38,7 +38,7 @@
                 <flux:field>
                     <flux:label>Frequency</flux:label>
 
-                    <flux:select variant="listbox" searchable placeholder="Select a frequency..." clearable wire:model='frequency'>
+                    <flux:select variant="listbox" placeholder="Select a frequency..." clearable wire:model='frequency'>
                         @foreach (RecurringFrequency::cases() as $frequency)
                             <flux:select.option value="{{ $frequency->value }}">
                                 Every {{ $frequency->label() }}
@@ -58,51 +58,91 @@
                 </flux:field>
 
                 <flux:field>
-                    <flux:label>Color</flux:label>
+                    <flux:label>Attachments</flux:label>
 
-                    <flux:select variant="listbox" placeholder="Select a color..." clearable wire:model='color'>
-                        @foreach (BillColor::cases() as $color)
-                            <flux:select.option value="{{ $color->value }}">
-                                <div class="flex items-center gap-1.5">
-                                    <p class="size-4 rounded-full {{ $color->labelColor() }}" />
-                                    <p>{{ $color->label() }}</p>
-                                </div>
-                            </flux:select.option>
-                        @endforeach
-                    </flux:select>
-
-                    <flux:error name="color" />
+                    <livewire:file-uploader :files="$bill?->attachments" 
+                        :wire:key="'file-uploader-' . ($bill?->id ?? 'new')" flyout="true" />
                 </flux:field>
 
-                @if ($bill) 
-                    <flux:field>
-                        <flux:label>Status</flux:label>
-    
-                        <div class="flex items-center gap-1.5">
-                            <flux:switch wire:model='paid' class="bg-amber-500! data-checked:bg-emerald-500!" />
-    
-                            <button type="button" class="text-sm text-zinc-500 dark:text-zinc-400 italic"
-                                x-text="$wire.paid ? 'Paid' : 'Unpaid'"
-                                x-on:click="$wire.paid = !$wire.paid"
-                            />
+                <flux:field>
+                    <flux:label>Alerts</flux:label>
+
+                    <div class="flex flex-col gap-1.5 w-full min-w-0">
+                        <div class="rounded-[8px] shadow-xs border border-zinc-200 bg-white dark:bg-white/10 md:flex min-w-0 w-full divide-y md:divide-x md:divide-y-0 dark:border-white/10 divide-zinc-200 dark:divide-white/10">
+                            <div class="md:!w-[60%] w-full min-w-0">
+                                <flux:select variant="listbox" placeholder="First alert..." clearable class="borderless-select"
+                                    wire:model='first_alert'
+                                >
+                                    @foreach (BillAlert::cases() as $alert)
+                                        <flux:select.option value="{{ $alert->value }}">
+                                            {{ $alert->label() }}
+                                        </flux:select.option>
+                                    @endforeach
+                                </flux:select>
+                            </div>
+
+                            <div class="md:!w-[40%] w-full min-w-0">
+                                <flux:select variant="listbox" placeholder="At" clearable class="borderless-select"
+                                    wire:model='first_alert_time'
+                                >
+                                    @foreach ($times as $time)
+                                        <flux:select.option value="{{ $time }}">
+                                            {{ $time }}
+                                        </flux:select.option>
+                                    @endforeach
+                                </flux:select>
+                            </div>
                         </div>
-    
-                        <flux:error name="paid" />
-                    </flux:field>
-                @endif
+
+                        <div class="rounded-[8px] shadow-xs border dark:border-white/10 border-zinc-200 bg-white dark:bg-white/10 md:flex min-w-0 w-full divide-y md:divide-x md:divide-y-0 divide-zinc-200 dark:divide-white/10">
+                            <div class="md:w-[60%] w-full">
+                                <flux:select variant="listbox" placeholder="Second alert..." clearable class="borderless-select"
+                                    wire:model='second_alert'
+                                >
+                                    @foreach (BillAlert::cases() as $alert)
+                                        <flux:select.option value="{{ $alert->value }}">
+                                            {{ $alert->label() }}
+                                        </flux:select.option>
+                                    @endforeach
+                                </flux:select>
+                            </div>
+
+                            <div class="md:w-[40%] w-full">
+                                <flux:select variant="listbox" placeholder="At" clearable class="borderless-select"
+                                    wire:model='second_alert_time'
+                                >
+                                    @foreach ($times as $time)
+                                        <flux:select.option value="{{ $time }}">
+                                            {{ $time }}
+                                        </flux:select.option>
+                                    @endforeach
+                                </flux:select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <flux:error name="first_alert" />
+                    <flux:error name="first_alert_time" />
+                    <flux:error name="second_alert" />
+                    <flux:error name="second_alert_time" />
+                </flux:field>
 
                 <div class="flex">
                     <flux:spacer />
 
-                    <flux:button wire:click='submit' variant="primary" class="w-full">
-                        Save
-                    </flux:button>
+                    <div class="flex flex-col gap-2 w-full">
+                        @if ($bill) 
+                            <flux:button wire:click='changePaidStatus' variant="outline" class="w-full">
+                                {{ $paid ? 'Mark as unpaid' : 'Mark as paid' }}
+                            </flux:button>
+                        @endif
+
+                        <flux:button wire:click='submit' variant="primary" class="w-full">
+                            Save
+                        </flux:button>
+                    </div>
                 </div>
             </form>
         </div>
-
-        <div x-cloak wire:loading.flex class="absolute inset-0 flex justify-center items-center">
-            <flux:icon.loading />
-        </div>        
     </flux:modal>
 </div>

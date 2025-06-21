@@ -4,23 +4,30 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
+use Closure;
 use Flux\Flux;
 use Carbon\Carbon;
 use App\Models\Bill;
 use Livewire\Component;
-use App\Enums\BillColor;
+use App\Enums\BillAlert;
 use Livewire\Attributes\On;
 use Illuminate\Validation\Rule;
 use App\Enums\RecurringFrequency;
+use App\Enums\TransactionType;
+use Illuminate\Support\Collection;
 use Illuminate\Contracts\View\View;
 
 class BillForm extends Component
 {
+    public bool $show_bill_form = false;
+
     public ?Bill $bill = null;
 
     public array $categories = [];
 
     public array $colors = [];
+
+    public Collection $times;
 
     public string $name = '';
 
@@ -34,11 +41,17 @@ class BillForm extends Component
 
     public ?string $notes = null;
 
-    public BillColor $color = BillColor::GREEN;
-
     public bool $paid = false;
 
     public ?array $attachments = [];
+
+    public ?BillAlert $first_alert = null;
+
+    public ?string $first_alert_time = null;
+
+    public ?BillAlert $second_alert = null;
+
+    public ?string $second_alert_time = null;
 
     protected function rules(): array
     {
@@ -53,13 +66,12 @@ class BillForm extends Component
                 Rule::enum(RecurringFrequency::class),
             ],
             'notes' => ['nullable', 'string'],
-            'color' => [
-                'nullable',
-                'required',
-                Rule::enum(BillColor::class),
-            ],
             'paid' => ['required', 'boolean'],
             'attachments' => ['nullable', 'array'],
+            'first_alert' => ['nullable', 'required_with:first_alert_time'],
+            'first_alert_time' => ['nullable', 'required_with:first_alert'],
+            'second_alert' => ['nullable', 'required_with:second_alert_time', $this->validateSecondAlert()],
+            'second_alert_time' => ['nullable', 'required_with:second_alert', $this->validateSecondAlert('time')],
         ];
     }
 
@@ -70,14 +82,21 @@ class BillForm extends Component
         ];
     }
 
+    protected function validateSecondAlert(?string $time = null): Closure
+    {
+        return function ($attribute, $value, $fail) use ($time) {
+            if ($value && (!$this->first_alert || !$this->first_alert_time)) {
+                $fail('The first alert and time must be filled if adding a second alert' . ($time ? " {$time}." : '.'));
+            }
+        };
+    }
+
     public function mount(): void
     {
         $this->getCategories()
-            ->getColors();
+            ->getTimes();
 
         $this->date = today('America/Chicago');
-
-        $this->color = BillColor::GREEN;
     }
 
     #[On('load-bill')]
@@ -90,8 +109,14 @@ class BillForm extends Component
         $this->date = $this->bill->date;
         $this->frequency = $this->bill->frequency;
         $this->notes = $this->bill->notes;
-        $this->color = $this->bill->color;
         $this->paid = $this->bill->paid;
+        $this->attachments = $this->bill->attachments;
+        $this->first_alert = $this->bill->first_alert;
+        $this->first_alert_time = $this->bill->first_alert_time;
+        $this->second_alert = $this->bill->second_alert;
+        $this->second_alert_time = $this->bill->second_alert_time;
+
+        $this->show_bill_form = true;
     }
 
     public function resetForm(): void
@@ -104,8 +129,12 @@ class BillForm extends Component
             'date',
             'frequency',
             'notes',
-            'color',
-            'paid'
+            'paid',
+            'attachments',
+            'first_alert',
+            'first_alert_time',
+            'second_alert',
+            'second_alert_time'
         ]);
 
         $this->date = today('America/Chicago');
@@ -142,9 +171,11 @@ class BillForm extends Component
         return $this;
     }
 
-    public function getColors(): self
+    public function getTimes(): self
     {
-        $this->colors = BillColor::cases();
+        $this->times = collect(range(0, 23))->map(
+            fn(int $hour): string => Carbon::createFromTime($hour, 0)->format('g A')
+        );
 
         return $this;
     }
@@ -153,6 +184,51 @@ class BillForm extends Component
     public function pushToAttachments(array $file): void
     {
         $this->attachments[] = $file;
+    }
+
+    #[On('file-deleted')]
+    public function deleteAttachment(string $file_id): void
+    {
+        if ($this->bill) {
+            $this->bill->attachments = collect($this->bill->attachments)
+                ->reject(fn(array $attachment): bool => $attachment['id'] === $file_id)
+                ->values()
+                ->all();
+
+            $this->bill->save();
+        }
+    }
+
+    public function changePaidStatus(): void
+    {
+        if ($this->paid) {
+            $this->bill->update(['paid' => false]);
+
+            $this->bill->transaction?->delete();
+        } else {
+            $this->bill->update(['paid' => true]);
+
+            $this->bill->transaction()->create([
+                'user_id' => auth()->id(),
+                'category_id' => $this->category_id,
+                'type' => TransactionType::DEBIT,
+                'amount' => $this->amount,
+                'payee' => $this->name,
+                'date' => $this->date,
+                'notes' => $this->notes,
+                'attachments' => $this->attachments,
+                'status' => true,
+            ]);
+        }
+
+        Flux::toast(
+            variant: 'success',
+            text: 'Bill successfully ' . ($this->bill ? 'updated' : 'created'),
+        );
+
+        Flux::modal('bill-form')->close();
+
+        $this->redirectRoute('bill-calendar', navigate: true);
     }
 
     public function submit(): void

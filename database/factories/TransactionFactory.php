@@ -28,7 +28,14 @@ class TransactionFactory extends Factory
 
         $frequency = Arr::random(RecurringFrequency::cases());
 
-        $recurring_end = (clone $transaction_date)->modify("+1 {$frequency->value}");
+        $modifier = match ($frequency) {
+            RecurringFrequency::MONTHLY => '+1 month',
+            RecurringFrequency::QUARTERLY => '+3 months',
+            RecurringFrequency::SEMI_ANNUALLY => '+6 months',
+            RecurringFrequency::YEARLY => '+1 year',
+        };
+
+        $recurring_end = (clone $transaction_date)->modify($modifier);
 
         $payee = $this->faker->company();
 

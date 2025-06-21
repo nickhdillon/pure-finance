@@ -128,7 +128,7 @@
     </flux:sidebar>
 
     <!-- Mobile User Menu -->
-    <flux:header class="lg:hidden">
+    <flux:header class="lg:hidden" x-data x-ref="mobileHeader" x-init="window.mobileHeaderHeight = $el.offsetHeight">
         <flux:sidebar.toggle class="lg:hidden text-zinc-800! dark:text-zinc-200!" icon="panel-left" inset="left" />
 
         <flux:spacer />

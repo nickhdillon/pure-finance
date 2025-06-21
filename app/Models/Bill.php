@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use App\Enums\BillColor;
+use App\Enums\BillAlert;
 use App\Enums\RecurringFrequency;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -26,9 +27,12 @@ class Bill extends Model
         'date',
         'frequency',
         'notes',
-        'color',
         'paid',
         'attachments',
+        'first_alert',
+        'first_alert_time',
+        'second_alert',
+        'second_alert_time'
     ];
 
     /**
@@ -41,14 +45,20 @@ class Bill extends Model
         return [
             'date' => 'date',
             'frequency' => RecurringFrequency::class,
-            'color' => BillColor::class,
             'paid' => 'bool',
             'attachments' => 'array',
+            'first_alert' => BillAlert::class,
+            'second_alert' => BillAlert::class,
         ];
     }
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function transaction(): HasOne
+    {
+        return $this->hasOne(Transaction::class);
     }
 }

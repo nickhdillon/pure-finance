@@ -114,6 +114,11 @@ class Transaction extends Model
         return $this->hasMany(self::class, 'parent_id');
     }
 
+    public function bill(): BelongsTo
+    {
+        return $this->belongsTo(Bill::class);
+    }
+
     public function recalculateAccountBalance(): void
     {
         defer(function (): void {

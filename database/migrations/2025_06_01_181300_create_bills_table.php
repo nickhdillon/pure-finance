@@ -22,9 +22,12 @@ return new class extends Migration
             $table->date('date');
             $table->string('frequency')->nullable();
             $table->text('notes')->nullable();
-            $table->string('color');
             $table->boolean('paid')->default(false);
             $table->json('attachments')->nullable();
+            $table->string('first_alert')->nullable();
+            $table->string('first_alert_time')->nullable();
+            $table->string('second_alert')->nullable();
+            $table->string('second_alert_time')->nullable();
             $table->timestamps();
         });
     }
