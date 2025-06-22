@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Bill;
 use App\Models\User;
+use App\Models\Account;
 use App\Models\Category;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -15,7 +17,9 @@ return new class extends Migration
     {
         Schema::create('bills', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(Account::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Bill::class, 'parent_id')->nullable()->constrained()->nullOnDelete();
             $table->string('name');
             $table->foreignIdFor(Category::class)->constrained()->cascadeOnDelete();
             $table->float('amount');

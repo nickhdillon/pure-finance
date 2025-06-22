@@ -10,6 +10,20 @@
 
             <form class="space-y-6">
                 <flux:field>
+                    <flux:label>Account</flux:label>
+
+                    <flux:select variant="listbox" placeholder="Select an account" wire:model.blur='account_id' clearable>
+                        @foreach ($accounts as $account)
+                            <flux:select.option value="{{ $account->id }}">
+                                {{ $account->name }}
+                            </flux:select.option>
+                        @endforeach
+                    </flux:select>
+
+                    <flux:error name="account_id" />
+                </flux:field>
+
+                <flux:field>
                     <flux:label>Name</flux:label>
 
                     <flux:input type="text" wire:model='name' />
@@ -132,14 +146,88 @@
 
                     <div class="flex flex-col gap-2 w-full">
                         @if ($bill) 
-                            <flux:button wire:click='changePaidStatus' variant="outline" class="w-full">
-                                {{ $paid ? 'Mark as unpaid' : 'Mark as paid' }}
+                            <flux:modal.trigger name="save-bill" class="w-full">
+                                <flux:button variant="primary">Save</flux:button>
+                            </flux:modal.trigger>
+
+                            <flux:modal name="save-bill">
+                                <flux:heading size="lg">Save Bill</flux:heading>
+
+                                <flux:text class="mt-2">
+                                    Would you like to save these changes for just this bill, or all instances of this bill?
+                                </flux:text>
+
+                                <div class="flex mt-4">
+                                    <flux:spacer />
+
+                                    <div class="flex items-center gap-1.5">
+                                        <flux:button wire:click='submit' variant="primary" size="sm">
+                                            This bill only
+                                        </flux:button>
+
+                                        <flux:button wire:click='submit' variant="outline" size="sm" class="text-emerald-500!">
+                                            All instances
+                                        </flux:button>
+                                    </div>
+                                </div>
+                            </flux:modal>
+                        @else
+                            <flux:button wire:click='submit' variant="primary" class="w-full">
+                                Save
                             </flux:button>
                         @endif
 
-                        <flux:button wire:click='submit' variant="primary" class="w-full">
-                            Save
-                        </flux:button>
+                        @if ($bill)
+                            <div class="flex items-center gap-2 w-full">
+                                <flux:button wire:click='changePaidStatus' variant="outline" class="w-full">
+                                    {{ $paid ? 'Mark as unpaid' : 'Mark as paid' }}
+                                </flux:button>
+
+                                <div class="w-full">
+                                    <flux:modal.trigger name="delete-bill">
+                                        <flux:button variant="outline" class="w-full text-rose-500! font-medium!">
+                                            Delete
+                                        </flux:button>
+                                    </flux:modal.trigger>
+
+                                    <flux:modal name="delete-bill">
+                                        <flux:heading size="lg">Delete Bill</flux:heading>
+                                        
+                                        @if ($bill->children()->count())
+                                            <flux:text class="mt-2">
+                                                Would you like to delete just this bill, or all instances of this bill?
+                                            </flux:text>
+
+                                            <div class="flex mt-4">
+                                                <flux:spacer />
+
+                                                <div class="flex items-center gap-1.5">
+                                                    <flux:button wire:click='delete' variant="danger" size="sm">
+                                                        This bill only
+                                                    </flux:button>
+
+                                                    <flux:button wire:click="delete(true)" variant="outline" size="sm" class="text-rose-500!">
+                                                        All instances
+                                                    </flux:button>
+                                                </div>
+                                            </div>
+                                        @else
+                                            <flux:text class="mt-2">
+                                                Are you sure you want to delete this bill?
+                                            </flux:text>
+
+                                            <div class="flex mt-4">
+                                                <flux:spacer />
+
+                                                <flux:button wire:click="delete" variant="danger" size="sm">
+                                                    Yes, delete
+                                                </flux:button>
+                                            </div>
+                                        @endif
+                                    </flux:modal>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </form>

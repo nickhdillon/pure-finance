@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Account;
 use App\Enums\BillAlert;
 use App\Models\Category;
 use Illuminate\Support\Arr;
@@ -21,6 +22,9 @@ class BillFactory extends Factory
     public function definition(): array
     {
         return [
+            'account_id' => Account::count() > 0
+                ? Account::inRandomOrder()->first()->id
+                : Account::factory(),
             'name' => $this->faker->company(),
             'category_id' => Category::count() > 0
                 ? Category::inRandomOrder()->first()->id

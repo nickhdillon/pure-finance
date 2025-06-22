@@ -11,15 +11,18 @@ use App\Models\Bill;
 use Livewire\Component;
 use App\Enums\BillAlert;
 use Livewire\Attributes\On;
+use App\Enums\TransactionType;
 use Illuminate\Validation\Rule;
 use App\Enums\RecurringFrequency;
-use App\Enums\TransactionType;
 use Illuminate\Support\Collection;
 use Illuminate\Contracts\View\View;
+use App\Actions\CreateRecurringBills;
 
 class BillForm extends Component
 {
     public bool $show_bill_form = false;
+
+    public Collection $accounts;
 
     public ?Bill $bill = null;
 
@@ -28,6 +31,8 @@ class BillForm extends Component
     public array $colors = [];
 
     public Collection $times;
+
+    public int $account_id;
 
     public string $name = '';
 
@@ -56,6 +61,7 @@ class BillForm extends Component
     protected function rules(): array
     {
         return [
+            'account_id' => ['required', 'int'],
             'name' => ['required', 'string'],
             'category_id' => ['required', 'int'],
             'amount' => ['required', 'decimal:0,2', 'numeric'],
@@ -93,7 +99,8 @@ class BillForm extends Component
 
     public function mount(): void
     {
-        $this->getCategories()
+        $this->getAccounts()
+            ->getCategories()
             ->getTimes();
 
         $this->date = today('America/Chicago');
@@ -103,6 +110,7 @@ class BillForm extends Component
     public function loadBill(int $bill_id): void
     {
         $this->bill = Bill::find($bill_id);
+        $this->account_id = $this->bill->account_id;
         $this->name = $this->bill->name;
         $this->category_id = $this->bill->category_id;
         $this->amount = $this->bill->amount;
@@ -123,6 +131,7 @@ class BillForm extends Component
     {
         $this->reset([
             'bill',
+            'account_id',
             'name',
             'category_id',
             'amount',
@@ -138,6 +147,18 @@ class BillForm extends Component
         ]);
 
         $this->date = today('America/Chicago');
+    }
+
+    public function getAccounts(): self
+    {
+        $this->accounts = auth()
+            ->user()
+            ->accounts()
+            ->select(['id', 'name'])
+            ->orderBy('name')
+            ->get();
+
+        return $this;
     }
 
     #[On('category-saved')]
@@ -209,7 +230,7 @@ class BillForm extends Component
             $this->bill->update(['paid' => true]);
 
             $this->bill->transaction()->create([
-                'user_id' => auth()->id(),
+                'account_id' => $this->account_id,
                 'category_id' => $this->category_id,
                 'type' => TransactionType::DEBIT,
                 'amount' => $this->amount,
@@ -231,17 +252,19 @@ class BillForm extends Component
         $this->redirectRoute('bill-calendar', navigate: true);
     }
 
-    public function submit(): void
+    public function submit(CreateRecurringBills $recurring_action): void
     {
         $validated_data = $this->validate();
 
         if ($this->bill) {
             $this->bill->update($validated_data);
         } else {
-            auth()->user()->bills()->create($validated_data);
+            $new_bill = auth()->user()->bills()->create($validated_data);
         }
 
-        if (! $this->bill) $this->reset();
+        if ($this->bill?->children->count() === 0 || !$this->bill) {
+            $recurring_action->handle($this->bill ?: $new_bill);
+        }
 
         Flux::toast(
             variant: 'success',
@@ -253,16 +276,22 @@ class BillForm extends Component
         $this->redirectRoute('bill-calendar', navigate: true);
     }
 
-    public function delete(Bill $bill): void
+    public function delete(?bool $all = null): void
     {
-        $bill->delete();
+        if ($all) {
+            Bill::where('parent_id', $this->bill->id)->delete();
+
+            Bill::where('id', $this->bill->id)->delete();
+        } else {
+            $this->bill->delete();
+        }
 
         Flux::toast(
             variant: 'success',
             text: 'Successfully deleted bill',
         );
 
-        Flux::modals()->close();
+        $this->redirectRoute('bill-calendar', navigate: true);
     }
 
     public function render(): View
