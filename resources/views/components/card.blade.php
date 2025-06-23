@@ -33,7 +33,10 @@
         </div>
     @endif
 
-    <div class="flex flex-col grow min-h-0 border border-zinc-200 bg-white dark:bg-zinc-900 dark:border-zinc-700 m-[5px] rounded-[8px] inset-shadow-xs overflow-hidden">
+    <div @class([
+        'flex flex-col grow min-h-0 bg-white dark:bg-zinc-900 m-[5px] rounded-[8px] inset-shadow-xs overflow-hidden',
+        'border border-zinc-200 dark:border-zinc-700' => !$attributes->has('no-content-border'),
+    ])>
         {{ $content }}
     </div>
 </flux:card>
