@@ -281,6 +281,8 @@ class TransactionForm extends Component
             $this->transaction->tags()->sync($current_tags);
 
             $this->transaction->update($validated_data);
+
+            if (!$this->status) $this->transaction->bill?->update(['paid' => false]);
         } else {
             $new_transaction = auth()->user()->transactions()->create($validated_data);
 

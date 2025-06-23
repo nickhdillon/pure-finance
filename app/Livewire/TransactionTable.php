@@ -141,6 +141,8 @@ class TransactionTable extends Component
     {
         $transaction->update(['status' => ! $transaction->status]);
 
+        if (!$transaction->status) $transaction->bill?->update(['paid' => false]);
+
         Flux::toast(
             variant: 'success',
             text: 'Successfully changed status',

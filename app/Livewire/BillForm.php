@@ -229,17 +229,20 @@ class BillForm extends Component
         } else {
             $this->bill->update(['paid' => true]);
 
-            $this->bill->transaction()->create([
-                'account_id' => $this->account_id,
-                'category_id' => $this->category_id,
-                'type' => TransactionType::DEBIT,
-                'amount' => $this->amount,
-                'payee' => $this->name,
-                'date' => $this->date,
-                'notes' => $this->notes,
-                'attachments' => $this->attachments,
-                'status' => true,
-            ]);
+            $this->bill->transaction()->updateOrCreate(
+                ['bill_id' => $this->bill->id],
+                [
+                    'account_id' => $this->account_id,
+                    'category_id' => $this->category_id,
+                    'type' => TransactionType::DEBIT,
+                    'amount' => $this->amount,
+                    'payee' => $this->name,
+                    'date' => $this->date,
+                    'notes' => $this->notes,
+                    'attachments' => $this->attachments,
+                    'status' => true
+                ]
+            );
         }
 
         Flux::toast(
@@ -252,12 +255,20 @@ class BillForm extends Component
         $this->redirectRoute('bill-calendar', navigate: true);
     }
 
-    public function submit(CreateRecurringBills $recurring_action): void
+    public function submit(CreateRecurringBills $recurring_action, ?bool $all = null): void
     {
         $validated_data = $this->validate();
 
         if ($this->bill) {
             $this->bill->update($validated_data);
+
+            if ($all) {
+                $fields_to_update = collect($validated_data)->except(['parent_id', 'date'])->toArray();
+
+                if (!empty($fields_to_update) && $this->bill->children()->exists()) {
+                    $this->bill->children()->update($fields_to_update);
+                }
+            }
         } else {
             $new_bill = auth()->user()->bills()->create($validated_data);
         }
@@ -279,7 +290,9 @@ class BillForm extends Component
     public function delete(?bool $all = null): void
     {
         if ($all) {
-            Bill::where('parent_id', $this->bill->id)->delete();
+            Bill::where('parent_id', $this->bill->id)
+                ->where('date', '>=', now('America/Chicago')->toDateString())
+                ->delete();
 
             Bill::where('id', $this->bill->id)->delete();
         } else {

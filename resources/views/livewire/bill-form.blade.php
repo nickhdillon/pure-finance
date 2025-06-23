@@ -145,7 +145,7 @@
                     <flux:spacer />
 
                     <div class="flex flex-col gap-2 w-full">
-                        @if ($bill) 
+                        @if ($bill && $bill->children()->count()) 
                             <flux:modal.trigger name="save-bill" class="w-full">
                                 <flux:button variant="primary">Save</flux:button>
                             </flux:modal.trigger>
@@ -165,7 +165,7 @@
                                             This bill only
                                         </flux:button>
 
-                                        <flux:button wire:click='submit' variant="outline" size="sm" class="text-emerald-500!">
+                                        <flux:button wire:click='submit(true)' variant="outline" size="sm" class="text-emerald-500!">
                                             All instances
                                         </flux:button>
                                     </div>
