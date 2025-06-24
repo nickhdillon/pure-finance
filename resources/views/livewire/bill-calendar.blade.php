@@ -98,7 +98,7 @@
                 </div>
             </div>
 
-            <div class="grow min-h-0 p-2 border-t relative border-zinc-200 dark:border-white/20 overflow-y-auto">
+            <div class="sm:hidden grow min-h-0 p-2 border-t relative border-zinc-200 dark:border-white/20 overflow-y-auto">
                 <div class="w-full flex justify-center">
                     <div
                         class="overflow-y-auto gap-1.5 flex-col flex w-full"
