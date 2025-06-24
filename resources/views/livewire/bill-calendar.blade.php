@@ -88,8 +88,8 @@
 
                                 <div class="flex items-center justify-center mt-1 mb-0.5 sm:hidden">
                                     <span x-cloak x-show="day.bills.length"
-                                        class="w-1.5 h-1.5 rounded-full bg-zinc-800 dark:bg-white"
-                                        :class="{'bg-emerald-500!': day.bills.every(bill => bill.paid)}"
+                                        class="min-w-1.5 min-h-1.5 aspect-square rounded-full bg-zinc-800 dark:bg-white"
+                                        :class="{ 'bg-emerald-500!': day.bills.every(bill => bill.paid) }"
                                     ></span>
                                 </div>
                             </div>
