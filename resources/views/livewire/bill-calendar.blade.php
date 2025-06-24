@@ -22,38 +22,38 @@
 
     <x-card dynamic-height>
         <x-slot:content>
-            <div class="p-3 gap-2.5 flex items-center justify-between dark:bg-zinc-900 rounded-t-[8px]">
-                <flux:heading class="text-xl" x-text="monthLabel"></flux:heading>
+            <div class="shrink-0">
+                <div class="p-3 gap-2.5 flex items-center justify-between dark:bg-zinc-900 rounded-t-[8px]">
+                    <flux:heading class="text-xl" x-text="monthLabel"></flux:heading>
 
-                <flux:button.group>
-                    <flux:button x-on:click="changeMonth(-1)" class="h-7! sm:h-8! px-1.5! sm:px-2!" variant="outline" size="sm">
-                        <flux:icon.chevron-left icon-variant="outline" class="h-[14px] w-[14px] stroke-2" />
-                    </flux:button>
+                    <flux:button.group>
+                        <flux:button x-on:click="changeMonth(-1)" class="h-7! sm:h-8! px-1.5! sm:px-2!" variant="outline" size="sm">
+                            <flux:icon.chevron-left icon-variant="outline" class="h-[14px] w-[14px] stroke-2" />
+                        </flux:button>
 
-                    <flux:button size="sm" x-on:click="goToToday" class="h-7! sm:h-8! px-2! sm:px-4!">
-                        <span class="hidden sm:block">Today</span>
+                        <flux:button size="sm" x-on:click="goToToday" class="h-7! sm:h-8! px-2! sm:px-4!">
+                            <span class="hidden sm:block">Today</span>
 
-                        <flux:icon.calendar icon-variant="outline" class="sm:hidden h-4 w-4 stroke-2" />
-                    </flux:button>
+                            <flux:icon.calendar icon-variant="outline" class="sm:hidden h-4 w-4 stroke-2" />
+                        </flux:button>
 
-                    <flux:button x-on:click="changeMonth(1)" class="h-7! sm:h-8! px-1.5! sm:px-2!" variant="outline" size="sm">
-                        <flux:icon.chevron-right icon-variant="outline" class="h-[14px] w-[14px] stroke-2" />
-                    </flux:button>
-                </flux:button.group>
-            </div>
+                        <flux:button x-on:click="changeMonth(1)" class="h-7! sm:h-8! px-1.5! sm:px-2!" variant="outline" size="sm">
+                            <flux:icon.chevron-right icon-variant="outline" class="h-[14px] w-[14px] stroke-2" />
+                        </flux:button>
+                    </flux:button.group>
+                </div>
 
-            <div class="grid grid-cols-7 border-y border-zinc-200 dark:border-white/20 text-center font-medium bg-zinc-100 sm:text-sm dark:bg-zinc-800 text-xs py-1.5 sm:py-2">
-                <template x-for="(day, index) in dayNames" :key="index">
-                    <div>
-                        <div class="text-zinc-800 dark:text-zinc-100 text-xs sm:text-sm font-medium text-center sm:hidden" x-text="day.substring(0,1)"></div>
-                        <div class="text-zinc-800 dark:text-zinc-100 text-xs sm:text-sm font-medium text-center hidden sm:block lg:hidden" x-text="day.substring(0,3)"></div>
-                        <div class="text-zinc-800 dark:text-zinc-100 text-xs sm:text-sm font-medium text-center hidden lg:block" x-text="day"></div>
-                    </div>
-                </template>
-            </div>
+                <div class="grid grid-cols-7 border-y border-zinc-200 dark:border-white/20 text-center font-medium bg-zinc-100 sm:text-sm dark:bg-zinc-800 text-xs py-1.5 sm:py-2">
+                    <template x-for="(day, index) in dayNames" :key="index">
+                        <div>
+                            <div class="text-zinc-800 dark:text-zinc-100 text-xs sm:text-sm font-medium text-center sm:hidden" x-text="day.substring(0,1)"></div>
+                            <div class="text-zinc-800 dark:text-zinc-100 text-xs sm:text-sm font-medium text-center hidden sm:block lg:hidden" x-text="day.substring(0,3)"></div>
+                            <div class="text-zinc-800 dark:text-zinc-100 text-xs sm:text-sm font-medium text-center hidden lg:block" x-text="day"></div>
+                        </div>
+                    </template>
+                </div>
 
-            <div class="rounded-b-[8px] h-full flex flex-col overflow-hidden">
-                <div class="grid grid-cols-7 h-1/2 gap-y-px sm:gap-x-px sm:bg-zinc-200 sm:dark:bg-zinc-600">
+                <div class="grid grid-cols-7 gap-y-px sm:gap-x-px sm:bg-zinc-200 sm:dark:bg-zinc-600">
                     <template x-for="(day, index) in days" :key="index">
                         <div class="p-1 max-h-[56px] sm:min-h-[140px] sm:overflow-scroll text-sm text-left flex flex-col"
                             x-on:click="!day.blank && (selectedDay = day)"
@@ -96,36 +96,36 @@
                         </div>
                     </template>
                 </div>
+            </div>
 
-                <div class="sm:hidden px-2.5 py-3 h-1/2 w-full flex justify-center border-t border-zinc-200 dark:border-white/20">
-                    <div class="w-full flex justify-center">
-                        <div
-                            class="overflow-y-auto gap-1.5 flex-col flex w-full"
-                            x-show="selectedDay && selectedDay.bills.length"
-                            x-cloak
-                        >
-                            <template x-for="bill in selectedDay?.bills" :key="bill.id">
-                                <flux:modal.trigger x-on:click="$dispatch('load-bill', { bill_id: bill.id })" class="w-full!">
-                                    <button type="button" class="text-xs text-left flex items-center justify-between p-1.5 rounded-md cursor-pointer"
-                                    :class="{
-                                        'bg-amber-400/25 dark:bg-amber-400/40 text-amber-700 dark:text-amber-200': !bill.paid,
-                                        'bg-emerald-400/25 dark:bg-emerald-400/40 text-emerald-700 dark:text-emerald-200': bill.paid
-                                    }">
-                                        <p x-text="bill.name" class="truncate font-medium"></p>
-                                        <p x-text="'$' + bill.amount" class="truncate font-medium"></p>
-                                    </button>
-                                </flux:modal.trigger>
-                            </template>
-                        </div>
-
-                        <p
-                            class="font-medium text-sm text-center flex items-center justify-center tracking-wide"
-                            x-show="!selectedDay?.bills.length"
-                            x-cloak
-                        >
-                            No Bills
-                        </p>
+            <div class="grow min-h-0 p-2 border-t relative border-zinc-200 dark:border-white/20 overflow-y-auto">
+                <div class="w-full flex justify-center">
+                    <div
+                        class="overflow-y-auto gap-1.5 flex-col flex w-full"
+                        x-show="selectedDay && selectedDay.bills.length"
+                        x-cloak
+                    >
+                        <template x-for="bill in selectedDay?.bills" :key="bill.id">
+                            <flux:modal.trigger x-on:click="$dispatch('load-bill', { bill_id: bill.id })" class="w-full!">
+                                <button type="button" class="text-xs text-left flex items-center justify-between p-1.5 rounded-md cursor-pointer"
+                                :class="{
+                                    'bg-amber-400/25 dark:bg-amber-400/40 text-amber-700 dark:text-amber-200': !bill.paid,
+                                    'bg-emerald-400/25 dark:bg-emerald-400/40 text-emerald-700 dark:text-emerald-200': bill.paid
+                                }">
+                                    <p x-text="bill.name" class="truncate font-medium"></p>
+                                    <p x-text="'$' + bill.amount" class="truncate font-medium"></p>
+                                </button>
+                            </flux:modal.trigger>
+                        </template>
                     </div>
+
+                    <p
+                        class="absolute inset-0 font-medium text-sm text-center flex items-center justify-center tracking-wide"
+                        x-show="!selectedDay?.bills.length"
+                        x-cloak
+                    >
+                        No Bills
+                    </p>
                 </div>
             </div>
         </x-slot:content>
