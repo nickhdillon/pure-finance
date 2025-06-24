@@ -1,15 +1,10 @@
-<div x-data="calendar" class="space-y-4 w-full">
+<div x-data="calendar" x-on:bill-submitted.window="setCurrentMonth" class="space-y-4 w-full">
     <div class="flex items-center justify-between">
         <flux:heading size="xl">
             Bill Calendar
         </flux:heading>
 
-        <flux:modal.trigger 
-            x-on:click="
-                sessionStorage.setItem('calendarMonth', formatDate(current).substring(0, 7));
-                $flux.modal('bill-form').show()
-            "
-        >
+        <flux:modal.trigger x-on:click="setCurrentMonth(); $flux.modal('bill-form').show()">
             <flux:button icon="plus" variant="primary" size="sm">
                 Add
             </flux:button>
@@ -79,7 +74,12 @@
                 
                                 <div class="overflow-y-auto p-1 gap-1 flex-col hidden sm:flex">
                                     <template x-for="bill in day.bills" :key="bill.id">
-                                        <flux:modal.trigger x-on:click="$dispatch('load-bill', { bill_id: bill.id })">
+                                        <flux:modal.trigger 
+                                            x-on:click="
+                                                setCurrentMonth();
+                                                $dispatch('load-bill', { bill_id: bill.id })
+                                            "
+                                        >
                                             <button type="button" class="text-xs text-left px-1 py-0.5 rounded cursor-pointer"
                                             :class="{
                                                 'bg-amber-400/25 dark:bg-amber-400/40 text-amber-700 dark:text-amber-200': !bill.paid,
@@ -111,7 +111,13 @@
                         x-cloak
                     >
                         <template x-for="bill in selectedDay?.bills" :key="bill.id">
-                            <flux:modal.trigger x-on:click="$dispatch('load-bill', { bill_id: bill.id })" class="w-full!">
+                            <flux:modal.trigger 
+                                x-on:click="
+                                    setCurrentMonth();
+                                    $dispatch('load-bill', { bill_id: bill.id })
+                                " 
+                                class="w-full!"
+                            >
                                 <button type="button" class="text-xs text-left flex items-center justify-between p-1.5 rounded-md cursor-pointer"
                                 :class="{
                                     'bg-amber-400/25 dark:bg-amber-400/40 text-amber-700 dark:text-amber-200': !bill.paid,
@@ -180,6 +186,8 @@
                 changeMonth(offset) {
                     this.current = this.getMonthStart(new Date(this.current.getFullYear(), this.current.getMonth() + offset, 1));
                     this.refresh();
+
+                    this.$dispatch('set-default-date', { date: this.formatDate(this.current) });
                 },
 
                 refresh() {                    
@@ -265,6 +273,10 @@
 
                 changeDefaultDate(date) {
                     this.$dispatch('set-default-date', { date });
+                },
+
+                setCurrentMonth() {           
+                    sessionStorage.setItem('calendarMonth', this.formatDate(this.current).substring(0, 7));
                 }
             };
         });

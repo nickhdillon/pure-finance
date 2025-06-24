@@ -161,11 +161,11 @@
                                     <flux:spacer />
 
                                     <div class="flex items-center gap-1.5">
-                                        <flux:button wire:click='submit' variant="primary" size="sm">
+                                        <flux:button wire:click='submit' x-on:click="$dispatch('bill-submitted')" variant="primary" size="sm">
                                             This bill only
                                         </flux:button>
 
-                                        <flux:button wire:click='submit(true)' variant="outline" size="sm" class="text-emerald-500!">
+                                        <flux:button wire:click='submit(true)' x-on:click="$dispatch('bill-submitted')" variant="outline" size="sm" class="text-emerald-500!">
                                             All instances
                                         </flux:button>
                                     </div>
@@ -202,11 +202,11 @@
                                                 <flux:spacer />
 
                                                 <div class="flex items-center gap-1.5">
-                                                    <flux:button wire:click='delete' variant="danger" size="sm">
+                                                    <flux:button wire:click='delete' x-on:click="$dispatch('bill-submitted')" variant="danger" size="sm">
                                                         This bill only
                                                     </flux:button>
 
-                                                    <flux:button wire:click="delete(true)" variant="outline" size="sm" class="text-rose-500!">
+                                                    <flux:button wire:click="delete(true)" x-on:click="$dispatch('bill-submitted')" variant="outline" size="sm" class="text-rose-500!">
                                                         All instances
                                                     </flux:button>
                                                 </div>
