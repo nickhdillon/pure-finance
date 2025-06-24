@@ -63,7 +63,7 @@
                             }"
                         >
                             <div class="flex flex-col h-full">
-                                <div class="sticky mx-auto sm:mx-0 top-0 z-10 font-medium p-0.5 aspect-square flex items-center justify-center shrink-0 w-4 text-xs rounded-full" 
+                                <div class="sticky mx-auto sm:mx-0 top-0 z-10 font-medium p-0.5 aspect-square flex items-center justify-center shrink-0 w-6 text-xs rounded-full" 
                                     :class="{
                                         'bg-emerald-500 text-white': selectedDay && selectedDay.date === day.date && day.isToday,
                                         'text-emerald-500 sm:bg-emerald-500 sm:text-white': day.isToday && (!selectedDay || selectedDay.date !== day.date),
