@@ -51,6 +51,8 @@ class CreateRecurringTransactions
 	{
 		return match ($frequency->value) {
 			'month' => CarbonInterval::month(),
+			'quarter' => CarbonInterval::months(3),
+			'semi_annual' => CarbonInterval::months(6),
 			'year' => CarbonInterval::year()
 		};
 	}

@@ -4,7 +4,12 @@
             Bill Calendar
         </flux:heading>
 
-        <flux:modal.trigger x-on:click="$flux.modal('bill-form').show()">
+        <flux:modal.trigger 
+            x-on:click="
+                sessionStorage.setItem('calendarMonth', formatDate(current).substring(0, 7));
+                $flux.modal('bill-form').show()
+            "
+        >
             <flux:button icon="plus" variant="primary" size="sm">
                 Add
             </flux:button>
@@ -147,7 +152,16 @@
                 bills: @js($bills),
 
                 init() {
-                    this.current = this.getMonthStart(new Date());
+                    if (storedMonth = sessionStorage.getItem('calendarMonth')) {
+                        const [year, month] = storedMonth.split('-').map(Number);
+
+                        this.current = this.getMonthStart(new Date(year, month - 1, 1));
+
+                        sessionStorage.removeItem('calendarMonth');
+                    } else {
+                        this.current = this.getMonthStart(new Date());
+                    }
+
                     this.refresh();
                 },
 
