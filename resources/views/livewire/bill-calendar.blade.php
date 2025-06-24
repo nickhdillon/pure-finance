@@ -56,7 +56,7 @@
                 <div class="grid grid-cols-7 gap-y-px sm:gap-x-px sm:bg-zinc-200 sm:dark:bg-zinc-600">
                     <template x-for="(day, index) in days" :key="index">
                         <div class="p-1 max-h-[56px] sm:min-h-[140px] sm:overflow-scroll text-sm text-left flex flex-col"
-                            x-on:click="!day.blank && (selectedDay = day)"
+                            x-on:click="!day.blank && (selectedDay = day); changeDefaultDate(day.date)"
                             :class="{
                                 'bg-white dark:bg-zinc-900': !day.blank,
                                 'text-zinc-400 dark:text-zinc-500 bg-striped dark:bg-striped': day.blank,
@@ -247,6 +247,10 @@
                     }
 
                     return days;
+                },
+
+                changeDefaultDate(date) {
+                    this.$dispatch('set-default-date', { date });
                 }
             };
         });
