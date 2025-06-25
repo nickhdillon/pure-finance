@@ -36,6 +36,8 @@ class FrequencyIntervalRule implements ValidationRule
 
         match ($this->frequency) {
             RecurringFrequency::MONTHLY => $start->addMonth()->isSameDay($end),
+            RecurringFrequency::QUARTERLY => $start->addMonths(3)->isSameDay($end),
+            RecurringFrequency::SEMI_ANNUALLY => $start->addMonths(6)->isSameDay($end),
             RecurringFrequency::YEARLY => $start->addYear()->isSameDay($end),
         };
     }

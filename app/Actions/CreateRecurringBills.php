@@ -22,14 +22,14 @@ class CreateRecurringBills
 	private function createRecurringBills(Bill $bill): void
 	{
 		$interval = $this->frequencyToInterval($bill->frequency);
+
 		$date = $bill->date->copy();
-		$end_of_year = now('America/Chicago')->copy()->endOfYear();
 
-		while (true) {
-			$date = $date->copy()->add($interval);
+		$end_of_year = now('America/Chicago')->endOfYear();
 
-			if ($date->greaterThan($end_of_year)) break;
+		$date = $date->copy()->add($interval);
 
+		while ($date->toDateString() <= $end_of_year->toDateString()) {
 			Bill::create([
 				'account_id' => $bill->account_id,
 				'user_id' => $bill->user_id,
@@ -45,6 +45,8 @@ class CreateRecurringBills
 				'second_alert' => $bill->second_alert,
 				'second_alert_time' => $bill->second_alert_time,
 			]);
+
+			$date = $date->copy()->add($interval);
 		}
 	}
 

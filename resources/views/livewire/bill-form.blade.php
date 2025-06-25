@@ -144,7 +144,7 @@
                 <div class="flex">
                     <flux:spacer />
 
-                    <div class="flex flex-col gap-2 w-full">
+                    <div class="flex flex-col space-y-2.5 w-full">
                         @if ($bill && $bill->children()->count()) 
                             <flux:modal.trigger name="save-bill" class="w-full">
                                 <flux:button variant="primary">Save</flux:button>
@@ -178,7 +178,7 @@
                         @endif
 
                         @if ($bill)
-                            <div class="flex items-center gap-2 w-full">
+                            <div class="flex items-center space-x-2 w-full">
                                 <flux:button wire:click='changePaidStatus' variant="outline" class="w-full">
                                     {{ $paid ? 'Mark as unpaid' : 'Mark as paid' }}
                                 </flux:button>
