@@ -14,12 +14,23 @@ new class extends Component {
 
     public string $preferred_homepage = '';
 
+    public array $phone_numbers = [];
+
     protected function rules(): array
     {
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore(Auth::id())],
             'preferred_homepage' => ['nullable', 'string'],
+            'phone_numbers' => ['nullable', 'array'],
+            'phone_numbers.*.value' => ['nullable', 'phone:US'],
+        ];
+    }
+
+    protected function messages(): array
+    {
+        return [
+            'phone_numbers.*.value.phone' => 'The phone number must be a valid number'
         ];
     }
 
@@ -38,25 +49,31 @@ new class extends Component {
         $this->name = $user->name;
         $this->email = $user->email;
         $this->preferred_homepage = $user->preferred_homepage ?? 'dashboard';
+        $this->phone_numbers = $user->phone_numbers ?? [];
     }
 
     public function updateProfileInformation(): void
     {
         $this->validate();
 
+        $filtered_phone_numbers = array_values(
+            array_filter($this->phone_numbers, fn(array $number): bool => !empty($number['value']))
+        );
+
         auth()
             ->user()
             ->update([
                 'name' => $this->name,
                 'email' => $this->email,
-                'preferred_homepage' => $this->preferred_homepage
+                'preferred_homepage' => $this->preferred_homepage,
+                'phone_numbers' => $filtered_phone_numbers,
             ]);
 
         $this->dispatch('profile-updated', name: $this->name);
     }
 }; ?>
 
-<section class="w-full">
+<section x-data="profile" class="w-full">
     @include('partials.settings-heading')
 
     <x-settings.layout :heading="__('Profile')" :subheading="__('Update your avatar, name, and email address')">
@@ -93,6 +110,36 @@ new class extends Component {
                 <flux:error name="preferred_homepage" />
             </flux:field>
 
+            <flux:field>
+                <div class="flex items-center justify-between">
+                    <flux:label>Phone Numbers</flux:label>
+
+                    <flux:button
+                        icon="plus"
+                        variant="subtle"
+                        class="size-3! hover:bg-transparent!"
+                        x-on:click="addPhoneNumber()" />
+                </div>
+
+                <template x-for="(phone_number, index) in phoneNumbers">
+                    <div class="flex items-center gap-1.5 first-of-type:mt-1">
+                        <flux:input type="text" x-model='phone_number.value' />
+
+                        <flux:button
+                            x-cloak
+                            x-show="phoneNumbers.length > 1"
+                            icon="trash"
+                            variant="outline"
+                            class="text-rose-500! h-[38px]!"
+                            x-on:click="deletePhoneNumber(index)" />
+                    </div>
+                </template>
+
+                <flux:error name="phone_numbers" />
+
+                <flux:error name="phone_numbers.*.value" />
+            </flux:field>
+
             <div class="flex items-center gap-4">
                 <div class="flex items-center justify-end">
                     <flux:button variant="primary" type="submit" size="sm" class="w-full">
@@ -109,3 +156,27 @@ new class extends Component {
         <livewire:settings.delete-user-form />
     </x-settings.layout>
 </section>
+
+@script
+<script>
+    Alpine.data('profile', () => {
+        return {
+            phoneNumbers: $wire.entangle('phone_numbers'),
+
+            addPhoneNumber() {
+                this.phoneNumbers.push({
+                    value: ''
+                });
+            },
+
+            deletePhoneNumber(index) {
+                this.phoneNumbers.splice(index, 1);
+            },
+
+            init() {
+                if (this.phoneNumbers.length === 0) this.addPhoneNumber();
+            }
+        };
+    });
+</script>
+@endscript

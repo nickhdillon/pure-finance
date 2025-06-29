@@ -81,6 +81,12 @@
                 <flux:field>
                     <flux:label>Alerts</flux:label>
 
+                    @if (is_null(auth()->user()->phone_numbers)) 
+                        <flux:text class="-mt-1.5 text-red-500">
+                            You must add at least one phone number to your profile to receive alerts
+                        </flux:text>
+                    @endif
+
                     <div class="flex flex-col gap-1.5 w-full min-w-0">
                         <div class="rounded-[8px] shadow-xs border border-zinc-200 bg-white dark:bg-white/10 md:flex min-w-0 w-full divide-y md:divide-x md:divide-y-0 dark:border-white/10 divide-zinc-200 dark:divide-white/10">
                             <div class="md:!w-[60%] w-full min-w-0">

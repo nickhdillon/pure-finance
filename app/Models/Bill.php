@@ -34,8 +34,10 @@ class Bill extends Model
         'attachments',
         'first_alert',
         'first_alert_time',
+        'first_alert_sent',
         'second_alert',
-        'second_alert_time'
+        'second_alert_time',
+        'second_alert_sent'
     ];
 
     /**
@@ -52,6 +54,8 @@ class Bill extends Model
             'attachments' => 'array',
             'first_alert' => BillAlert::class,
             'second_alert' => BillAlert::class,
+            'first_alert_sent' => 'bool',
+            'second_alert_sent' => 'bool'
         ];
     }
 
