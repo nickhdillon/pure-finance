@@ -26,7 +26,13 @@ class TransactionFactory extends Factory
     {
         $transaction_date = $this->faker->dateTimeBetween('-2 years', 'now');
 
-        $frequency = Arr::random(RecurringFrequency::cases());
+        $frequency = Arr::random(array_values(
+            array_filter(
+                RecurringFrequency::cases(),
+                fn(RecurringFrequency $case): bool =>
+                $case !== RecurringFrequency::ONE_TIME
+            )
+        ));
 
         $modifier = match ($frequency) {
             RecurringFrequency::MONTHLY => '+1 month',

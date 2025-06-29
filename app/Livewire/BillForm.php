@@ -30,11 +30,15 @@ class BillForm extends Component
 
     public array $colors = [];
 
+    public array $transaction_types;
+
     public Collection $times;
 
     public int $account_id;
 
     public string $name = '';
+
+    public TransactionType $type = TransactionType::DEBIT;
 
     public int $category_id;
 
@@ -63,6 +67,7 @@ class BillForm extends Component
         return [
             'account_id' => ['required', 'int'],
             'name' => ['required', 'string'],
+            'type' => ['required', Rule::enum(TransactionType::class)],
             'category_id' => ['required', 'int'],
             'amount' => ['required', 'decimal:0,2', 'numeric'],
             'date' => ['required', 'date'],
@@ -101,6 +106,7 @@ class BillForm extends Component
     {
         $this->getAccounts()
             ->getCategories()
+            ->getTransactionTypes()
             ->getTimes();
 
         $this->date = today('America/Chicago');
@@ -112,6 +118,7 @@ class BillForm extends Component
         $this->bill = Bill::find($bill_id);
         $this->account_id = $this->bill->account_id;
         $this->name = $this->bill->name;
+        $this->type = $this->bill->type;
         $this->category_id = $this->bill->category_id;
         $this->amount = $this->bill->amount;
         $this->date = $this->bill->date;
@@ -192,6 +199,16 @@ class BillForm extends Component
         return $this;
     }
 
+    public function getTransactionTypes(): self
+    {
+        $this->transaction_types = collect(TransactionType::cases())
+            ->sortBy('value')
+            ->values()
+            ->all();
+
+        return $this;
+    }
+
     public function getTimes(): self
     {
         $this->times = collect(range(0, 23))->map(
@@ -234,7 +251,7 @@ class BillForm extends Component
                 [
                     'account_id' => $this->account_id,
                     'category_id' => $this->category_id,
-                    'type' => TransactionType::DEBIT,
+                    'type' => $this->type,
                     'amount' => $this->amount,
                     'payee' => $this->name,
                     'date' => $this->date,
@@ -273,7 +290,10 @@ class BillForm extends Component
             $new_bill = auth()->user()->bills()->create($validated_data);
         }
 
-        if ($this->bill?->children->count() === 0 || !$this->bill) {
+        if (
+            ($this->bill?->children->count() === 0 || !$this->bill)
+            && $this->frequency !== RecurringFrequency::ONE_TIME
+        ) {
             $recurring_action->handle($this->bill ?: $new_bill);
         }
 

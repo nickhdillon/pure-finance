@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\BillAlert;
+use App\Enums\TransactionType;
 use App\Enums\RecurringFrequency;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -25,6 +26,7 @@ class Bill extends Model
         'user_id',
         'parent_id',
         'name',
+        'type',
         'category_id',
         'amount',
         'date',
@@ -48,6 +50,7 @@ class Bill extends Model
     protected function casts(): array
     {
         return [
+            'type' => TransactionType::class,
             'date' => 'date',
             'frequency' => RecurringFrequency::class,
             'paid' => 'bool',

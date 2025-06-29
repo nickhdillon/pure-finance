@@ -31,12 +31,26 @@
                     <flux:error name="name" />
                 </flux:field>
 
+                <flux:field>
+                    <flux:label>Type</flux:label>
+
+                    <flux:select variant="listbox" placeholder="Select a type" wire:model='type' clearable>
+                        @foreach ($transaction_types as $transaction_type)
+                            <flux:select.option value="{{ $transaction_type->value }}">
+                                {{ $transaction_type->label() }}
+                            </flux:select.option>
+                        @endforeach
+                    </flux:select>
+
+                    <flux:error name="type" />
+                </flux:field>
+
                 <x-categories :$categories />
 
                 <flux:field class="w-full">
                     <flux:label>Amount</flux:label>
 
-                    <flux:input type="number" inputmode="decimal" wire:model='amount' placeholder="100.00" step="0.01" required />
+                    <flux:input icon="currency-dollar" icon-variant="outline" type="number" inputmode="decimal" placeholder="100.00" step="0.01" wire:model='amount' required />
 
                     <flux:error name="amount" />
                 </flux:field>
@@ -55,7 +69,8 @@
                     <flux:select variant="listbox" placeholder="Select a frequency..." clearable wire:model='frequency'>
                         @foreach (RecurringFrequency::cases() as $frequency)
                             <flux:select.option value="{{ $frequency->value }}">
-                                Every {{ $frequency->label() }}
+                                {{ $frequency->value !== 'one_time' ? 'Every' : '' }} 
+                                {{ $frequency->label() }}
                             </flux:select.option>
                         @endforeach
                     </flux:select>

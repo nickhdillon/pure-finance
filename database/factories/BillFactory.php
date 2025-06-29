@@ -6,6 +6,7 @@ use App\Models\Account;
 use App\Enums\BillAlert;
 use App\Models\Category;
 use Illuminate\Support\Arr;
+use App\Enums\TransactionType;
 use App\Enums\RecurringFrequency;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -26,6 +27,7 @@ class BillFactory extends Factory
                 ? Account::inRandomOrder()->first()->id
                 : Account::factory(),
             'name' => $this->faker->company(),
+            'type' => TransactionType::DEBIT,
             'category_id' => Category::count() > 0
                 ? Category::inRandomOrder()->first()->id
                 : Category::factory(),

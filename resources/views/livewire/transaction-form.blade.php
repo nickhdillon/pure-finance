@@ -154,7 +154,8 @@
                                 <flux:select variant="listbox" placeholder="Select a frequency..." clearable wire:model='frequency'>
                                     @foreach (RecurringFrequency::cases() as $frequency)
                                         <flux:select.option value="{{ $frequency->value }}">
-                                            Every {{ $frequency->label() }}
+                                            {{ $frequency->value !== 'one_time' ? 'Every' : '' }}
+                                            {{ $frequency->label() }}
                                         </flux:select.option>
                                     @endforeach
                                 </flux:select>
@@ -165,7 +166,7 @@
                             <flux:field>
                                 <flux:label>End Date</flux:label>
 
-                                <flux:date-picker wire:model='recurring_end' clearable with-today selectable-header />
+                                <flux:date-picker wire:model='recurring_end' clearable with-today />
 
                                 <flux:error name="recurring_end" />
                             </flux:field>

@@ -293,7 +293,10 @@ class TransactionForm extends Component
             $transfer_action->handle(Account::find($this->transfer_to), $this->transaction ?: $new_transaction);
         }
 
-        if ($this->transaction?->children->count() === 0 || ! $this->transaction) {
+        if (
+            (! $this->transaction || $this->transaction->children->count() === 0)
+            && $this->frequency !== RecurringFrequency::ONE_TIME
+        ) {
             $recurring_action->handle($this->transaction ?: $new_transaction);
         }
 

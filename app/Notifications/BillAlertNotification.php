@@ -33,7 +33,7 @@ class BillAlertNotification extends Notification implements ShouldQueue
         };
 
         return (new VonageMessage)
-            ->content("Pure Finance - Bill Reminder: Your {$this->bill->name} bill is due {$message}");
+            ->content("Pure Finance - Bill Reminder: Your " . trim($this->bill->name) . " bill is due {$message}");
     }
 
     /**
