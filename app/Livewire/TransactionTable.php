@@ -225,9 +225,9 @@ class TransactionTable extends Component
                     });
                 })
                 ->when($this->date, function (Builder $query): void {
-                    $query->whereBetween('date', [Carbon::parse($this->date)->toDateString(), now()->addWeek()->toDateString()]);
+                    $query->whereBetween('date', [Carbon::parse($this->date)->toDateString(), now()->toDateString()]);
                 })
-                ->whereDate('date', '<=', now()->timezone('America/Chicago'))
+                ->whereDate('date', '<=', now()->timezone('America/Chicago')->addWeek())
                 ->latest('id')
                 ->paginate(25),
         ]);
