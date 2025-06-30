@@ -254,7 +254,7 @@ class BillForm extends Component
                     'type' => $this->type,
                     'amount' => $this->amount,
                     'payee' => $this->name,
-                    'date' => $this->date,
+                    'date' => now('America/Chicago')->toDateString(),
                     'notes' => $this->notes,
                     'attachments' => $this->attachments,
                     'status' => true
