@@ -121,26 +121,26 @@ class Transaction extends Model
 
     public function recalculateAccountBalance(): void
     {
-        defer(function (): void {
-            $total_credits = $this->account->transactions()
-                ->whereDate('date', '<=', now()->timezone('America/Chicago'))
-                ->whereIn('type', [TransactionType::CREDIT, TransactionType::DEPOSIT])
-                ->sum('amount');
+        $account = $this->account;
 
-            $total_debits = $this->account->transactions()
-                ->whereDate('date', '<=', now()->timezone('America/Chicago'))
-                ->whereIn('type', [
-                    TransactionType::DEBIT,
-                    TransactionType::TRANSFER,
-                    TransactionType::WITHDRAWAL,
-                ])
-                ->sum('amount');
+        $transactions = $account
+            ->transactions()
+            ->whereDate('date', '<=', now()->timezone('America/Chicago'));
 
-            $initial_balance = $this->account->initial_balance;
+        $total_credits = (clone $transactions)
+            ->whereIn('type', [TransactionType::CREDIT, TransactionType::DEPOSIT])
+            ->sum('amount');
 
-            $new_balance = $initial_balance + $total_credits - $total_debits;
+        $total_debits = (clone $transactions)
+            ->whereIn('type', [
+                TransactionType::DEBIT,
+                TransactionType::TRANSFER,
+                TransactionType::WITHDRAWAL,
+            ])
+            ->sum('amount');
 
-            $this->account->update(['balance' => $new_balance]);
-        });
+        $balance = $account->initial_balance + $total_credits - $total_debits;
+
+        $account->update(['balance' => $balance]);
     }
 }

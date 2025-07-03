@@ -30,7 +30,7 @@ class GenerateTransactionSlugs extends Command
      */
     public function handle()
     {
-        Transaction::select(['id', 'payee'])
+        Transaction::select(['id', 'account_id', 'payee'])
             ->chunk(100, function (Collection $transactions): void {
                 foreach ($transactions as $transaction) {
                     $transaction->update([
