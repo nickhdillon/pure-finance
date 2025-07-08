@@ -51,7 +51,7 @@ Route::middleware(['auth'])->group(function () {
         ->can('update', 'savings_goal')
         ->name('edit-savings-goal');
 
-    Route::get('bill-calendar', BillCalendar::class)->name('bill-calendar');
+    Route::get('bill-calendar/{bill?}', BillCalendar::class)->name('bill-calendar');
 
     Route::get('transactions', TransactionTable::class)->name('transactions');
 
