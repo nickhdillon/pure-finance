@@ -237,7 +237,7 @@ class BillForm extends Component
         }
     }
 
-    public function changePaidStatus(): void
+    public function changePaidStatus(bool $create_related_transaction = false): void
     {
         if ($this->paid) {
             $this->bill->update(['paid' => false]);
@@ -246,20 +246,22 @@ class BillForm extends Component
         } else {
             $this->bill->update(['paid' => true]);
 
-            $this->bill->transaction()->updateOrCreate(
-                ['bill_id' => $this->bill->id],
-                [
-                    'account_id' => $this->account_id,
-                    'category_id' => $this->category_id,
-                    'type' => $this->type,
-                    'amount' => $this->amount,
-                    'payee' => $this->name,
-                    'date' => now('America/Chicago')->toDateString(),
-                    'notes' => $this->notes,
-                    'attachments' => $this->attachments,
-                    'status' => true
-                ]
-            );
+            if ($create_related_transaction) {
+                $this->bill->transaction()->updateOrCreate(
+                    ['bill_id' => $this->bill->id],
+                    [
+                        'account_id' => $this->account_id,
+                        'category_id' => $this->category_id,
+                        'type' => $this->type,
+                        'amount' => $this->amount,
+                        'payee' => $this->name,
+                        'date' => now('America/Chicago')->toDateString(),
+                        'notes' => $this->notes,
+                        'attachments' => $this->attachments,
+                        'status' => true
+                    ]
+                );
+            }
         }
 
         Flux::toast(
@@ -306,6 +308,8 @@ class BillForm extends Component
 
         $this->redirectRoute('bill-calendar', navigate: true);
     }
+
+    public function createRelatedTransaction(): void {}
 
     public function delete(?bool $all = null): void
     {

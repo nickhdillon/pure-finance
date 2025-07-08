@@ -200,9 +200,39 @@
 
                         @if ($bill)
                             <div class="flex items-center space-x-2 w-full">
-                                <flux:button wire:click='changePaidStatus' variant="outline" class="w-full">
-                                    {{ $paid ? 'Mark as unpaid' : 'Mark as paid' }}
-                                </flux:button>
+                                @if (!$bill->paid || !$bill->transaction()->exists()) 
+                                    <flux:modal.trigger name="mark-as-paid">
+                                        <flux:button variant="outline" class="w-full">
+                                            Mark as paid
+                                        </flux:button>
+                                    </flux:modal.trigger>
+    
+                                    <flux:modal name="mark-as-paid">
+                                        <flux:heading size="lg">Mark As Paid</flux:heading>
+    
+                                        <flux:text class="mt-2">
+                                            Would you like to create a corresponding transaction for this bill?
+                                        </flux:text>
+    
+                                        <div class="flex mt-4">
+                                            <flux:spacer />
+    
+                                            <div class="flex items-center gap-1.5">
+                                                <flux:button wire:click='changePaidStatus' variant="primary" size="sm" class="w-12!">
+                                                    No
+                                                </flux:button>
+    
+                                                <flux:button wire:click='changePaidStatus(true)' variant="outline" size="sm" class="text-emerald-500! w-12!">
+                                                    Yes
+                                                </flux:button>
+                                            </div>
+                                        </div>
+                                    </flux:modal>
+                                @else
+                                    <flux:button wire:click='changePaidStatus' variant="outline" class="w-full">
+                                        Mark as unpaid
+                                    </flux:button>
+                                @endif
 
                                 <div class="w-full">
                                     <flux:modal.trigger name="delete-bill">
