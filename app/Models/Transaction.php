@@ -40,6 +40,7 @@ class Transaction extends Model
         'frequency',
         'recurring_end',
         'parent_id',
+        'posted_at'
     ];
 
     /**
@@ -57,6 +58,7 @@ class Transaction extends Model
             'is_recurring' => 'bool',
             'frequency' => RecurringFrequency::class,
             'recurring_end' => 'date',
+            'posted_at' => 'datetime'
         ];
     }
 
