@@ -10,7 +10,7 @@
                 </flux:heading>
             
                 <div class="flex flex-col sm:flex-row p-3 gap-5 w-full items-center justify-between">
-                    <div class="relative w-40 h-40 rounded-full">
+                    <div class="relative w-48 h-48 rounded-full">
                         <div class="absolute inset-0 rounded-full" style="background: conic-gradient({{ $gradient }});"></div>
             
                         <div class="absolute inset-[15px] flex justify-center items-center bg-white rounded-full text-lg font-medium">
