@@ -10,10 +10,10 @@
                 </flux:heading>
             
                 <div class="flex flex-col sm:flex-row p-3 gap-5 w-full items-center justify-between">
-                    <div class="relative w-44 h-44 rounded-full">
+                    <div class="relative w-46 h-46 rounded-full">
                         <div class="absolute inset-0 rounded-full" style="background: conic-gradient({{ $gradient }});"></div>
             
-                        <div class="absolute inset-[16px] flex justify-center items-center bg-white rounded-full text-lg font-medium">
+                        <div class="absolute inset-[20px] flex justify-center items-center bg-white rounded-full text-lg font-medium">
                             ${{ Number::format($monthly_total, 2) }}
                         </div>
                     </div>
