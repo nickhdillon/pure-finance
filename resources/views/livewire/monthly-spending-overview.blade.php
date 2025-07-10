@@ -13,7 +13,7 @@
                     <div class="relative w-46 h-46 rounded-full">
                         <div class="absolute inset-0 rounded-full" style="background: conic-gradient({{ $gradient }});"></div>
             
-                        <div class="absolute inset-[20px] flex justify-center items-center bg-white rounded-full text-lg font-medium">
+                        <div class="absolute inset-[20px] flex justify-center items-center bg-white dark:bg-zinc-900 rounded-full text-lg font-medium">
                             ${{ Number::format($monthly_total, 2) }}
                         </div>
                     </div>
