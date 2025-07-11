@@ -3,7 +3,7 @@
         <x-slot:content>                
             <div class="p-3 gap-2 flex flex-col dark:bg-zinc-900 w-full">
                 <flux:heading class="text-xl text-center sm:text-left pt-2 sm:pt-0">
-                    Total Spending for
+                    Current Spending for
 
                     <span class="sm:hidden">{{ $month_short }}</span>
                     <span class="hidden sm:inline">{{ $month_full }}</span>
