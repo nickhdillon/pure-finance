@@ -33,7 +33,7 @@
 
                                 <div class="flex gap-1">
                                     <span class="font-medium">
-                                        {{ round($category->percent, 1) }}%
+                                        {{ $category->display_percent }}%
                                     </span>
 
                                     (${{ Number::format($category->total_spent, 2) }})

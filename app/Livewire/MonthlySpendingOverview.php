@@ -51,6 +51,9 @@ class MonthlySpendingOverview extends Component
             ->whereBetween('transactions.date', [$start_of_month, $end_of_month])
             ->sum('transactions.amount');
 
+        $start = 0;
+        $segments = [];
+
         $this->top_categories = $user->categories()
             ->selectRaw('categories.name, SUM(transactions.amount) as total_spent')
             ->join('transactions', 'transactions.category_id', '=', 'categories.id')
@@ -61,33 +64,46 @@ class MonthlySpendingOverview extends Component
             ->limit(5)
             ->get()
             ->values()
-            ->map(function (Category $category, int $index): Category {
+            ->map(function (Category $category, int $index) use (&$start, &$segments): Category {
                 $category->percent = $this->monthly_total > 0
                     ? ($category->total_spent / $this->monthly_total) * 100
                     : 0;
 
+                $category->display_percent = (int) floor($category->percent);
+                $category->remainder = $category->percent - $category->display_percent;
+
                 $category->color = $this->colors[$index]['base'];
                 $category->hex = $this->colors[$index]['hex'];
 
+                $end = $start + $category->display_percent;
+                $segments[] = "{$category->hex} {$start}% {$end}%";
+                $start = $end;
+
                 return $category;
+            })
+            ->pipe(function (Collection $categories): Collection {
+                $sum = $categories->sum('display_percent');
+                $diff = 100 - $sum;
+
+                if ($diff > 0) {
+                    return $categories
+                        ->map(function (Category $category, int $index) use ($diff): Category {
+                            if ($index < $diff) {
+                                $category->display_percent += 1;
+                            }
+
+                            unset($category->remainder);
+
+                            return $category;
+                        })
+                        ->sortByDesc('total_spent')
+                        ->values();
+                }
+
+                return $categories;
             });
 
-        $this->gradient = $this->buildGradient($this->top_categories);
-    }
-
-    private function buildGradient(Collection $categories): string
-    {
-        $start = 0;
-
-        return $categories->map(function (Category $category) use (&$start): string {
-            $end = $start + $category->percent;
-
-            $segment = "{$category->hex} {$start}% {$end}%";
-
-            $start = $end;
-
-            return $segment;
-        })->implode(',');
+        $this->gradient = implode(',', $segments);
     }
 
     public function render(): View
