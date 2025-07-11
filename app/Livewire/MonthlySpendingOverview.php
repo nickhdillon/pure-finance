@@ -61,30 +61,15 @@ class MonthlySpendingOverview extends Component
             ->limit(5)
             ->get()
             ->values()
-            ->pipe(function (Collection $categories): Collection {
-                $total = $this->monthly_total;
-                $last_index = $categories->count() - 1;
-                $rounded_total = 0;
+            ->map(function (Category $category, int $index): Category {
+                $category->percent = $this->monthly_total > 0
+                    ? ($category->total_spent / $this->monthly_total) * 100
+                    : 0;
 
-                return $categories->map(
-                    function (Category $category, int $index) use (&$rounded_total, $last_index, $total): Category {
-                        $category->percent = $total > 0
-                            ? ($category->total_spent / $total) * 100
-                            : 0;
+                $category->color = $this->colors[$index]['base'];
+                $category->hex = $this->colors[$index]['hex'];
 
-                        if ($index < $last_index) {
-                            $category->rounded_percent = round($category->percent);
-                            $rounded_total += $category->rounded_percent;
-                        } else {
-                            $category->rounded_percent = max(0, 100 - $rounded_total);
-                        }
-
-                        $category->color = $this->colors[$index]['base'];
-                        $category->hex = $this->colors[$index]['hex'];
-
-                        return $category;
-                    }
-                );
+                return $category;
             });
 
         $this->gradient = $this->buildGradient($this->top_categories);

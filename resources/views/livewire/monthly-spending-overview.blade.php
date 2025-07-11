@@ -20,7 +20,7 @@
             
                     <ul class="space-y-3 sm:ml-auto">
                         @foreach ($top_categories as $category)
-                            <li class="flex text-sm items-center gap-2">
+                            <li class="flex text-sm items-center gap-1.5">
                                 <div class="flex items-center gap-2">
                                     <span class="inline-block w-3 h-3 rounded-full {{ $category->color }}"></span>
                                     
@@ -33,7 +33,7 @@
 
                                 <div class="flex gap-1">
                                     <span class="font-medium">
-                                        {{ $category->rounded_percent }}%
+                                        {{ Number::format($category->percent, 1) }}%
                                     </span>
 
                                     (${{ Number::format($category->total_spent, 2) }})
