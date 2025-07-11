@@ -44,7 +44,7 @@ class MonthlySpendingOverview extends Component
             : $this->month_full;
 
         $start_of_month = $now->copy()->startOfMonth()->toDateString();
-        $end_of_month = $now->copy()->endOfMonth()->toDateString();
+        $end_of_month = $now->copy()->toDateString();
 
         $this->monthly_total = $user->transactions()
             ->where('transactions.type', TransactionType::DEBIT)
