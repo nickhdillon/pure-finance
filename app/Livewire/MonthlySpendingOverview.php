@@ -51,9 +51,6 @@ class MonthlySpendingOverview extends Component
             ->whereBetween('transactions.date', [$start_of_month, $end_of_month])
             ->sum('transactions.amount');
 
-        $start = 0;
-        $segments = [];
-
         $this->top_categories = $user->categories()
             ->selectRaw('categories.name, SUM(transactions.amount) as total_spent')
             ->join('transactions', 'transactions.category_id', '=', 'categories.id')
@@ -64,7 +61,7 @@ class MonthlySpendingOverview extends Component
             ->limit(5)
             ->get()
             ->values()
-            ->map(function (Category $category, int $index) use (&$start, &$segments): Category {
+            ->map(function (Category $category, int $index): Category {
                 $category->percent = $this->monthly_total > 0
                     ? ($category->total_spent / $this->monthly_total) * 100
                     : 0;
@@ -107,7 +104,7 @@ class MonthlySpendingOverview extends Component
         $start = 0;
 
         return $this->top_categories->map(function (Category $category) use (&$start): string {
-            $end = $start + $category->percent;
+            $end = $start + $category->display_percent;
 
             $segment = "{$category->hex} {$start}% {$end}%";
 
