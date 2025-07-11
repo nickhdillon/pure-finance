@@ -70,40 +70,51 @@ class MonthlySpendingOverview extends Component
                     : 0;
 
                 $category->display_percent = (int) floor($category->percent);
-                $category->remainder = $category->percent - $category->display_percent;
 
                 $category->color = $this->colors[$index]['base'];
                 $category->hex = $this->colors[$index]['hex'];
-
-                $end = $start + $category->display_percent;
-                $segments[] = "{$category->hex} {$start}% {$end}%";
-                $start = $end;
 
                 return $category;
             })
             ->pipe(function (Collection $categories): Collection {
                 $sum = $categories->sum('display_percent');
                 $diff = 100 - $sum;
+                $count = $categories->count();
 
                 if ($diff > 0) {
-                    return $categories
-                        ->map(function (Category $category, int $index) use ($diff): Category {
-                            if ($index < $diff) {
-                                $category->display_percent += 1;
-                            }
+                    $add_per_category = (int) floor($diff / $count);
+                    $leftover = $diff % $count;
 
-                            unset($category->remainder);
+                    return $categories->map(function (Category $category, int $index) use ($add_per_category, $leftover): Category {
+                        $category->display_percent += $add_per_category;
 
-                            return $category;
-                        })
-                        ->sortByDesc('total_spent')
-                        ->values();
+                        if ($index < $leftover) {
+                            $category->display_percent += 1;
+                        }
+
+                        return $category;
+                    });
                 }
 
                 return $categories;
             });
 
-        $this->gradient = implode(',', $segments);
+        $this->gradient = $this->buildGradient();
+    }
+
+    private function buildGradient(): string
+    {
+        $start = 0;
+
+        return $this->top_categories->map(function (Category $category) use (&$start): string {
+            $end = $start + $category->percent;
+
+            $segment = "{$category->hex} {$start}% {$end}%";
+
+            $start = $end;
+
+            return $segment;
+        })->implode(',');
     }
 
     public function render(): View
