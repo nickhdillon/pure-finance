@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
+use Carbon\Carbon;
 use Livewire\Component;
 use Illuminate\Contracts\View\View;
 
@@ -13,7 +14,7 @@ class UpcomingBills extends Component
     {
         $now = now('America/Chicago');
         $start = $now->copy();
-        $end = $now->copy()->endOfWeek()->subDay();
+        $end = $now->copy()->endOfWeek(Carbon::SATURDAY);
 
         return view('livewire.upcoming-bills', [
             'today' => $start->format('n/d/y'),

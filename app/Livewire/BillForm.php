@@ -309,8 +309,6 @@ class BillForm extends Component
         $this->redirectRoute('bill-calendar', navigate: true);
     }
 
-    public function createRelatedTransaction(): void {}
-
     public function delete(?bool $all = null): void
     {
         if ($all) {
