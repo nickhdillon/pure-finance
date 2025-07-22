@@ -80,7 +80,7 @@
         @endif
 
         @error('files.*')
-            <div class="pt-2 text-sm text-rose-600 dark:text-rose-400">
+            <div class="pt-2 text-sm text-red-600 dark:text-red-400">
                 {{ $message }}
             </div>
         @enderror

@@ -242,7 +242,7 @@
 
                                 <div class="w-full">
                                     <flux:modal.trigger name="delete-bill">
-                                        <flux:button variant="outline" class="w-full text-rose-500! font-medium!">
+                                        <flux:button variant="outline" class="w-full text-red-500! font-medium!">
                                             Delete
                                         </flux:button>
                                     </flux:modal.trigger>
@@ -263,7 +263,7 @@
                                                         This bill only
                                                     </flux:button>
 
-                                                    <flux:button wire:click="delete(true)" x-on:click="$dispatch('bill-submitted')" variant="outline" size="sm" class="text-rose-500!">
+                                                    <flux:button wire:click="delete(true)" x-on:click="$dispatch('bill-submitted')" variant="outline" size="sm" class="text-red-500!">
                                                         All instances
                                                     </flux:button>
                                                 </div>
