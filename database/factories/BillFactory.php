@@ -39,8 +39,10 @@ class BillFactory extends Factory
             'paid' => Arr::random([true, false]),
             'first_alert' => Arr::random(BillAlert::cases()),
             'first_alert_time' => $this->faker->dateTimeBetween('00:00', '23:00')->format('g A'),
+            'first_alert_sent' => false,
             'second_alert' => Arr::random(BillAlert::cases()),
             'second_alert_time' => $this->faker->dateTimeBetween('00:00', '23:00')->format('g A'),
+            'second_alert_sent' => false,
         ];
     }
 }

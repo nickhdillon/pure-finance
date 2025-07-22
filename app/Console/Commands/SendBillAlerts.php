@@ -108,7 +108,6 @@ class SendBillAlerts extends Command
             BillAlert::ONE_DAY_BEFORE => $date->copy()->subDay(),
             BillAlert::TWO_DAYS_BEFORE => $date->copy()->subDays(2),
             BillAlert::ONE_WEEK_BEFORE => $date->copy()->subWeek(),
-            default => null,
         };
 
         if (!$alert_date) return false;
