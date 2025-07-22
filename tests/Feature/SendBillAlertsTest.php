@@ -59,5 +59,12 @@ beforeEach(function () {
 it('can send bill alerts successfully', function () {
     $this->artisan('send-bill-alerts')->assertExitCode(0);
 
-    Notification::assertSentOnDemand(BillAlertNotification::class);
+    Notification::assertSentOnDemand(
+        BillAlertNotification::class,
+        function (BillAlertNotification $notification) {
+            expect($notification->toVonage()->content)->toContain('Pure Finance');
+
+            return true;
+        }
+    );
 });
