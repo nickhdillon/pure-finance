@@ -122,7 +122,7 @@ new class extends Component {
                             x-show="phoneNumbers.length > 1"
                             icon="trash"
                             variant="outline"
-                            class="text-rose-500! h-[38px]! dark:bg-white/10!"
+                            class="text-red-500! h-[38px]! dark:bg-white/10! dark:hover:bg-zinc-700!"
                             x-on:click="deletePhoneNumber(index)" />
                     </div>
                 </template>
