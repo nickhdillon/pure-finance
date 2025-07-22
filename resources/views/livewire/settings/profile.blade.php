@@ -111,15 +111,7 @@ new class extends Component {
             </flux:field>
 
             <flux:field>
-                <div class="flex items-center justify-between">
-                    <flux:label>Phone Numbers</flux:label>
-
-                    <flux:button
-                        icon="plus"
-                        variant="subtle"
-                        class="size-3! hover:bg-transparent!"
-                        x-on:click="addPhoneNumber()" />
-                </div>
+                <flux:label>Phone Numbers</flux:label>
 
                 <template x-for="(phone_number, index) in phoneNumbers">
                     <div class="flex items-center gap-1.5 first-of-type:mt-1">
@@ -130,10 +122,19 @@ new class extends Component {
                             x-show="phoneNumbers.length > 1"
                             icon="trash"
                             variant="outline"
-                            class="text-rose-500! h-[38px]!"
+                            class="text-rose-500! h-[38px]! dark:bg-white/10!"
                             x-on:click="deletePhoneNumber(index)" />
                     </div>
                 </template>
+
+                <flux:button
+                    icon="plus"
+                    variant="primary"
+                    x-on:click="addPhoneNumber()"
+                    size="sm"
+                    class="w-18">
+                    Add
+                </flux:button>
 
                 <flux:error name="phone_numbers" />
 
