@@ -62,9 +62,7 @@ class MonthlySpendingOverview extends Component
             ->get()
             ->values()
             ->map(function (Category $category, int $index): Category {
-                $category->percent = $this->monthly_total > 0
-                    ? ($category->total_spent / $this->monthly_total) * 100
-                    : 0;
+                $category->percent = ($category->total_spent / $this->monthly_total) * 100;
 
                 $category->display_percent = (int) floor($category->percent);
 
@@ -78,7 +76,7 @@ class MonthlySpendingOverview extends Component
                 $diff = 100 - $sum;
                 $count = $categories->count();
 
-                if ($diff > 0) {
+                if ($diff > 0 && $count > 0) {
                     $add_per_category = (int) floor($diff / $count);
                     $leftover = $diff % $count;
 
