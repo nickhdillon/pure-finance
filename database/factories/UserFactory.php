@@ -30,6 +30,7 @@ class UserFactory extends Factory
             'name' => 'Admin',
             'email' => 'admin@example.com',
             'preferred_homepage' => 'dashboard',
+            'terms_accepted' => true,
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
         ];

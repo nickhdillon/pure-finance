@@ -27,6 +27,8 @@ class User extends Authenticatable
         'email',
         'preferred_homepage',
         'phone_numbers',
+        'terms_accepted',
+        'terms_accepted_at',
         'password',
     ];
 
@@ -49,6 +51,8 @@ class User extends Authenticatable
     {
         return [
             'phone_numbers' => 'array',
+            'terms_accepted' => 'bool',
+            'terms_accepted_at' => 'datetime',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];

@@ -3,17 +3,17 @@
 declare(strict_types=1);
 
 use Livewire\Volt\Volt;
-use App\Livewire\TagTable;
 use App\Livewire\Accounts;
+use App\Livewire\TagTable;
 use App\Models\Transaction;
 use App\Livewire\BillCalendar;
 use App\Livewire\SavingsGoals;
 use App\Livewire\CategoryTable;
-use App\Livewire\TransactionForm;
 use App\Livewire\AccountOverview;
 use App\Livewire\PlannedSpending;
 use App\Livewire\SavingsGoalForm;
 use App\Livewire\SavingsGoalView;
+use App\Livewire\TransactionForm;
 use App\Livewire\TransactionTable;
 use App\Livewire\PlannedExpenseView;
 use Illuminate\Support\Facades\Route;
@@ -78,5 +78,9 @@ Route::middleware(['auth'])->group(function () {
         });
     });
 });
+
+Route::view('privacy-policy', 'legal.privacy-policy')->name('privacy-policy');
+
+Route::view('terms-and-conditions', 'legal.terms-and-conditions')->name('terms-and-conditions');
 
 require __DIR__ . '/auth.php';

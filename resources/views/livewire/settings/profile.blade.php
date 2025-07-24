@@ -16,6 +16,10 @@ new class extends Component {
 
     public array $phone_numbers = [];
 
+    public bool $terms_accepted = false;
+
+    public ?DateTime $terms_accepted_at = null;
+
     protected function rules(): array
     {
         return [
@@ -24,6 +28,7 @@ new class extends Component {
             'preferred_homepage' => ['nullable', 'string'],
             'phone_numbers' => ['nullable', 'array'],
             'phone_numbers.*.value' => ['nullable', 'phone:US'],
+            'terms_accepted' => ['nullable', 'boolean']
         ];
     }
 
@@ -50,6 +55,8 @@ new class extends Component {
         $this->email = $user->email;
         $this->preferred_homepage = $user->preferred_homepage ?? 'dashboard';
         $this->phone_numbers = $user->phone_numbers ?? [];
+        $this->terms_accepted = $user->terms_accepted;
+        $this->terms_accepted_at = $user->terms_accepted_at;
     }
 
     public function updateProfileInformation(): void
@@ -67,6 +74,8 @@ new class extends Component {
                 'email' => $this->email,
                 'preferred_homepage' => $this->preferred_homepage,
                 'phone_numbers' => $filtered_phone_numbers,
+                'terms_accepted' => $this->terms_accepted,
+                'terms_accepted_at' => $this->terms_accepted ? now() : null
             ]);
 
         $this->dispatch('profile-updated', name: $this->name);
@@ -139,6 +148,26 @@ new class extends Component {
                 <flux:error name="phone_numbers" />
 
                 <flux:error name="phone_numbers.*.value" />
+            </flux:field>
+
+            <flux:field variant="inline">
+                <flux:checkbox wire:model="terms_accepted" />
+
+                <flux:label>
+                    I agree to the
+
+                    <flux:link :href="route('terms-and-conditions')" wire:navigate>
+                        terms & conditions
+                    </flux:link>
+
+                    and
+
+                    <flux:link :href="route('privacy-policy')" wire:navigate>
+                        privacy-policy
+                    </flux:link>
+                </flux:label>
+
+                <flux:error name="terms_accepted" />
             </flux:field>
 
             <div class="flex items-center gap-4">
