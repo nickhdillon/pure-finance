@@ -163,7 +163,7 @@ new class extends Component {
                     and
 
                     <flux:link :href="route('privacy-policy')" wire:navigate>
-                        privacy-policy
+                        privacy policy
                     </flux:link>
                 </flux:label>
 
