@@ -25,7 +25,7 @@
             <h2>2. Opt-In</h2>
 
             <p class="ml-6">
-                You must provide your mobile number and consent to receive messages. This can be done via a form or checkbox on our website or app.
+                You must provide your mobile number and consent to receive messages. This can be done via a checkbox the profile form.
             </p>
         </div>
 
@@ -49,7 +49,8 @@
             <h2>5. Opt-Out</h2>
 
             <p class="ml-6">
-                You may opt out of SMS alerts at any time by replying <span class="font-medium">STOP</span>. You may also contact us at 
+                You may opt out of SMS alerts at any time by replying <span class="font-medium">STOP</span>.
+                You may also contact us at 
                 <a class="font-medium" href="mailto:nickhds@gmail.com">nickhds@gmail.com</a> to be removed.
             </p>
         </div>
@@ -58,7 +59,7 @@
             <h2>6. Disclaimer</h2>
 
             <p class="ml-6">
-                We are not responsible for any late fees or service disruptions caused by missed alerts. You are responsible for managing your own billing schedules.
+                Carriers are not liable for delayed or undelivered messages.
             </p>
         </div>
 
@@ -75,7 +76,7 @@
 
             <p class="ml-6">
                 Questions? Email us at: 
-				<a class="font-medium" href="mailto:nickhds@gmail.com">nickhds@gmail.com</a>
+				<a class="font-medium" href="mailto:nickhds@gmail.com">nickhds@gmail.com</a>.
             </p>
         </div>
     </div>

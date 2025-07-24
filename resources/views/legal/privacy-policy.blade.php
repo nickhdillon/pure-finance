@@ -11,8 +11,7 @@
 
         <p>
             This Privacy Policy explains how we collect, use, and protect your personal information when you sign up to receive SMS bill alerts from 
-            <span class="font-medium">Pure Finance</span>
-            .
+            <span class="font-medium">Pure Finance</span>.
         </p>
 
         <div class="flex flex-col gap-1">
@@ -72,7 +71,7 @@
 
             <p class="ml-6">
                 For questions about this policy, contact us at: 
-                <a class="font-medium" href="mailto:nickhds@gmail.com">nickhds@gmail.com</a>
+                <a class="font-medium" href="mailto:nickhds@gmail.com">nickhds@gmail.com</a>.
             </p>
         </div>
     </div>
