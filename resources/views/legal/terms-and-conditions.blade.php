@@ -1,5 +1,5 @@
-<x-layouts.app>
-    <div class="max-w-3xl mx-auto px-4 py-10 space-y-4">
+<x-layouts.guest>
+    <div class="py-8 space-y-4">
         <flux:heading size="xl">
             Terms &amp; Conditions
         </flux:heading>
@@ -80,4 +80,4 @@
             </p>
         </div>
     </div>
-</x-layouts.app>
+</x-layouts.guest>
