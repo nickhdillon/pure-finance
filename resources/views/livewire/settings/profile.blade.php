@@ -170,6 +170,10 @@ new class extends Component {
                 <flux:error name="terms_accepted" />
             </flux:field>
 
+            <flux:text class="-mt-3.5 italic">
+                By checking this box you agree to receive text messages from Pure Finance. Reply STOP to opt out. Reply HELP for help. Message frequency varies. Message and data rates may apply.
+            </flux:text>
+
             <div class="flex items-center gap-4">
                 <div class="flex items-center justify-end">
                     <flux:button variant="primary" type="submit" size="sm" class="w-full">
