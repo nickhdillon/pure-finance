@@ -83,7 +83,9 @@ class PlannedExpenseView extends Component
 
     private function getTotalSpentLastSixMonths(): void
     {
-        $start_of_oldest_month = now()->timezone($this->timezone)->subMonths(6)->startOfMonth()->toDateString();
+        $now = now()->setTimezone($this->timezone);
+
+        $start_of_oldest_month = $now->copy()->startOfMonth()->subMonths(6)->toDateString();
 
         $transactions = Transaction::query()
             ->where('date', '>=', $start_of_oldest_month)
@@ -104,13 +106,15 @@ class PlannedExpenseView extends Component
             ->get()
             ->keyBy('month');
 
-        $this->monthly_totals = collect(range(1, 6))->mapWithKeys(function (int $i) use ($transactions): array {
-            $month = now()->subMonths($i)->format('Y-m');
+        $this->monthly_totals = collect(range(1, 6))->mapWithKeys(function (int $i) use ($transactions, $now): array {
+            $date = $now->copy()->startOfMonth()->subMonths($i);
+
+            $month = $date->format('Y-m');
 
             $data = $transactions[$month] ?? (object) ['total_deposits' => 0, 'total_debits' => 0];
 
             return [$month => [
-                'month' => now()->subMonths($i)->format('M'),
+                'month' => $date->format('M'),
                 'total_spent' => ceil(abs(($data->total_deposits ?? 0) - ($data->total_debits ?? 0))),
             ]];
         });
