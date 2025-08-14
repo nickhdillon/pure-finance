@@ -21,22 +21,30 @@
             
             <flux:modal name="edit-report">
                 <div class="space-y-6">
-                    <div class="space-y-6">
-                        <flux:heading size="lg" class="font-semibold -mt-1.5!">
-                            Edit Report
-                        </flux:heading>
-        
-                        <flux:field>
-                            <flux:label>Name</flux:label>
-        
-                            <flux:input type="text" wire:model='name' />
-        
-                            <flux:error name="name" />
-                        </flux:field>
-        
-                        <div class="flex gap-2">
-                            <flux:spacer />
-        
+                    <flux:heading size="lg" class="font-semibold -mt-1.5!">
+                        Edit Report
+                    </flux:heading>
+    
+                    <flux:field>
+                        <flux:label>Name</flux:label>
+    
+                        <flux:input type="text" wire:model='name' />
+    
+                        <flux:error name="name" />
+                    </flux:field>
+    
+                    <div class="flex gap-2 items-center">
+                        <div>
+                            <flux:modal.trigger name="delete-report">
+                                <flux:button variant="danger" size="sm">
+                                    Delete
+                                </flux:button>
+                            </flux:modal.trigger>
+    
+                            <x-delete-modal name="delete-report" heading="report" />
+                        </div>
+
+                        <div class="ml-auto flex gap-2">    
                             <flux:modal.close>
                                 <flux:button variant="ghost" size="sm">
                                     Cancel

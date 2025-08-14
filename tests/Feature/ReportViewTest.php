@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Models\User;
 use App\Models\Report;
+use App\Livewire\Reports;
 use Illuminate\Support\Str;
 use App\Livewire\ReportView;
 use Illuminate\Support\Facades\URL;
@@ -29,6 +30,13 @@ it('can update search', function () {
 it('can update report name', function () {
     livewire(ReportView::class, ['report' => Report::first()])
         ->call('submit')
+        ->assertHasNoErrors();
+});
+
+it('can delete report', function () {
+    livewire(ReportView::class, ['report' => Report::first()])
+        ->call('delete')
+        ->assertRedirect(Reports::class)
         ->assertHasNoErrors();
 });
 

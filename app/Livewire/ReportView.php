@@ -45,6 +45,18 @@ class ReportView extends Component
         Flux::modals()->close();
     }
 
+    public function delete(): void
+    {
+        $this->report?->delete();
+
+        Flux::toast(
+            variant: 'success',
+            text: "Report successfully deleted",
+        );
+
+        $this->redirectRoute('reports', navigate: true);
+    }
+
     public function render(): View
     {
         return view('livewire.report-view', [
