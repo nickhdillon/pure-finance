@@ -39,7 +39,7 @@
 
                     <flux:table.rows class="sm:hidden dark:bg-zinc-900 border-b-0!">
                         @foreach ($reports as $report)
-                            <flux:table.row :key="$report->id" class="hover:bg-zinc-100 sm:hidden">
+                            <flux:table.row :key="$report->id" class="hover:bg-zinc-100 sm:hidden [&>td]:py-0.5!">
                                 <flux:table.cell class="p-0!">
                                     <a href="{{ route('report-view', $report) }}" wire:navigate class="font-medium text-zinc-800 dark:text-white w-full flex text-center p-3">
                                         {{ $report->name }}
