@@ -203,7 +203,17 @@ class ReportForm extends Component
                 $query->whereIn('transactions.payee', $this->payees);
             })
             ->when($this->category_id, function (Builder $query): void {
-                $query->whereRelation('category', 'id', $this->category_id);
+                $category = Category::with('children')->find($this->category_id);
+
+                if ($category) {
+                    if (is_null($category->parent_id)) {
+                        $child_ids = $category->children->pluck('id')->toArray();
+
+                        $query->whereIn('category_id', array_merge([$category->id], $child_ids));
+                    } else {
+                        $query->where('category_id', $category->id);
+                    }
+                }
             })
             ->when($this->tag_id, function (Builder $query): void {
                 $query->whereRelation('tags', 'tag_id', $this->tag_id);
