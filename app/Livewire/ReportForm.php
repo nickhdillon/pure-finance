@@ -128,6 +128,7 @@ class ReportForm extends Component
             ->select(['transactions.id', 'transactions.payee'])
             ->orderBy('payee')
             ->pluck('payee')
+            ->map(fn(string $payee): string => trim($payee))
             ->unique()
             ->toArray();
 
@@ -153,7 +154,7 @@ class ReportForm extends Component
                 'account_id' => $transaction->account_id,
                 'category_id' => $transaction->category_id,
                 'type' => $transaction->type,
-                'payee' => $transaction->payee,
+                'payee' => html_entity_decode($transaction->payee),
                 'amount' => $transaction->amount,
                 'date' => $transaction->date,
                 'snapshot' => json_encode($transaction->toArray()),

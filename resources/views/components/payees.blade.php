@@ -11,8 +11,8 @@
         </x-slot>
         
         @foreach ($user_payees as $payee)
-            <flux:select.option value="{{ $payee }}" class="font-semibold">
-                {{ $payee }}
+            <flux:select.option value="{!! $payee !!}" class="font-semibold">
+                {!! $payee !!}
             </flux:select.option>
         @endforeach
     </flux:select>
