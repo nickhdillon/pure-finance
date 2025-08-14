@@ -87,6 +87,14 @@ select:focus[data-flux-control] {
     @apply mt-0;
 }
 
+[data-flux-rows] {
+    @apply divide-zinc-200;
+}
+
+.dark [data-flux-rows] {
+    @apply divide-zinc-700;
+}
+
 .borderless-select>button {
     @apply  !border-none !shadow-none !rounded-none !bg-transparent;
 }
