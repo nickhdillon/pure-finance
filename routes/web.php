@@ -3,9 +3,12 @@
 declare(strict_types=1);
 
 use Livewire\Volt\Volt;
+use App\Livewire\Reports;
 use App\Livewire\Accounts;
 use App\Livewire\TagTable;
 use App\Models\Transaction;
+use App\Livewire\ReportForm;
+use App\Livewire\ReportView;
 use App\Livewire\BillCalendar;
 use App\Livewire\SavingsGoals;
 use App\Livewire\CategoryTable;
@@ -62,6 +65,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('transaction-form/{transaction:slug}', TransactionForm::class)
         ->can('update', 'transaction')
         ->name('edit-transaction');
+
+    Route::get('reports', Reports::class)->name('reports');
+
+    Route::get('report-form', ReportForm::class)->name('report-form');
+
+    Route::get('report-view/{report}', ReportView::class)->name('report-view');
 
     Route::get('categories', CategoryTable::class)->name('categories');
 

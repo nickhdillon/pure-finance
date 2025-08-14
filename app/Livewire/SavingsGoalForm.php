@@ -10,9 +10,7 @@ use Livewire\Component;
 use App\Models\SavingsGoal;
 use Livewire\Attributes\Validate;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Database\Eloquent\Collection;
-use Livewire\Features\SupportRedirects\Redirector;
 
 class SavingsGoalForm extends Component
 {
@@ -92,7 +90,7 @@ class SavingsGoalForm extends Component
         return $this;
     }
 
-    public function submit(): RedirectResponse|Redirector
+    public function submit(): void
     {
         $validated_data = $this->validate();
 
@@ -111,7 +109,7 @@ class SavingsGoalForm extends Component
             text: 'Savings goal successfully ' . ($this->savings_goal ? 'updated' : 'created'),
         );
 
-        return redirect()->route('savings-goals');
+        $this->redirectRoute('savings-goals', navigate: true);
     }
 
     public function delete(): void

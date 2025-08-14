@@ -18,9 +18,7 @@ use App\Enums\RecurringFrequency;
 use Illuminate\Support\Collection;
 use Illuminate\Contracts\View\View;
 use App\Rules\FrequencyIntervalRule;
-use Illuminate\Http\RedirectResponse;
 use App\Actions\CreateRecurringTransactions;
-use Livewire\Features\SupportRedirects\Redirector;
 
 class TransactionForm extends Component
 {
@@ -257,13 +255,13 @@ class TransactionForm extends Component
 
         Flux::modals()->close();
 
-        $this->redirectRoute('account-overview', $this->account);
+        $this->redirectRoute('account-overview', $this->account, navigate: true);
     }
 
     public function submit(
         CreateTransfer $transfer_action,
         CreateRecurringTransactions $recurring_action
-    ): RedirectResponse|Redirector {
+    ): void {
         $validated_data = $this->validate();
 
         if ($this->transaction) {
@@ -305,7 +303,11 @@ class TransactionForm extends Component
             text: 'Transaction successfully ' . ($this->transaction ? 'updated' : 'created'),
         );
 
-        return redirect()->route('account-overview', $this->account ?? Account::find($this->account_id));
+        $this->redirectRoute(
+            name: 'account-overview',
+            parameters: $this->account ?? Account::find($this->account_id),
+            navigate: true
+        );
     }
 
     public function render(): View

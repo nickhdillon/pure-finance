@@ -45,6 +45,11 @@
                     {{ __('Transactions') }}
                 </flux:navlist.item>
 
+                <flux:navlist.item icon="chart-column" :href="route('reports')"
+                    :current="request()->routeIs('reports')" wire:navigate>
+                    {{ __('Reports') }}
+                </flux:navlist.item>
+
                 <flux:navlist.item icon="queue-list" :href="route('categories')"
                     :current="request()->routeIs('categories')" wire:navigate>
                     {{ __('Categories') }}

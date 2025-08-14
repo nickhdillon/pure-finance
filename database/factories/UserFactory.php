@@ -28,7 +28,7 @@ class UserFactory extends Factory
         return [
             'avatar' => null,
             'name' => 'Admin',
-            'email' => 'admin@example.com',
+            'email' => $this->faker->email,
             'preferred_homepage' => 'dashboard',
             'terms_accepted' => true,
             'password' => static::$password ??= Hash::make('password'),

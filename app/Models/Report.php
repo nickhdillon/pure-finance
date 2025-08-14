@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\TransactionType;
 use Illuminate\Database\Eloquent\Model;
-use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class SavingsGoal extends Model
+class Report extends Model
 {
-    /** @use HasFactory<\Database\Factories\SavingsGoalFactory> */
+    /** @use HasFactory<\Database\Factories\ReportFactory> */
     use HasFactory;
-    use Sluggable;
 
     /**
      * The attributes that are mass assignable.
@@ -22,16 +21,15 @@ class SavingsGoal extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'account_id',
+        'user_id',
         'name',
-        'slug',
-        'goal_amount',
-        'amount_saved',
-        'monthly_contribution',
-        'last_contributed',
-        'target',
-        'target_month',
-        'target_year',
+        'account_id',
+        'type',
+        'category_id',
+        'tag_id',
+        'payees',
+        'start_date',
+        'end_date'
     ];
 
     /**
@@ -42,23 +40,16 @@ class SavingsGoal extends Model
     protected function casts(): array
     {
         return [
-            'target' => 'bool',
-            'last_contributed' => 'datetime'
+            'type' => TransactionType::class,
+            'payees' => 'array',
+            'start_date' => 'date',
+            'end_date' => 'date'
         ];
     }
 
-    /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable(): array
+    public function user(): BelongsTo
     {
-        return [
-            'slug' => [
-                'source' => 'name'
-            ]
-        ];
+        return $this->belongsTo(User::class);
     }
 
     public function account(): BelongsTo
@@ -66,8 +57,18 @@ class SavingsGoal extends Model
         return $this->belongsTo(Account::class);
     }
 
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function tag(): BelongsTo
+    {
+        return $this->belongsTo(Tag::class);
+    }
+
     public function transactions(): HasMany
     {
-        return $this->hasMany(SavingsGoalTransaction::class);
+        return $this->hasMany(ReportTransaction::class);
     }
 }
