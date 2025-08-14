@@ -128,7 +128,7 @@ class ReportForm extends Component
             ->select(['transactions.id', 'transactions.payee'])
             ->orderBy('payee')
             ->pluck('payee')
-            ->map(fn(string $payee): string => str_replace(
+            ->map(fn(string $payee): string => Str::replace(
                 ["‘", "’", "´", "`"], // different types of single quotes
                 "'",                  // normalize to standard apostrophe
                 trim($payee)
