@@ -176,9 +176,11 @@ class ReportForm extends Component
 
         $tag_name = Tag::find($this->tag_id)?->name;
 
+        $payees = implode(', ', $this->payees);
+
         $this->name = Prism::text()
             ->using(Provider::OpenAI, 'gpt-4.1-nano-2025-04-14')
-            ->withPrompt("Generate a name for a report based on the following information if available (not null): account: {$account_name}, category: {$category_name}, tag: {$tag_name}, date range: {$this->date_range['start']} - {$this->date_range['end']}. Keep it short, with a limit of 25 characters. Exclude the word report, summary, overview, or anything similar, and make it human readable and helpful. It should be a good summary of what the report is without being too lengthy or too short to where it does not make much sense. Don't give me a response that is more than 25 characters no matter what.")
+            ->withPrompt("Generate a name for a report based on the following information if available (not null): payees: {$payees} account: {$account_name}, category: {$category_name}, tag: {$tag_name}, date range: {$this->date_range['start']} - {$this->date_range['end']}. Keep it short, with a limit of 25 characters. Exclude the word report, summary, overview, or anything similar, and make it human readable and helpful. It should be a good summary of what the report is without being too lengthy or too short to where it does not make much sense. Don't give me a response that is more than 25 characters no matter what.")
             ->asText()
             ->text;
 
