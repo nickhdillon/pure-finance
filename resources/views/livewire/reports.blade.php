@@ -45,6 +45,43 @@
                                         {{ $report->name }}
                                     </a>
                                 </flux:table.cell>
+
+                                <flux:table.cell align="end">
+                                    <div class="pr-0.5">
+                                        <flux:modal.trigger name="delete-report-{{ $report->id }}-mobile">
+                                            <flux:button icon="trash" variant="ghost" size="sm"
+                                                class="text-red-500!" />
+                                        </flux:modal.trigger>
+
+                                        <flux:modal name="delete-report-{{ $report->id }}-mobile" class="min-w-[22rem]">
+                                            <form wire:submit="delete({{ $report->id }})" class="space-y-6 text-left">
+                                                <div class="space-y-4!">
+                                                    <flux:heading size="lg" class="font-semibold -mt-1.5!">
+                                                        Delete Report?
+                                                    </flux:heading>
+
+                                                    <flux:subheading>
+                                                        Are you sure you want to delete this report?
+                                                    </flux:subheading>
+                                                </div>
+
+                                                <div class="flex gap-2">
+                                                    <flux:spacer />
+
+                                                    <flux:modal.close>
+                                                        <flux:button variant="ghost" size="sm">
+                                                            Cancel
+                                                        </flux:button>
+                                                    </flux:modal.close>
+
+                                                    <flux:button type="submit" variant="danger" size="sm">
+                                                        Confirm
+                                                    </flux:button>
+                                                </div>
+                                            </form>
+                                        </flux:modal>
+                                    </div>
+                                </flux:table.cell>
                             </flux:table.row>
                         @endforeach
                     </flux:table.rows>
