@@ -19,7 +19,6 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 1rem;
         }
     
         thead {
@@ -94,7 +93,7 @@
         <tbody>
             @foreach ($report_transactions as $transaction)
                 <tr>
-                    <td>{{ $transaction->date->format('M j, Y') }}</td>
+                    <td>{{ $transaction->date->format('n/d') }}</td>
                     <td>{!! $transaction->payee !!}</td>
                     <td>{{ $transaction->snapshot['account']['name'] ?? '' }}</td>
                     <td>{{ $transaction->snapshot['category']['name'] ?? '' }}</td>

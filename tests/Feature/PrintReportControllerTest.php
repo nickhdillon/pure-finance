@@ -14,7 +14,5 @@ beforeEach(function () {
 });
 
 it('can generate a pdf of a report', function () {
-    $report = Report::first();
-
-    $this->get(route('print-report', $report))->assertOk();
+    $this->get(route('print-report', Report::first()))->assertOk();
 });
