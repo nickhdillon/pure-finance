@@ -53,8 +53,11 @@ class MonthlySpendingOverview extends Component
             ->sum('transactions.amount');
 
         $this->top_categories = $user->categories()
-            ->select('categories.id', 'categories.name', 'categories.parent_id')
-            ->selectRaw('SUM(transactions.amount) AS total_spent')
+            ->select('categories.id', 'categories.name')
+            ->whereNull('categories.parent_id')
+            ->selectRaw('
+                COALESCE(SUM(transactions.amount), 0) AS total_spent
+            ')
             ->leftJoin('categories AS children', 'children.parent_id', '=', 'categories.id')
             ->leftJoin('transactions', function (JoinClause $join) use ($start_of_month, $end_of_month): void {
                 $join->on(function (JoinClause $sub_join): void {
@@ -64,7 +67,7 @@ class MonthlySpendingOverview extends Component
                     ->where('transactions.type', TransactionType::DEBIT)
                     ->whereBetween('transactions.date', [$start_of_month, $end_of_month]);
             })
-            ->groupBy('categories.id', 'categories.name', 'categories.parent_id')
+            ->groupBy('categories.id', 'categories.name')
             ->orderByDesc('total_spent')
             ->limit(5)
             ->get()
