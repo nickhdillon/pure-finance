@@ -18,6 +18,6 @@ class PrintReportController
                 ->with(['account', 'category.parent'])
                 ->latest('date')
                 ->get()
-        ])->stream();
+        ])->stream("{$report->slug}.pdf");
     }
 }
