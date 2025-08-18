@@ -36,7 +36,7 @@
                                         {{ $category->display_percent }}%
                                     </span>
 
-                                    (${{ Number::format($category->total_spent, 2) }})
+                                    (${{ Number::format($category->total_spent ?? 0, 2) }})
                                 </div>
                             </li>
                         @endforeach

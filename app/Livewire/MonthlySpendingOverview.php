@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use App\Enums\TransactionType;
 use Illuminate\Support\Collection;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Query\JoinClause;
 
 class MonthlySpendingOverview extends Component
 {
@@ -52,17 +53,26 @@ class MonthlySpendingOverview extends Component
             ->sum('transactions.amount');
 
         $this->top_categories = $user->categories()
-            ->selectRaw('categories.name, SUM(transactions.amount) as total_spent')
-            ->join('transactions', 'transactions.category_id', '=', 'categories.id')
-            ->where('transactions.type', TransactionType::DEBIT)
-            ->whereBetween('transactions.date', [$start_of_month, $end_of_month])
-            ->groupBy('categories.name')
+            ->select('categories.id', 'categories.name', 'categories.parent_id')
+            ->selectRaw('SUM(transactions.amount) AS total_spent')
+            ->leftJoin('categories AS children', 'children.parent_id', '=', 'categories.id')
+            ->leftJoin('transactions', function (JoinClause $join) use ($start_of_month, $end_of_month): void {
+                $join->on(function (JoinClause $sub_join): void {
+                    $sub_join->on('transactions.category_id', '=', 'categories.id')
+                        ->orOn('transactions.category_id', '=', 'children.id');
+                })
+                    ->where('transactions.type', TransactionType::DEBIT)
+                    ->whereBetween('transactions.date', [$start_of_month, $end_of_month]);
+            })
+            ->groupBy('categories.id', 'categories.name', 'categories.parent_id')
             ->orderByDesc('total_spent')
             ->limit(5)
             ->get()
             ->values()
             ->map(function (Category $category, int $index): Category {
-                $category->percent = ($category->total_spent / $this->monthly_total) * 100;
+                $category->percent = $this->monthly_total > 0
+                    ? ($category->total_spent / $this->monthly_total) * 100
+                    : 0;
 
                 $category->display_percent = (int) floor($category->percent);
 
@@ -101,8 +111,14 @@ class MonthlySpendingOverview extends Component
     {
         $start = 0;
 
-        return $this->top_categories->map(function (Category $category) use (&$start): string {
-            $end = $start + $category->display_percent;
+        $total = $this->top_categories->sum('percent');
+
+        return $this->top_categories->map(function (Category $category) use (&$start, $total): string {
+            $percent = $total > 0
+                ? ($category->percent / $total) * 100
+                : 0;
+
+            $end = $start + $percent;
 
             $segment = "{$category->hex} {$start}% {$end}%";
 
