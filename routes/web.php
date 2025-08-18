@@ -71,10 +71,10 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('report-form', ReportForm::class)->name('report-form');
 
-    Route::get('report-view/{report}', ReportView::class)->name('report-view');
+    Route::get('report-view/{report:slug}', ReportView::class)->name('report-view');
 
     Route::get('/reports/{report:slug}/print', PrintReportController::class)
-        ->name('reports.print');
+        ->name('print-report');
 
     Route::get('categories', CategoryTable::class)->name('categories');
 

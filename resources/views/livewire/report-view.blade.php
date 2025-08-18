@@ -13,11 +13,13 @@
         </div>
 
         <div class="flex items-center gap-2">
-            <flux:button icon="printer" size="sm" x-on:click.prevent="
-                let url = '{{ route('reports.print', $report) }}';
-                let w = window.open(url, '_blank');
-                w.addEventListener('load', () => w.print());
-            " />
+            @if ($report_transactions->count()) 
+                <flux:button icon="printer" size="sm" x-on:click.prevent="
+                    let url = '{{ route('print-report', $report) }}';
+                    let w = window.open(url, '_blank');
+                    w.addEventListener('load', () => w.print());
+                " />
+            @endif
 
             <div>
                 <flux:modal.trigger name="edit-report">
