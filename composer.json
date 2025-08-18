@@ -19,7 +19,8 @@
         "livewire/volt": "^1.6.7",
         "prism-php/prism": "^0.83.2",
         "propaganistas/laravel-phone": "^6.0",
-        "spatie/image": "^3.8"
+        "spatie/image": "^3.8",
+        "spatie/laravel-pdf": "^1.6"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.15",

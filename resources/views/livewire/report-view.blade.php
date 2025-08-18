@@ -12,52 +12,60 @@
             </p>
         </div>
 
-        <div>
-            <flux:modal.trigger name="edit-report">
-                <flux:button icon="pencil-square" variant="primary" size="sm">
-                    Edit
-                </flux:button>
-            </flux:modal.trigger>
-            
-            <flux:modal name="edit-report">
-                <div class="space-y-6">
-                    <flux:heading size="lg" class="font-semibold -mt-1.5!">
-                        Edit Report
-                    </flux:heading>
-    
-                    <flux:field>
-                        <flux:label>Name</flux:label>
-    
-                        <flux:input type="text" wire:model='name' />
-    
-                        <flux:error name="name" />
-                    </flux:field>
-    
-                    <div class="flex gap-2 items-center">
-                        <div>
-                            <flux:modal.trigger name="delete-report">
-                                <flux:button variant="danger" size="sm">
-                                    Delete
-                                </flux:button>
-                            </flux:modal.trigger>
-    
-                            <x-delete-modal name="delete-report" heading="report" />
-                        </div>
+        <div class="flex items-center gap-2">
+            <flux:button icon="printer" size="sm" x-on:click.prevent="
+                let url = '{{ route('reports.print', $report) }}';
+                let w = window.open(url, '_blank');
+                w.addEventListener('load', () => w.print());
+            " />
 
-                        <div class="ml-auto flex gap-2">    
-                            <flux:modal.close>
-                                <flux:button variant="ghost" size="sm">
-                                    Cancel
-                                </flux:button>
-                            </flux:modal.close>
+            <div>
+                <flux:modal.trigger name="edit-report">
+                    <flux:button icon="pencil-square" variant="primary" size="sm">
+                        Edit
+                    </flux:button>
+                </flux:modal.trigger>
+                
+                <flux:modal name="edit-report">
+                    <div class="space-y-6">
+                        <flux:heading size="lg" class="font-semibold -mt-1.5!">
+                            Edit Report
+                        </flux:heading>
         
-                            <flux:button type="button" wire:click='submit' variant="primary" size="sm">
-                                Save
-                            </flux:button>
+                        <flux:field>
+                            <flux:label>Name</flux:label>
+        
+                            <flux:input type="text" wire:model='name' />
+        
+                            <flux:error name="name" />
+                        </flux:field>
+        
+                        <div class="flex gap-2 items-center">
+                            <div>
+                                <flux:modal.trigger name="delete-report">
+                                    <flux:button variant="danger" size="sm">
+                                        Delete
+                                    </flux:button>
+                                </flux:modal.trigger>
+        
+                                <x-delete-modal name="delete-report" heading="report" />
+                            </div>
+
+                            <div class="ml-auto flex gap-2">    
+                                <flux:modal.close>
+                                    <flux:button variant="ghost" size="sm">
+                                        Cancel
+                                    </flux:button>
+                                </flux:modal.close>
+            
+                                <flux:button type="button" wire:click='submit' variant="primary" size="sm">
+                                    Save
+                                </flux:button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </flux:modal>
+                </flux:modal>
+            </div>
         </div>
     </div>
 

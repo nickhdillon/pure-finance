@@ -20,6 +20,7 @@ use App\Livewire\TransactionForm;
 use App\Livewire\TransactionTable;
 use App\Livewire\PlannedExpenseView;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PrintReportController;
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/', function () {
@@ -71,6 +72,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('report-form', ReportForm::class)->name('report-form');
 
     Route::get('report-view/{report}', ReportView::class)->name('report-view');
+
+    Route::get('/reports/{report:slug}/print', PrintReportController::class)
+        ->name('reports.print');
 
     Route::get('categories', CategoryTable::class)->name('categories');
 
