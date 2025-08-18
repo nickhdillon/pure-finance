@@ -5,19 +5,19 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Report;
-use Spatie\LaravelPdf\PdfBuilder;
-use function Spatie\LaravelPdf\Support\pdf;
+use Illuminate\Http\Response;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PrintReportController
 {
-    public function __invoke(Report $report): PdfBuilder
+    public function __invoke(Report $report): Response
     {
-        return pdf()->view('print-report', [
+        return Pdf::loadView('print-report', [
             'report' => $report,
             'report_transactions' => $report->transactions()
                 ->with(['account', 'category.parent'])
                 ->latest('date')
                 ->get()
-        ])->name("{$report->slug}.pdf");
+        ])->stream();
     }
 }

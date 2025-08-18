@@ -5,11 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>{!! $report->name !!}</title>
-    <style>
-        @page {
-            margin: 1.5cm;
-        }
-    
+    <style>    
         body {
             font-family: sans-serif;
             font-size: 14px;
@@ -32,7 +28,7 @@
     
         table, th, td {
             border: 1px solid #ccc;
-            padding: 0.5rem;
+            padding: 0.32rem;
             text-align: left;
         }
     
@@ -82,6 +78,7 @@
     </p>
 
     <h2>Transactions</h2>
+    
     <table>
         <thead>
             <tr>
