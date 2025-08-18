@@ -26,14 +26,16 @@ class BillAlertNotification extends Notification implements ShouldQueue
     public function toVonage(): VonageMessage
     {
         $message = match ($this->alert_type) {
-            BillAlert::DAY_OF => 'today.',
-            BillAlert::ONE_DAY_BEFORE => 'tomorrow.',
-            BillAlert::TWO_DAYS_BEFORE => 'in two days.',
-            BillAlert::ONE_WEEK_BEFORE => 'in one week.',
+            BillAlert::DAY_OF => 'today',
+            BillAlert::ONE_DAY_BEFORE => 'tomorrow',
+            BillAlert::TWO_DAYS_BEFORE => 'in two days',
+            BillAlert::ONE_WEEK_BEFORE => 'in one week',
         };
 
+        $route = route('bill-calendar', $this->bill);
+
         return (new VonageMessage)
-            ->content("Pure Finance - Bill Reminder: Your " . trim($this->bill->name) . " bill is due {$message}");
+            ->content('Pure Finance - Bill Reminder: Your ' . trim($this->bill->name) . " bill is due {$message}. {$route}");
     }
 
     /**
