@@ -10,7 +10,6 @@ use Illuminate\Support\Str;
 use App\Enums\TransactionType;
 use Illuminate\Support\Collection;
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Query\JoinClause;
 
 class MonthlySpendingOverview extends Component
 {
@@ -52,26 +51,25 @@ class MonthlySpendingOverview extends Component
             ->whereBetween('transactions.date', [$start_of_month, $end_of_month])
             ->sum('transactions.amount');
 
-        $this->top_categories = $user->categories()
-            ->select('categories.id', 'categories.name')
-            ->whereNull('categories.parent_id')
+        $this->top_categories = Category::query()
             ->selectRaw('
-                COALESCE(SUM(transactions.amount), 0) AS total_spent
+                COALESCE(parent.id, categories.id) as id,
+                COALESCE(parent.name, categories.name) as name,
+                SUM(transactions.amount) as total_spent
             ')
-            ->leftJoin('categories AS children', 'children.parent_id', '=', 'categories.id')
-            ->leftJoin('transactions', function (JoinClause $join) use ($start_of_month, $end_of_month): void {
-                $join->on(function (JoinClause $sub_join): void {
-                    $sub_join->on('transactions.category_id', '=', 'categories.id')
-                        ->orOn('transactions.category_id', '=', 'children.id');
-                })
-                    ->where('transactions.type', TransactionType::DEBIT)
-                    ->whereBetween('transactions.date', [$start_of_month, $end_of_month]);
-            })
-            ->groupBy('categories.id', 'categories.name')
+            ->join('transactions', 'transactions.category_id', '=', 'categories.id')
+            ->leftJoin('categories as parent', 'categories.parent_id', '=', 'parent.id')
+            ->join('accounts', 'transactions.account_id', '=', 'accounts.id')
+            ->where('accounts.user_id', $user->id)
+            ->where('transactions.type', TransactionType::DEBIT)
+            ->whereBetween('transactions.date', [$start_of_month, $end_of_month])
+            ->groupByRaw('
+                COALESCE(parent.id, categories.id),
+                COALESCE(parent.name, categories.name)
+            ')
             ->orderByDesc('total_spent')
             ->limit(5)
             ->get()
-            ->values()
             ->map(function (Category $category, int $index): Category {
                 $category->percent = $this->monthly_total > 0
                     ? ($category->total_spent / $this->monthly_total) * 100
@@ -95,11 +93,9 @@ class MonthlySpendingOverview extends Component
 
                     return $categories->map(function (Category $category, int $index) use ($add_per_category, $leftover): Category {
                         $category->display_percent += $add_per_category;
-
                         if ($index < $leftover) {
                             $category->display_percent += 1;
                         }
-
                         return $category;
                     });
                 }
