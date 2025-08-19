@@ -13,7 +13,7 @@
         </div>
 
         <div class="flex items-center gap-2">
-            @if ($report_transactions->count()) 
+            @if ($report->transactions()->exists()) 
                 <flux:button icon="printer" size="sm" x-on:click.prevent="
                     let url = '{{ route('print-report', $report) }}';
                     let w = window.open(url, '_blank');
@@ -142,12 +142,12 @@
                             Transactions:
                         </p>
 
-                        <div class="rounded-[8px] shadow-xs border border-zinc-200 dark:border-white/20 mt-2">
-                            @if ($report_transactions->count())
-                                <div class="p-3 border-b border-zinc-200 dark:border-white/20">
-                                    <flux:input icon="magnifying-glass" placeholder="Search transactions..." wire:model.live.debounce.300ms='search' clearable />
-                                </div>
+                        <div class="rounded-[8px] shadow-xs border border-zinc-200 dark:border-white/20 mt-2">  
+                            <div class="p-3 border-b border-zinc-200 dark:border-white/20">
+                                <flux:input icon="magnifying-glass" placeholder="Search transactions..." wire:model.live.debounce.300ms='search' clearable />
+                            </div>
 
+                            @if ($report_transactions->count())
                                 <flux:table :paginate="$report_transactions">
                                     <flux:table.columns class="[&>tr>th]:px-3! [&>tr>th]:py-2! bg-zinc-100 dark:bg-zinc-700 hidden sm:table-header-group">
                                         <flux:table.column>
