@@ -1,5 +1,5 @@
 <div>
-    <flux:label class="hidden" />
+    <flux:label class="hidden!" />
 
     <div x-data="{
         isDragging: false,
