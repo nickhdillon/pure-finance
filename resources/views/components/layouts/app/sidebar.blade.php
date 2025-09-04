@@ -7,8 +7,6 @@
 
 <body class="min-h-screen bg-white dark:bg-zinc-900">
     <flux:sidebar sticky collapsible stashable class="border-r border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800">
-        <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
-
         <flux:sidebar.header>
             <flux:sidebar.brand
                 href="{{ route('dashboard') }}"
