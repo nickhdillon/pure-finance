@@ -6,72 +6,76 @@
 </head>
 
 <body class="min-h-screen bg-white dark:bg-zinc-900">
-    <flux:sidebar sticky stashable class="border-r border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800">
+    <flux:sidebar sticky collapsible stashable class="border-r border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800">
         <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
-        <a href="{{ route('dashboard') }}" class="mr-5 flex items-center space-x-2" wire:navigate>
-            <x-app-logo />
-        </a>
+        <flux:sidebar.header>
+            <flux:sidebar.brand
+                href="{{ route('dashboard') }}"
+                logo="{{ asset('icon-circle.png') }}"
+                name="Pure Finance"
+            />
 
-        <flux:navlist variant="outline">
-            <flux:navlist.group class="grid">
-                <flux:navlist.item icon="layout-dashboard" :href="route('dashboard')"
-                    :current="request()->routeIs('dashboard')" wire:navigate>
-                    {{ __('Dashboard') }}
-                </flux:navlist.item>
+            <flux:sidebar.collapse class="in-data-flux-sidebar-on-desktop:not-in-data-flux-sidebar-collapsed-desktop:-mr-2" />
+        </flux:sidebar.header>
 
-                <flux:navlist.item icon="user" :href="route('accounts')"
-                    :current="request()->routeIs('accounts')" wire:navigate>
-                    {{ __('Accounts') }}
-                </flux:navlist.item>
+        <flux:sidebar.nav>
+            <flux:sidebar.item icon="layout-dashboard" :href="route('dashboard')"
+                :current="request()->routeIs('dashboard')" wire:navigate>
+                Dashboard
+            </flux:sidebar.item>
 
-                <flux:navlist.item icon="currency-dollar" :href="route('planned-spending')"
-                    :current="request()->routeIs('planned-spending')" wire:navigate>
-                    {{ __('Planned Spending') }}
-                </flux:navlist.item>
+            <flux:sidebar.item icon="user" :href="route('accounts')"
+                :current="request()->routeIs('accounts')" wire:navigate>
+                Accounts
+            </flux:sidebar.item>
 
-                <flux:navlist.item icon="target" :href="route('savings-goals')"
-                    :current="request()->routeIs('savings-goals')" wire:navigate>
-                    {{ __('Savings Goals') }}
-                </flux:navlist.item>
+            <flux:sidebar.item icon="currency-dollar" :href="route('planned-spending')"
+                :current="request()->routeIs('planned-spending')" wire:navigate>
+                Planned Spending
+            </flux:sidebar.item>
 
-                <flux:navlist.item icon="calendar-days" :href="route('bill-calendar')"
-                    :current="request()->routeIs('bill-calendar')" wire:navigate>
-                    {{ __('Bill Calendar') }}
-                </flux:navlist.item>
+            <flux:sidebar.item icon="target" :href="route('savings-goals')"
+                :current="request()->routeIs('savings-goals')" wire:navigate>
+                Savings Goals
+            </flux:sidebar.item>
 
-                <flux:navlist.item icon="scroll-text" :href="route('transactions')"
-                    :current="request()->routeIs('transactions')" wire:navigate>
-                    {{ __('Transactions') }}
-                </flux:navlist.item>
+            <flux:sidebar.item icon="calendar-days" :href="route('bill-calendar')"
+                :current="request()->routeIs('bill-calendar')" wire:navigate>
+                Bill Calendar
+            </flux:sidebar.item>
 
-                <flux:navlist.item icon="chart-column" :href="route('reports')"
-                    :current="request()->routeIs('reports')" wire:navigate>
-                    {{ __('Reports') }}
-                </flux:navlist.item>
+            <flux:sidebar.item icon="scroll-text" :href="route('transactions')"
+                :current="request()->routeIs('transactions')" wire:navigate>
+                Transactions
+            </flux:sidebar.item>
 
-                <flux:navlist.item icon="queue-list" :href="route('categories')"
-                    :current="request()->routeIs('categories')" wire:navigate>
-                    {{ __('Categories') }}
-                </flux:navlist.item>
+            <flux:sidebar.item icon="chart-column" :href="route('reports')"
+                :current="request()->routeIs('reports')" wire:navigate>
+                Reports
+            </flux:sidebar.item>
 
-                <flux:navlist.item icon="tags" :href="route('tags')"
-                    :current="request()->routeIs('tags')" wire:navigate>
-                    {{ __('Tags') }}
-                </flux:navlist.item>
-            </flux:navlist.group>
-        </flux:navlist>
+            <flux:sidebar.item icon="queue-list" :href="route('categories')"
+                :current="request()->routeIs('categories')" wire:navigate>
+                Categories
+            </flux:sidebar.item>
 
-        <flux:spacer />
+            <flux:sidebar.item icon="tags" :href="route('tags')"
+                :current="request()->routeIs('tags')" wire:navigate>
+                Tags
+            </flux:sidebar.item>
+        </flux:sidebar.nav>
+
+        <flux:sidebar.spacer />
 
         <!-- Desktop User Menu -->
         <flux:dropdown position="bottom" align="start">
             @if (auth()->user()->avatar)
-                <flux:profile :name="auth()->user()->name" :initials="auth()->user()->initials()"
+                <flux:sidebar.profile :name="auth()->user()->name" :initials="auth()->user()->initials()"
                     :avatar="Storage::disk('s3')->url('avatars/' . auth()->user()->avatar)"
                     icon-trailing="chevrons-up-down" />
             @else
-                <flux:profile :name="auth()->user()->name" :initials="auth()->user()->initials()"
+                <flux:sidebar.profile :name="auth()->user()->name" :initials="auth()->user()->initials()"
                     icon-trailing="chevrons-up-down" />
             @endif
 
@@ -110,7 +114,8 @@
                 <flux:menu.separator />
 
                 <flux:menu.radio.group>
-                    <flux:menu.item href="/settings/profile" icon="cog" wire:navigate>{{ __('Settings') }}
+                    <flux:menu.item href="/settings/profile" icon="cog" wire:navigate>
+                        {{ __('Settings') }}
                     </flux:menu.item>
                 </flux:menu.radio.group>
 
@@ -195,7 +200,9 @@
     {{ $slot }}
 
     @persist('toast')
-        <flux:toast />
+        <flux:toast.group position="top end">
+            <flux:toast />
+        </flux:toast.group>
     @endpersist
     
     @fluxScripts

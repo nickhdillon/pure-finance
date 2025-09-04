@@ -16,7 +16,7 @@
         "laravel/tinker": "^2.10.1",
         "laravel/vonage-notification-channel": "^3.3",
         "league/flysystem-aws-s3-v3": "^3.0",
-        "livewire/flux-pro": "^2.0.5",
+        "livewire/flux-pro": "^2.3.0",
         "livewire/volt": "^1.7.2",
         "prism-php/prism": "^0.83.2",
         "propaganistas/laravel-phone": "^6.0",
