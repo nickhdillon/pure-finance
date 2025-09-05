@@ -36,7 +36,7 @@ beforeEach(function () {
                 ->for($category)
                 ->create([
                     'type' => TransactionType::DEBIT,
-                    'date' => now('America/Chicago')->subWeek()->toDateString()
+                    'date' => now('America/Chicago')->subDays(3)->toDateString()
                 ]);
         });
     }

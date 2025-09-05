@@ -47,9 +47,7 @@ class AccountForm extends Component
             ? $this->account->update($validated_data)
             : auth()->user()->accounts()->create($validated_data);
 
-        if (! $this->account) {
-            $this->reset();
-        }
+        if (! $this->account) $this->reset();
 
         Flux::toast(
             variant: 'success',

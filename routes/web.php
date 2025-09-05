@@ -29,11 +29,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('accounts', Accounts::class)->name('accounts');
 
-    Route::get('account-overview/{account:slug}', AccountOverview::class)
+    Route::get('account-overview/{account}', AccountOverview::class)
         ->can('update', 'account')
         ->name('account-overview');
 
-    Route::get('account/{account:slug}/transaction-form', TransactionForm::class)
+    Route::get('account/{account}/transaction-form', TransactionForm::class)
         ->can('update', 'account')
         ->name('account.transaction-form');
 
