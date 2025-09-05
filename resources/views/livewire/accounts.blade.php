@@ -18,7 +18,7 @@
                     <div class="divide-y divide-zinc-200 dark:divide-zinc-700">
                         <p @class([
                             'text-emerald-600 dark:text-emerald-400' => $group_name === 'banking',
-                            'text-red-600 dark:text-red-400' => $group_name === 'credit',
+                            'text-red-600 dark:text-red-400' => $group_name === 'debt',
                             'text-blue-600 dark:text-blue-400' => $group_name === 'investment',
                             'text-sm px-3 py-2.5 font-semibold uppercase'
                         ])>

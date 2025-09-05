@@ -34,13 +34,13 @@ class Accounts extends Component
                         ->where('status', true);
                 },
 
-                // Credit accounts
-                'transactions as credit_cleared_deposits' => function (Builder $query): void {
+                // Debt accounts
+                'transactions as debt_cleared_deposits' => function (Builder $query): void {
                     $query->whereIn('type', [TransactionType::CREDIT, TransactionType::DEPOSIT])
                         ->whereIn('accounts.type', [AccountType::CREDIT_CARD, AccountType::LOAN])
                         ->where('status', true);
                 },
-                'transactions as credit_cleared_debits' => function (Builder $query): void {
+                'transactions as debt_cleared_debits' => function (Builder $query): void {
                     $query->whereIn('type', [TransactionType::DEBIT, TransactionType::TRANSFER, TransactionType::WITHDRAWAL])
                         ->whereIn('accounts.type', [AccountType::CREDIT_CARD, AccountType::LOAN])
                         ->where('status', true);
@@ -70,7 +70,7 @@ class Accounts extends Component
 
         $group_definitions = [
             'banking' => [AccountType::CHECKING, AccountType::SAVINGS],
-            'credit' => [AccountType::CREDIT_CARD, AccountType::LOAN],
+            'debt' => [AccountType::CREDIT_CARD, AccountType::LOAN],
             'investment' => [AccountType::INVESTMENT],
         ];
 
