@@ -206,7 +206,7 @@
 
                         @if ($bill)
                             <div class="flex items-center space-x-2 w-full">
-                                @if (!$bill->paid || !$bill->transaction()->exists()) 
+                                @if (!$bill->paid) 
                                     <flux:modal.trigger name="mark-as-paid">
                                         <flux:button variant="outline" class="w-full">
                                             Mark as paid

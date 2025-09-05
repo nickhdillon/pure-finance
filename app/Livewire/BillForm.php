@@ -97,7 +97,7 @@ class BillForm extends Component
     {
         return function ($attribute, $value, $fail) use ($time) {
             if ($value && (!$this->first_alert || !$this->first_alert_time)) {
-                $fail('The first alert and time must be filled if adding a second alert' . ($time ? " {$time}." : '.'));
+                $fail('The first alert and time must be selected if adding a second alert' . ($time ? " {$time}." : '.'));
             }
         };
     }
@@ -278,13 +278,18 @@ class BillForm extends Component
     {
         $validated_data = $this->validate();
 
+        $old_frequency = $this->bill?->frequency;
+        $old_date = $this->bill?->date;
+
         if ($this->bill) {
             $this->bill->update($validated_data);
 
-            if ($all) {
-                $fields_to_update = collect($validated_data)->except(['parent_id', 'date'])->toArray();
+            if ($all && $this->bill->children()->exists()) {
+                $fields_to_update = collect($validated_data)
+                    ->except(['parent_id', 'date'])
+                    ->toArray();
 
-                if (!empty($fields_to_update) && $this->bill->children()->exists()) {
+                if (!empty($fields_to_update)) {
                     $this->bill->children()->update($fields_to_update);
                 }
             }
@@ -292,11 +297,18 @@ class BillForm extends Component
             $new_bill = auth()->user()->bills()->create($validated_data);
         }
 
-        if (
-            ($this->bill?->children->count() === 0 || !$this->bill)
-            && $this->frequency !== RecurringFrequency::ONE_TIME
-        ) {
-            $recurring_action->handle($this->bill ?: $new_bill);
+        $should_regenerate_children =
+            ($this->bill && ($old_frequency !== $this->frequency || ($old_date !== $this->date && $all)))
+            || !$this->bill;
+
+        if ($this->frequency !== RecurringFrequency::ONE_TIME && $should_regenerate_children) {
+            if ($this->bill) {
+                $this->bill->children()->delete();
+
+                $recurring_action->handle($this->bill);
+            } else {
+                $recurring_action->handle($new_bill);
+            }
         }
 
         Flux::toast(
