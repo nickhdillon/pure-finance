@@ -50,7 +50,7 @@
                             @endforeach
                         </div>
 
-                        <div class="flex items-center justify-between py-2.5 px-3 gap-2 text-sm w-full bg-zinc-50/50 dark:bg-zinc-800">
+                        <div class="flex items-center justify-between py-2.5 px-3 gap-2 text-sm w-full bg-zinc-100/50 dark:bg-zinc-800">
                             <div class="flex flex-col sm:flex-row sm:space-x-1">
                                 <p class="font-medium">Available Total:</p>
 
