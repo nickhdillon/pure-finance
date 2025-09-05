@@ -30,7 +30,7 @@ $buttonClasses = Flux::classes()
 <ui-sidebar-toggle {{ $attributes->class($classes) }} data-flux-sidebar-collapse>
     <flux:tooltip :content="$tooltip" :position="$tooltipPosition" :kbd="$tooltipKbd">
         <button type="button" class="{{ $buttonClasses }}">
-            <flux:icon.panel-left class="size-5" />
+            <flux:icon.panel-left class="size-[18px]" />
         </button>
     </flux:tooltip>
 </ui-sidebar-toggle>
