@@ -6,8 +6,8 @@
 
 <ui-toast x-data x-on:toast-show.document="! $el.closest('ui-toast-group') && $el.showToast($event.detail)" popover="manual" position="{{ $position }}" wire:ignore>
     <template>
-        <div {{ $attributes->only(['class'])->class('max-w-sm in-[ui-toast-group]:max-w-auto in-[ui-toast-group]:w-sm') }} data-variant="" data-flux-toast-dialog>
-            <div class="p-1 max-w-sm flex rounded-xl shadow-lg bg-white border border-zinc-200 border-b-zinc-300/80 dark:bg-zinc-700 dark:border-zinc-600">
+        <div {{ $attributes->only(['class'])->class('max-w-sm in-[ui-toast-group]:max-w-auto in-[ui-toast-group]:sm:w-sm') }} data-variant="" data-flux-toast-dialog>
+            <div class="p-1 flex rounded-xl shadow-lg bg-white border border-zinc-200 border-b-zinc-300/80 dark:bg-zinc-700 dark:border-zinc-600">
                 <div class="flex-1 flex items-start gap-4 overflow-hidden">
                     <div class="flex-1 py-1.5 ps-2.5 flex gap-2">
                         {{-- Success icon --}}
