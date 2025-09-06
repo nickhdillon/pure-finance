@@ -35,7 +35,7 @@ class BillAlertNotification extends Notification implements ShouldQueue
         $route = route('bill-calendar', $this->bill);
 
         return (new VonageMessage)
-            ->content('Pure Finance - Bill Reminder: Your ' . trim($this->bill->name) . " bill is due {$message}. {$route}");
+            ->content('Pure Finance - Bill Reminder: Your ' . trim($this->bill->name) . " bill is due {$message}. {$route}. See details.");
     }
 
     /**
