@@ -39,10 +39,12 @@ new #[Layout('components.layouts.auth')] class extends Component {
         RateLimiter::clear($this->throttleKey());
         Session::regenerate();
 
-        if ($preferred_homepage = auth()?->user()?->preferred_homepage) {
+        if (redirect()->getIntendedUrl()) {
+            $this->redirectIntended(navigate: true);
+        } elseif ($preferred_homepage = auth()?->user()?->preferred_homepage) {
             $this->redirectRoute($preferred_homepage, navigate: true);
         } else {
-            $this->redirectIntended(navigate: true);
+            $this->redirectRoute('dashboard', navigate: true);
         }
     }
 
