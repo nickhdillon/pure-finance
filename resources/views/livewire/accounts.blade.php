@@ -37,7 +37,8 @@
                                         @else
                                             <div class="flex items-center justify-between">
                                                 <span>
-                                                    Available: ${{ Number::format($account->balance ?? 0, 2) }}
+                                                    {{ $group_name === 'debt' ? 'Remaining' : 'Available' }}: 
+                                                    ${{ Number::format($account->balance ?? 0, 2) }}
                                                 </span>
 
                                                 <span>
@@ -52,7 +53,9 @@
 
                         <div class="flex items-center justify-between py-2.5 px-3 gap-2 text-sm w-full bg-zinc-100/50 dark:bg-zinc-800">
                             <div class="flex flex-col sm:flex-row sm:space-x-1">
-                                <p class="font-medium">Available Total:</p>
+                                <p class="font-medium">
+                                    {{ $group_name === 'debt' ? 'Remaining' : 'Available' }} Total:
+                                </p>
 
                                 <p>${{ Number::format($group['available_total'] ?? 0, 2) }}</p>
                             </div>

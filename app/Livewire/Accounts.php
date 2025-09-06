@@ -61,9 +61,15 @@ class Accounts extends Component
             ->orderBy('name')
             ->get()
             ->map(function (Account $account): Account {
-                $account->cleared_balance = $account->initial_balance
-                    + ($account->cleared_deposits ?? 0)
-                    - ($account->cleared_debits ?? 0);
+                if (in_array($account->type, [AccountType::LOAN, AccountType::CREDIT_CARD])) {
+                    $account->cleared_balance = $account->initial_balance
+                        - ($account->debt_cleared_debits ?? 0)
+                        + ($account->debt_cleared_deposits ?? 0);
+                } else {
+                    $account->cleared_balance = $account->initial_balance
+                        + ($account->cleared_deposits ?? 0)
+                        - ($account->cleared_debits ?? 0);
+                }
 
                 return $account;
             });
