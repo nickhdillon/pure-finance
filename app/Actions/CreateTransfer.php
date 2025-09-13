@@ -32,6 +32,8 @@ class CreateTransfer
                 'recurring_end' => $transaction->recurring_end ?? null,
                 'parent_id' => $transaction->id,
             ]
-        )->recalculateAccountBalance();
+        );
+
+        $transfer_to_account->recalculateBalance();
     }
 }
