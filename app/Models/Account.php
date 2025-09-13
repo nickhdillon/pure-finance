@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Enums\AccountType;
+use App\Enums\TransactionType;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -70,5 +72,33 @@ class Account extends Model
     public function savings_goals(): HasMany
     {
         return $this->hasMany(SavingsGoal::class);
+    }
+
+    public function recalculateBalance(): void
+    {
+        DB::transaction(function (): void {
+            $account = $this->lockForUpdate()->first();
+
+            $transactions = $account->transactions()
+                ->whereDate('date', '<=', now()->timezone('America/Chicago'));
+
+            $total_credits = (clone $transactions)
+                ->whereIn('type', [TransactionType::CREDIT, TransactionType::DEPOSIT])
+                ->sum('amount');
+
+            $total_debits = (clone $transactions)
+                ->whereIn('type', [
+                    TransactionType::DEBIT,
+                    TransactionType::TRANSFER,
+                    TransactionType::WITHDRAWAL,
+                ])
+                ->sum('amount');
+
+            $balance = in_array($account->type, [AccountType::LOAN, AccountType::CREDIT_CARD])
+                ? $account->initial_balance - $total_debits + $total_credits
+                : $account->initial_balance + $total_credits - $total_debits;
+
+            $account->update(['balance' => $balance]);
+        });
     }
 }

@@ -79,15 +79,15 @@ class Transaction extends Model
     protected static function booted(): void
     {
         static::created(function (Transaction $transaction): void {
-            $transaction->recalculateAccountBalance();
+            $transaction->account->recalculateBalance();
         });
 
         static::updated(function (Transaction $transaction): void {
-            $transaction->recalculateAccountBalance();
+            $transaction->account->recalculateBalance();
         });
 
-        static::deleting(function (Transaction $transaction): void {
-            $transaction->recalculateAccountBalance();
+        static::deleted(function (Transaction $transaction): void {
+            $transaction->account->recalculateBalance();
         });
     }
 
@@ -119,30 +119,5 @@ class Transaction extends Model
     public function bill(): BelongsTo
     {
         return $this->belongsTo(Bill::class);
-    }
-
-    public function recalculateAccountBalance(): void
-    {
-        $account = $this->account;
-
-        $transactions = $account
-            ->transactions()
-            ->whereDate('date', '<=', now()->timezone('America/Chicago'));
-
-        $total_credits = (clone $transactions)
-            ->whereIn('type', [TransactionType::CREDIT, TransactionType::DEPOSIT])
-            ->sum('amount');
-
-        $total_debits = (clone $transactions)
-            ->whereIn('type', [
-                TransactionType::DEBIT,
-                TransactionType::TRANSFER,
-                TransactionType::WITHDRAWAL,
-            ])
-            ->sum('amount');
-
-        $balance = $account->initial_balance + $total_credits - $total_debits;
-
-        $account->update(['balance' => $balance]);
     }
 }
