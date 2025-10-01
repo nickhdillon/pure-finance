@@ -79,15 +79,15 @@ class Account extends Model
         DB::transaction(function (): void {
             $account = Account::whereKey($this->getKey())->lockForUpdate()->first();
 
-            $cutoff = now('America/Chicago');
+            $cutoff = now('America/Chicago')->toDateString();
 
             $total_credits = $account->transactions()
-                ->whereDate('date', '<=', $cutoff)
+                ->where('date', '<=', $cutoff)
                 ->whereIn('type', [TransactionType::CREDIT, TransactionType::DEPOSIT])
                 ->sum('amount');
 
             $total_debits = $account->transactions()
-                ->whereDate('date', '<=', $cutoff)
+                ->where('date', '<=', $cutoff)
                 ->whereIn('type', [
                     TransactionType::DEBIT,
                     TransactionType::TRANSFER,

@@ -44,7 +44,7 @@ class Accounts extends Component
             ->orderBy('name')
             ->get()
             ->map(function (Account $account): Account {
-                if (in_array($account->type, [AccountType::LOAN, AccountType::CREDIT_CARD])) {
+                if (in_array($account->type, [AccountType::LOAN, AccountType::CREDIT_CARD], true)) {
                     $account->available_balance = $account->initial_balance
                         - ($account->all_debits ?? 0)
                         + ($account->all_deposits ?? 0);
