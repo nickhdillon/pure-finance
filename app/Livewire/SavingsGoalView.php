@@ -40,7 +40,7 @@ class SavingsGoalView extends Component
         $contributions = $data->contribution_total ?? 0;
         $withdrawals = $data->withdrawal_total ?? 0;
 
-        $this->total_saved = abs(($contributions ?? 0) - ($withdrawals ?? 0)) + $this->savings_goal->amount_saved;
+        $this->total_saved = ($contributions ?? 0) - ($withdrawals ?? 0) + $this->savings_goal->amount_saved;
 
         $this->total_spent = $withdrawals ?? 0;
 

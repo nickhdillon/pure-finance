@@ -154,17 +154,19 @@ new class extends Component {
                 <flux:checkbox wire:model="terms_accepted" />
 
                 <flux:label>
-                    I agree to the
+                    <div>
+                        I agree to the
 
-                    <flux:link :href="route('terms-and-conditions')" wire:navigate>
-                        terms & conditions
-                    </flux:link>
+                        <flux:link class="px-0.5" :href="route('terms-and-conditions')" wire:navigate>
+                            terms & conditions
+                        </flux:link>
 
-                    and
+                        and
 
-                    <flux:link :href="route('privacy-policy')" wire:navigate>
-                        privacy policy
-                    </flux:link>
+                        <flux:link class="pl-0.5" :href="route('privacy-policy')" wire:navigate>
+                            privacy policy
+                        </flux:link>
+                    </div>
                 </flux:label>
 
                 <flux:error name="terms_accepted" />

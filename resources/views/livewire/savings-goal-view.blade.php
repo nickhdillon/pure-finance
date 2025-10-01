@@ -123,7 +123,7 @@
                                             </p>
 
                                             <p>
-                                                {{ Carbon\Carbon::parse($transaction->created_at)->format('M j, Y') }}
+                                                {{ $transaction->created_at->format('M j, Y') }}
                                             </p>
                                         </div>
                                     @else
@@ -133,7 +133,7 @@
                                             </p>
 
                                             <p>
-                                                {{ Carbon\Carbon::parse($transaction->created_at)->format('M j, Y') }}
+                                                {{ $transaction->created_at->format('M j, Y') }}
                                             </p>
                                         </div>
                                     @endif

@@ -77,16 +77,17 @@ class Account extends Model
     public function recalculateBalance(): void
     {
         DB::transaction(function (): void {
-            $account = $this->lockForUpdate()->first();
+            $account = Account::whereKey($this->getKey())->lockForUpdate()->first();
 
-            $transactions = $account->transactions()
-                ->whereDate('date', '<=', now()->timezone('America/Chicago'));
+            $cutoff = now('America/Chicago');
 
-            $total_credits = (clone $transactions)
+            $total_credits = $account->transactions()
+                ->whereDate('date', '<=', $cutoff)
                 ->whereIn('type', [TransactionType::CREDIT, TransactionType::DEPOSIT])
                 ->sum('amount');
 
-            $total_debits = (clone $transactions)
+            $total_debits = $account->transactions()
+                ->whereDate('date', '<=', $cutoff)
                 ->whereIn('type', [
                     TransactionType::DEBIT,
                     TransactionType::TRANSFER,
@@ -94,7 +95,7 @@ class Account extends Model
                 ])
                 ->sum('amount');
 
-            $balance = in_array($account->type, [AccountType::LOAN, AccountType::CREDIT_CARD])
+            $balance = in_array($account->type, [AccountType::LOAN, AccountType::CREDIT_CARD], true)
                 ? $account->initial_balance - $total_debits + $total_credits
                 : $account->initial_balance + $total_credits - $total_debits;
 
