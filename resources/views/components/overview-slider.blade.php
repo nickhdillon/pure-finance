@@ -41,7 +41,7 @@
                     </div>
                 </div>
 
-                <div class="absolute bottom-3 sm:bottom-2 left-0 right-0 flex justify-center items-center gap-3">
+                <div class="absolute bottom-3 sm:bottom-2 left-0 right-0 flex justify-center items-center gap-3 pt-2">
                     <flux:button
                         icon="chevron-left"
                         variant="ghost"
