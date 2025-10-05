@@ -1,7 +1,7 @@
 <x-layouts.app>
     <div class="flex flex-col gap-6">
         @if (auth()->user()->categories()->count()) 
-            <livewire:monthly-spending-overview />
+            <x-overview-slider />
         @endif
 
         <livewire:accounts />
