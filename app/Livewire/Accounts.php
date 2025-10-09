@@ -86,6 +86,13 @@ class Accounts extends Component
 
         return view('livewire.accounts', [
             'grouped_accounts' => $grouped_accounts,
+            'net_worth' => collect($grouped_accounts)
+                ->map(function (array $group, string $group_name): float {
+                    return $group_name === 'debt'
+                        ? -$group['available_total']
+                        : $group['available_total'];
+                })
+                ->sum()
         ]);
     }
 }

@@ -73,6 +73,14 @@
                         No accounts found...
                     </div>
                 @endforelse
+
+                @if ($grouped_accounts)
+                    <div class="flex items-center space-x-1 py-2.5 px-3 text-sm w-full">
+                        <p class="font-medium">Net Worth:</p>
+
+                        <p>${{ Number::format($net_worth ?? 0, 2) }}</p>
+                    </div>
+                @endif
             </div>
         </x-slot:content>
     </x-card>
