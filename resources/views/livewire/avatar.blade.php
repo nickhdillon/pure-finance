@@ -3,7 +3,7 @@
 <div x-data="cropper" class="flex w-fit flex-col">
     <h4 class="text-sm font-medium select-none text-zinc-800 dark:text-white">
         Avatar
-    </h4>   
+    </h4>
 
     <div class="flex items-center space-x-3">
         <label for="avatar"

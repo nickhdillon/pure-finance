@@ -26,7 +26,7 @@ class SavingsGoalForm extends Component
     public float $goal_amount;
 
     #[Validate(['nullable', 'decimal:0,2', 'numeric', 'min:1'])]
-    public float $amount_saved;
+    public ?float $amount_saved = null;
 
     #[Validate(['nullable', 'decimal:0,2', 'numeric', 'min:1'])]
     public float $monthly_contribution;
