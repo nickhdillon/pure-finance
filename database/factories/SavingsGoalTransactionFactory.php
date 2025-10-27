@@ -20,7 +20,9 @@ class SavingsGoalTransactionFactory extends Factory
         return [
             'savings_goal_id' => SavingsGoal::factory(),
             'contribution_amount' => 500,
-            'withdrawal_amount' => 200
+            'withdrawal_amount' => 200,
+            'deduct_from_account' => false,
+            'add_to_account' => false
         ];
     }
 }

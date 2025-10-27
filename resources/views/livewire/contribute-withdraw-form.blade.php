@@ -1,4 +1,4 @@
-<div x-data="{ 
+<div x-data="{
     header: '',
     setHeader(e) { this.header = e.detail.header }
 }" x-on:open-form.window="setHeader">
@@ -9,28 +9,50 @@
             </flux:heading>
 
             <template x-if="header.includes('Contribute')">
-                <flux:field>
-                    <flux:label>Amount to contribute</flux:label>
+                <div class="space-y-6">
+                    <flux:field>
+                        <flux:label>Amount to contribute</flux:label>
 
-                    <flux:input type="number" inputmode="decimal" wire:model='contribution_amount' placeholder="100.00" step="0.01" required />
+                        <flux:input type="number" inputmode="decimal" wire:model='contribution_amount'
+                            placeholder="100.00" step="0.01" required />
 
-                    <flux:description class="-mt-0.5!">
-                        Suggested monthly contribution: 
-                        ${{ Number::format($savings_goal->monthly_contribution ?? 0, 2) }}
-                    </flux:description>
+                        <flux:description class="-mt-0.5!">
+                            Suggested monthly contribution:
+                            ${{ Number::format($savings_goal->monthly_contribution ?? 0, 2) }}
+                        </flux:description>
 
-                    <flux:error name="contribution_amount" />
-                </flux:field>
+                        <flux:error name="contribution_amount" />
+                    </flux:field>
+
+                    <flux:field variant="inline">
+                        <flux:checkbox wire:model="deduct_from_account" />
+
+                        <flux:label>Deduct from {{ $savings_goal->account->name }} account</flux:label>
+
+                        <flux:error name="deduct_from_account" />
+                    </flux:field>
+                </div>
             </template>
 
             <template x-if="header.includes('Withdraw')">
-                <flux:field>
-                    <flux:label>Amount to withdraw</flux:label>
+                <div class="space-y-6">
+                    <flux:field>
+                        <flux:label>Amount to withdraw</flux:label>
 
-                    <flux:input type="number" inputmode="decimal" wire:model='withdrawal_amount' placeholder="100.00" step="0.01" required />
+                        <flux:input type="number" inputmode="decimal" wire:model='withdrawal_amount'
+                            placeholder="100.00" step="0.01" required />
 
-                    <flux:error name="withdrawal_amount" />
-                </flux:field>
+                        <flux:error name="withdrawal_amount" />
+                    </flux:field>
+
+                    <flux:field variant="inline">
+                        <flux:checkbox wire:model="add_to_account" />
+
+                        <flux:label>Add to {{ $savings_goal->account->name }} account</flux:label>
+
+                        <flux:error name="add_to_account" />
+                    </flux:field>
+                </div>
             </template>
 
             <div class="flex gap-2">

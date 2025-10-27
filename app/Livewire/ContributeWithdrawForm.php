@@ -7,6 +7,7 @@ namespace App\Livewire;
 use Flux\Flux;
 use Livewire\Component;
 use App\Models\SavingsGoal;
+use App\Enums\TransactionType;
 use Livewire\Attributes\Validate;
 use Illuminate\Contracts\View\View;
 
@@ -20,6 +21,12 @@ class ContributeWithdrawForm extends Component
     #[Validate(['nullable', 'decimal:0,2', 'numeric', 'min:1'])]
     public ?float $withdrawal_amount = null;
 
+    #[Validate(['bool'])]
+    public bool $deduct_from_account = false;
+
+    #[Validate(['bool'])]
+    public bool $add_to_account = false;
+
     public function submit(): void
     {
         $validated_data = $this->validate();
@@ -28,6 +35,31 @@ class ContributeWithdrawForm extends Component
             'account_id' => $this->savings_goal->account_id,
             ...$validated_data
         ]);
+
+        if ($this->deduct_from_account || $this->add_to_account) {
+            $category = auth()
+                ->user()
+                ->categories()
+                ->firstOrCreate([
+                    'name' => $this->deduct_from_account ? 'Goal Contribution' : 'Goal Withdrawal'
+                ]);
+
+            $type = $this->deduct_from_account ? TransactionType::DEBIT : TransactionType::CREDIT;
+
+            $amount = $this->deduct_from_account ? $this->contribution_amount : $this->withdrawal_amount;
+
+            $this->savings_goal->account->transactions()->create([
+                'payee' => "{$this->savings_goal->name} Goal",
+                'type' => $type,
+                'amount' => $amount,
+                'category_id' => $category->id,
+                'date' => now('America/Chicago'),
+                'tags' => null,
+                'notes' => null,
+                'status' => 0,
+                'is_recurring' => false,
+            ]);
+        }
 
         $this->dispatch('savings-goal-saved');
 
@@ -38,7 +70,12 @@ class ContributeWithdrawForm extends Component
 
         Flux::modals()->close();
 
-        $this->reset(['contribution_amount', 'withdrawal_amount']);
+        $this->reset([
+            'contribution_amount',
+            'withdrawal_amount',
+            'deduct_from_account',
+            'add_to_account'
+        ]);
     }
 
     public function render(): View

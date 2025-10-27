@@ -24,6 +24,7 @@ beforeEach(function () {
 it('can contribute to goal', function () {
     livewire(ContributeWithdrawForm::class, ['savings_goal' => SavingsGoal::first()])
         ->set('contribution_amount', 200)
+        ->set('deduct_from_account', true)
         ->call('submit')
         ->assertDispatched('savings-goal-saved')
         ->assertHasNoErrors();
@@ -32,6 +33,7 @@ it('can contribute to goal', function () {
 it('can withdraw from goal', function () {
     livewire(ContributeWithdrawForm::class, ['savings_goal' => SavingsGoal::first()])
         ->set('withdrawal_amount', 100)
+        ->set('add_to_account', true)
         ->call('submit')
         ->assertDispatched('savings-goal-saved')
         ->assertHasNoErrors();

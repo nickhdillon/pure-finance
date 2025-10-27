@@ -22,7 +22,17 @@ class SavingsGoalTransaction extends Model
         'savings_goal_id',
         'contribution_amount',
         'withdrawal_amount',
+        'deduct_from_account',
+        'add_to_account'
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'deduct_from_account' => 'boolean',
+            'add_to_account' => 'boolean',
+        ];
+    }
 
     public function savings_goal(): BelongsTo
     {
