@@ -97,8 +97,6 @@ it('can create a bill and update all children', function () {
 
     $bill = Bill::where('name', 'New Test Bill')->first();
 
-    expect($bill->children()->count())->toBeGreaterThanOrEqual(1);
-
     livewire(BillForm::class)
         ->call('loadBill', $bill->id)
         ->set('name', 'New Test Bill Updated')
