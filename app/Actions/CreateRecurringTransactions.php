@@ -50,6 +50,7 @@ class CreateRecurringTransactions
 	private function frequencyToInterval(RecurringFrequency $frequency): CarbonInterval
 	{
 		return match ($frequency->value) {
+			'bi_weekly' => CarbonInterval::weeks(2),
 			'month' => CarbonInterval::month(),
 			'quarter' => CarbonInterval::months(3),
 			'semi_annual' => CarbonInterval::months(6),

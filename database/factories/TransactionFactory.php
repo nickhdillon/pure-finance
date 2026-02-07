@@ -35,6 +35,7 @@ class TransactionFactory extends Factory
         ));
 
         $modifier = match ($frequency) {
+            RecurringFrequency::BI_WEEKLY => '+2 weeks',
             RecurringFrequency::MONTHLY => '+1 month',
             RecurringFrequency::QUARTERLY => '+3 months',
             RecurringFrequency::SEMI_ANNUALLY => '+6 months',
