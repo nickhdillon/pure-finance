@@ -22,10 +22,7 @@
                         </p>
     
                         <p>
-                            <span @class([
-                            'text-red-500 font-medium' =>
-                                $expense->total_spent > $expense->monthly_amount,
-                            ])>
+                            <span @class(['text-red-500 font-medium' => $expense->total_spent > $expense->monthly_amount])>
                                 ${{ Number::format($expense->total_spent ?? 0, 2) }}
                             </span>
 
@@ -40,6 +37,20 @@
                         No expenses found...
                     </div>
                 @endforelse
+
+                <div class="flex items-center justify-between bg-zinc-100/50 dark:bg-zinc-800 space-x-1 py-2.5 px-3 text-sm w-full">
+                    <p class="font-medium">Total</p>
+
+                    <p>
+                        <span @class(['text-red-500 font-medium' => $total_spent > $total_planned])>
+                            ${{ Number::format($total_spent ?? 0, 2) }}
+                        </span>
+
+                        of
+
+                        ${{ Number::format($total_planned ?? 0, 2) }}
+                    </p>
+                </div>
             </div>
         </x-slot:content>
     </x-card>

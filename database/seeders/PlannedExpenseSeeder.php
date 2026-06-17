@@ -14,6 +14,6 @@ class PlannedExpenseSeeder extends Seeder
      */
     public function run(): void
     {
-        PlannedExpense::factory()->create();
+        PlannedExpense::factory(4)->create();
     }
 }

@@ -54,6 +54,10 @@ class PlannedSpending extends Component
             $expense->total_spent = max(0, $direct_total + $child_total);
         });
 
-        return view('livewire.planned-spending', ['expenses' => $expenses]);
+        return view('livewire.planned-spending', [
+            'expenses' => $expenses,
+            'total_spent' => $expenses->sum('total_spent'),
+            'total_planned' => $expenses->sum('monthly_amount')
+        ]);
     }
 }

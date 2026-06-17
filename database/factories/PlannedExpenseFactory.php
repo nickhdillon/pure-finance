@@ -20,10 +20,12 @@ class PlannedExpenseFactory extends Factory
      */
     public function definition(): array
     {
+        $category = Category::inRandomOrder()->first();
+
         return [
-            'name' => Category::first()->name,
-            'slug' => Str::slug(Category::first()->name),
-            'category_id' => Category::first(),
+            'name' => $category->name,
+            'slug' => Str::slug($category->name),
+            'category_id' => $category->id,
             'monthly_amount' => $this->faker->randomFloat(2, 0, 100),
         ];
     }
