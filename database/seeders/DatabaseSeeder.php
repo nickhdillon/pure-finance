@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             TransactionSeeder::class,
             TagSeeder::class,
             PlannedExpenseSeeder::class,
+            PlannedExpenseMonthSeeder::class,
             SavingsGoalSeeder::class,
             SavingsGoalTransactionSeeder::class,
             BillSeeder::class

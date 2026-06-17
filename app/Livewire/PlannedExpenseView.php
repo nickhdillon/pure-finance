@@ -11,6 +11,7 @@ use Livewire\Attributes\On;
 use App\Enums\TransactionType;
 use App\Models\PlannedExpense;
 use Illuminate\Support\Collection;
+use App\Models\PlannedExpenseMonth;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -18,6 +19,8 @@ use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 class PlannedExpenseView extends Component
 {
     public PlannedExpense $expense;
+
+    public ?PlannedExpenseMonth $expense_month = null;
 
     public string $timezone = 'America/Chicago';
 
@@ -38,6 +41,19 @@ class PlannedExpenseView extends Component
     public function mount(): void
     {
         $this->monthly_totals = collect();
+    }
+
+    private function loadCurrentMonth(): void
+    {
+        $month = now($this->timezone)->startOfMonth()->toDateString();
+
+        $this->expense_month = $this->expense
+            ->months()
+            ->whereDate('month', $month)
+            ->firstOrCreate(
+                ['month' => $month],
+                ['amount' => $this->expense->monthly_amount]
+            );
     }
 
     private function applyCategoryFilter(Builder $query): void
@@ -76,9 +92,11 @@ class PlannedExpenseView extends Component
 
         $this->transaction_count = $data->transaction_count;
 
-        $this->available = $this->expense->monthly_amount - $this->total_spent;
+        $this->available = $this->expense_month->amount - $this->total_spent;
 
-        $this->percentage_spent = ($this->total_spent / $this->expense->monthly_amount) * 100;
+        $this->percentage_spent = $this->expense_month->amount > 0
+            ? ($this->total_spent / $this->expense_month->amount) * 100
+            : 0;
     }
 
     private function getTotalSpentLastSixMonths(): void
@@ -160,6 +178,8 @@ class PlannedExpenseView extends Component
     #[On('planned-expense-saved')]
     public function render(): View
     {
+        $this->loadCurrentMonth();
+
         $this->getCurrentMonthData();
 
         $this->getTotalSpentLastSixMonths();

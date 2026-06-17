@@ -5,12 +5,12 @@ declare(strict_types=1);
 use App\Models\Tag;
 use App\Models\User;
 use App\Models\Report;
-use Prism\Prism\Prism;
 use App\Models\Account;
 use App\Models\Category;
 use App\Models\Transaction;
 use App\Livewire\ReportForm;
 use App\Enums\TransactionType;
+use Prism\Prism\Facades\Prism;
 use function Pest\Livewire\livewire;
 use Prism\Prism\Testing\TextResponseFake;
 

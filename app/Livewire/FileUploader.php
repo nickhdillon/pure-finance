@@ -79,7 +79,7 @@ class FileUploader extends Component
         foreach ($this->files as $file) {
             $uuid = Str::uuid()->toString();
 
-            $converted_image = Image::read($file)->encodeByExtension('jpg');
+            $converted_image = Image::decode($file)->encodeUsingFileExtension('jpg');
 
             $file_name = Str::beforeLast($file->getClientOriginalName(), '.') . '.jpg';
 

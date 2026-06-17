@@ -1,8 +1,10 @@
+@use('App\Enums\PlannedExpenseType', 'PlannedExpenseType')
+
 <div>
-    <flux:modal name="{{ $expense ? ('edit-expense' . $expense->id) : 'add-expense' }}">
+    <flux:modal name="add-expense">
         <form wire:submit='submit' class="space-y-6">
             <flux:heading size="lg" class="font-semibold -mt-1.5!">
-                {{ $expense ? 'Edit' : 'Create' }} Expense
+                Create Expense
             </flux:heading>
 
             <flux:field>
@@ -23,19 +25,15 @@
                 <flux:error name="monthly_amount" />
             </flux:field>
 
+            <flux:field>
+                <flux:radio.group wire:model="type" label="Type">
+                    @foreach (PlannedExpenseType::cases() as $type)
+                        <flux:radio :value="$type->value" :label="$type->label()" />
+                    @endforeach
+                </flux:radio.group>
+            </flux:field>
+
             <div class="flex gap-2 items-center">
-                @if ($expense) 
-                    <div>
-                        <flux:modal.trigger name="delete-expense">
-                            <flux:button variant="danger" size="sm">
-                                Delete
-                            </flux:button>
-                        </flux:modal.trigger>
-            
-                        <x-delete-modal name="delete-expense" heading="expense" />
-                    </div>
-                @endif
-            
                 <div class="ml-auto flex gap-2">
                     <flux:modal.close>
                         <flux:button variant="ghost" size="sm">

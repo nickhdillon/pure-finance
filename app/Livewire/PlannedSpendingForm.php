@@ -7,7 +7,8 @@ namespace App\Livewire;
 use Flux\Flux;
 use Livewire\Component;
 use Livewire\Attributes\On;
-use App\Models\PlannedExpense;
+use Illuminate\Validation\Rule;
+use App\Enums\PlannedExpenseType;
 use Livewire\Attributes\Validate;
 use Illuminate\Contracts\View\View;
 
@@ -22,9 +23,16 @@ class PlannedSpendingForm extends Component
     #[Validate(['required', 'decimal:0,2', 'numeric', 'min:1'])]
     public float $monthly_amount;
 
-    public ?PlannedExpense $expense = null;
+    public PlannedExpenseType $type = PlannedExpenseType::RECURRING;
 
     public array $categories = [];
+
+    public function rules(): array
+    {
+        return [
+            'type' => ['required', Rule::enum(PlannedExpenseType::class)],
+        ];
+    }
 
     protected function messages(): array
     {
@@ -36,12 +44,6 @@ class PlannedSpendingForm extends Component
     public function mount(): void
     {
         $this->getCategories();
-
-        if ($this->expense) {
-            $this->name = $this->expense->name;
-            $this->category_id = $this->expense->category_id;
-            $this->monthly_amount = $this->expense->monthly_amount;
-        }
     }
 
     #[On('category-saved'), On('planned-expense-saved')]
@@ -64,36 +66,29 @@ class PlannedSpendingForm extends Component
     {
         $validated_data = $this->validate();
 
-        if ($this->expense) {
-            PlannedExpense::query()
-                ->where('id', $this->expense['id'])
-                ->update($validated_data);
-        } else {
-            auth()->user()->planned_expenses()->create($validated_data);
-        }
+        $month = now('America/Chicago')->startOfMonth()->toDateString();
+
+        $expense = auth()->user()->planned_expenses()->create([
+            ...$validated_data,
+            'starts_on' => $month,
+            'ends_on' => $this->type === PlannedExpenseType::ONE_TIME ? $month : null,
+        ]);
+
+        $expense->months()->create([
+            'month' => $month,
+            'amount' => $expense->monthly_amount,
+        ]);
 
         $this->dispatch('planned-expense-saved');
 
-        if (! $this->expense) $this->reset();
+        $this->reset();
 
         Flux::toast(
             variant: 'success',
-            text: 'Expense successfully ' . ($this->expense ? 'updated' : 'created'),
+            text: 'Expense successfully created',
         );
 
         Flux::modals()->close();
-    }
-
-    public function delete(): void
-    {
-        $this->expense?->delete();
-
-        Flux::toast(
-            variant: 'success',
-            text: 'Expense successfully deleted',
-        );
-
-        $this->redirectRoute('planned-spending', navigate: true);
     }
 
     public function render(): View

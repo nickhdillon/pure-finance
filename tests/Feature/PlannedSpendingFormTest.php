@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use App\Models\User;
 use App\Models\Category;
-use App\Models\PlannedExpense;
 use function Pest\Livewire\livewire;
 use App\Livewire\PlannedSpendingForm;
 
@@ -38,22 +37,6 @@ it('can create an expense', function () {
         ->call('submit')
         ->assertDispatched('planned-expense-saved')
         ->assertHasNoErrors();
-});
-
-it('can edit an expense', function () {
-    livewire(PlannedSpendingForm::class, ['expense' => PlannedExpense::factory()->create()])
-        ->set('name', 'Test expense updated')
-        ->call('submit')
-        ->assertDispatched('planned-expense-saved')
-        ->assertHasNoErrors();
-});
-
-it('can delete an expense', function () {
-    livewire(PlannedSpendingForm::class, ['expense' => PlannedExpense::factory()->create()])
-        ->call('delete')
-        ->assertHasNoErrors();
-
-    $this->assertDatabaseCount('planned_expenses', 0);
 });
 
 test('component can render', function () {

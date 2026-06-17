@@ -8,13 +8,13 @@
     <x-card heading="{{ $expense->name }}">
         <x-slot:button>
             <div>
-                <flux:modal.trigger name="{{ 'edit-expense' . $expense->id }}">
+                <flux:modal.trigger name="{{ 'edit-expense' . $expense_month->id }}">
                     <flux:button icon="pencil-square" variant="primary" size="sm">
                         Edit
                     </flux:button>
                 </flux:modal.trigger>
 
-                <livewire:planned-spending-form :$expense />
+                <livewire:planned-expense-month-form :$expense_month />
             </div>
         </x-slot:button>
 
@@ -83,7 +83,7 @@
                                         of
 
                                         <span class="font-semibold">
-                                            ${{ Number::format($expense->monthly_amount ?? 0, 2) }}
+                                            ${{ Number::format($expense_month->amount ?? 0, 2) }}
                                         </span>
                                     </p>
                                 </div>
