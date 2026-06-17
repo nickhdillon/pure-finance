@@ -16,7 +16,7 @@ class PlannedSpending extends Component
     #[On('planned-expense-saved')]
     public function render(): View
     {
-        $expenses = auth()->user()->planned_expenses;
+        $expenses = auth()->user()->planned_expenses()->with('currentMonth')->get();
 
         $timezone = 'America/Chicago';
 
@@ -52,6 +52,8 @@ class PlannedSpending extends Component
             $child_total = $totals->where('parent_id', $expense->category_id)->sum('total_spent');
 
             $expense->total_spent = max(0, $direct_total + $child_total);
+
+            $expense->planned_amount = $expense->currentMonth?->amount ?? $expense->monthly_amount;
         });
 
         return view('livewire.planned-spending', [

@@ -18,7 +18,7 @@
             <x-categories :$categories />
 
             <flux:field>
-                <flux:label>Monthly Amount</flux:label>
+                <flux:label>Amount</flux:label>
 
                 <flux:input type="number" inputmode="decimal" wire:model='monthly_amount' placeholder="100.00" step="0.01" required />
 

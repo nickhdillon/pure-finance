@@ -21,6 +21,10 @@
         <x-slot:content>
             <div>
                 <h3 class="px-4 pt-3 text-sm font-medium">
+                    Type: {{ $expense->type->label() }}
+                </h3>
+
+                <h3 class="px-4 pt-3 text-sm font-medium">
                     Spending in category: {{ $expense->category->name }}
                 </h3>
 
