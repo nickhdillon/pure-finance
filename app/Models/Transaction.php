@@ -79,15 +79,19 @@ class Transaction extends Model
     protected static function booted(): void
     {
         static::created(function (Transaction $transaction): void {
-            $transaction->account->recalculateBalance();
+            Account::find($transaction->account_id)?->recalculateBalance();
         });
 
         static::updated(function (Transaction $transaction): void {
-            $transaction->account->recalculateBalance();
+            if ($transaction->wasChanged('account_id')) {
+                Account::find($transaction->getOriginal('account_id'))?->recalculateBalance();
+            }
+
+            Account::find($transaction->account_id)?->recalculateBalance();
         });
 
         static::deleted(function (Transaction $transaction): void {
-            $transaction->account->recalculateBalance();
+            Account::find($transaction->account_id)?->recalculateBalance();
         });
     }
 

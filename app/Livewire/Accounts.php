@@ -18,27 +18,33 @@ class Accounts extends Component
 {
     public function render(): View
     {
+        $today = now('America/Chicago')->toDateString();
+
         $accounts = auth()
             ->user()
             ->accounts()
             ->withCount('transactions')
             ->withSum([
                 // All transactions (available balance)
-                'transactions as all_deposits' => function (Builder $query): void {
-                    $query->whereIn('type', [TransactionType::CREDIT, TransactionType::DEPOSIT]);
+                'transactions as all_deposits' => function (Builder $query) use ($today): void {
+                    $query->whereIn('type', [TransactionType::CREDIT, TransactionType::DEPOSIT])
+                        ->whereDate('date', '<=', $today);
                 },
-                'transactions as all_debits' => function (Builder $query): void {
-                    $query->whereIn('type', [TransactionType::DEBIT, TransactionType::TRANSFER, TransactionType::WITHDRAWAL]);
+                'transactions as all_debits' => function (Builder $query) use ($today): void {
+                    $query->whereIn('type', [TransactionType::DEBIT, TransactionType::TRANSFER, TransactionType::WITHDRAWAL])
+                        ->whereDate('date', '<=', $today);
                 },
 
                 // Cleared only
-                'transactions as cleared_deposits' => function (Builder $query): void {
+                'transactions as cleared_deposits' => function (Builder $query) use ($today): void {
                     $query->whereIn('type', [TransactionType::CREDIT, TransactionType::DEPOSIT])
-                        ->where('status', true);
+                        ->where('status', true)
+                        ->whereDate('date', '<=', $today);
                 },
-                'transactions as cleared_debits' => function (Builder $query): void {
+                'transactions as cleared_debits' => function (Builder $query) use ($today): void {
                     $query->whereIn('type', [TransactionType::DEBIT, TransactionType::TRANSFER, TransactionType::WITHDRAWAL])
-                        ->where('status', true);
+                        ->where('status', true)
+                        ->whereDate('date', '<=', $today);
                 },
             ], 'amount')
             ->orderBy('name')
