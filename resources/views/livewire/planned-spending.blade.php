@@ -102,18 +102,18 @@
                             <div class="w-full my-1.5 h-8 sm:h-9 bg-zinc-50 dark:bg-zinc-700 shadow-sm rounded-lg">
                                 <div
                                     @class([
-                                        '!rounded-r-lg' => $expense->total_spent >= $expense->monthly_amount,
-                                        '!bg-red-500 hover:!bg-red-400' => $expense->total_spent > $expense->monthly_amount,
+                                        '!rounded-r-lg' => $expense->total_spent >= $expense->planned_amount,
+                                        '!bg-red-500 hover:!bg-red-400' => $expense->total_spent > $expense->planned_amount,
                                         'min-w-[25px]' => $expense->total_spent > 0,
                                         '!bg-transparent' => $expense->total_spent === 0,
                                         'flex items-center justify-center h-full bg-emerald-500 hover:bg-emerald-400 rounded-lg cursor-pointer rounded-r-none duration-200 ease-in-out text-sm',
                                     ])
                                     style="width: {{ min($expense->total_spent, 100) }}%;"
                                 >
-                                    <span x-cloak x-show="@js($expense->total_spent) > 0"
+                                    <span x-cloak x-show="@js($expense->percentage_spent) > 0"
                                         class="font-semibold text-white"
                                     >
-                                        {{ Number::format($expense->total_spent, 0) }}%
+                                        {{ Number::format($expense->percentage_spent, 0) }}%
                                     </span>
                                 </div>
                             </div>

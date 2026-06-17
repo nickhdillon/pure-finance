@@ -58,14 +58,15 @@
                                 <div class="w-full my-1.5 h-8 sm:h-9 bg-zinc-50 dark:bg-zinc-700 shadow-sm rounded-lg">
                                     <flux:modal.trigger name="expense-transactions">
                                         <button x-on:click="$dispatch('load-transactions')"
-                                        @class([
-                                            '!rounded-r-lg' => $percentage_spent >= 100,
-                                            '!bg-red-500 hover:!bg-red-400' => $percentage_spent > 100,
-                                            'min-w-[25px]' => $percentage_spent > 0,
-                                            '!bg-transparent' => $percentage_spent === 0,
-                                            'flex items-center justify-center h-full bg-emerald-500 hover:bg-emerald-400 rounded-lg cursor-pointer rounded-r-none duration-200 ease-in-out',
-                                        ])
-                                            style="width: {{ min($percentage_spent, 100) }}%;">
+                                            @class([
+                                                '!rounded-r-lg' => $percentage_spent >= 100,
+                                                '!bg-red-500 hover:!bg-red-400' => $percentage_spent > 100,
+                                                'min-w-[25px]' => $percentage_spent > 0,
+                                                '!bg-transparent' => $percentage_spent === 0,
+                                                'flex items-center justify-center h-full bg-emerald-500 hover:bg-emerald-400 rounded-lg cursor-pointer rounded-r-none duration-200 ease-in-out',
+                                            ])
+                                            style="width: {{ min($percentage_spent, 100) }}%;"
+                                        >
                                             <span x-cloak x-show="$wire.percentage_spent > 0"
                                                 class="font-semibold text-white">
                                                 {{ Number::format($percentage_spent, 0) }}%
