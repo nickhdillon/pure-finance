@@ -23,13 +23,13 @@
                             </p>
         
                             <p>
-                                <span @class(['text-red-500 font-medium' => $expense->total_spent > $expense->monthly_amount])>
+                                <span @class(['text-red-500 font-medium' => $expense->total_spent > $expense->planned_amount])>
                                     ${{ Number::format($expense->total_spent ?? 0, 2) }}
                                 </span>
 
                                 of
 
-                                ${{ Number::format($expense->monthly_amount ?? 0, 2) }}
+                                ${{ Number::format($expense->planned_amount ?? 0, 2) }}
                             </p>
                         </a>
                     @empty
