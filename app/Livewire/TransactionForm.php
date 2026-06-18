@@ -62,6 +62,8 @@ class TransactionForm extends Component
 
     public ?Carbon $recurring_end = null;
 
+    public ?string $return_url = null;
+
     protected function rules(): array
     {
         return [
@@ -134,6 +136,8 @@ class TransactionForm extends Component
             $this->frequency = $this->transaction->frequency;
             $this->recurring_end = $this->transaction->recurring_end;
         }
+
+        $this->return_url = request()->query('return_url');
     }
 
     public function getAccounts(): self
@@ -246,7 +250,7 @@ class TransactionForm extends Component
 
     public function delete(Transaction $transaction): void
     {
-        $transaction->delete();
+        $transaction?->delete();
 
         Flux::toast(
             variant: 'success',
@@ -255,7 +259,10 @@ class TransactionForm extends Component
 
         Flux::modals()->close();
 
-        $this->redirectRoute('transactions', navigate: true);
+        $this->redirect(
+            $this->return_url ?: route('transactions'),
+            navigate: true,
+        );
     }
 
     public function submit(
@@ -303,7 +310,10 @@ class TransactionForm extends Component
             text: 'Transaction successfully ' . ($this->transaction ? 'updated' : 'created'),
         );
 
-        $this->redirectRoute('transactions', navigate: true);
+        $this->redirect(
+            $this->return_url ?: route('transactions'),
+            navigate: true,
+        );
     }
 
     public function render(): View
