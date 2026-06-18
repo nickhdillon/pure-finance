@@ -94,9 +94,7 @@ class PlannedExpenseView extends Component
 
         $this->available = $this->expense_month->amount - $this->total_spent;
 
-        $this->percentage_spent = $this->expense_month->amount > 0
-            ? ($this->total_spent / $this->expense_month->amount) * 100
-            : 0;
+        $this->percentage_spent = ($this->total_spent / $this->expense_month->amount) * 100;
     }
 
     private function getTotalSpentLastSixMonths(): void

@@ -78,9 +78,7 @@ class PlannedSpending extends Component
 
             $expense->planned_amount = $expense->currentMonth?->amount ?? $expense->monthly_amount;
 
-            $expense->percentage_spent = $expense->planned_amount > 0
-                ? ($expense->total_spent / $expense->planned_amount) * 100
-                : 0;
+            $expense->percentage_spent = ($expense->total_spent / $expense->planned_amount) * 100;
         });
         
         $expenses = $expenses
@@ -88,8 +86,6 @@ class PlannedSpending extends Component
                 fn (PlannedExpense $expense): string|float => match ($this->sort_by) {
                     'name' => $expense->name,
                     'planned_amount' => $expense->planned_amount,
-                    'total_spent' => $expense->total_spent,
-                    'percentage_spent' => $expense->percentage_spent,
                     default => $expense->planned_amount
                 },
                 options: SORT_REGULAR,
