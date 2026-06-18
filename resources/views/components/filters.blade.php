@@ -32,7 +32,7 @@
         </div>
     </flux:modal.trigger>
 
-    <flux:modal name="filters" variant="flyout" class="space-y-6 px-5! w-[250px]!">
+    <flux:modal name="filters" flyout variant="floating" class="space-y-6 px-5! w-[300px]! sm:w-[400px]!">
         <div class="flex mt-4 items-center justify-between">
             <flux:heading size="lg">
                 Filters

@@ -1,7 +1,7 @@
 @props(['name', 'heading'])
 
 <div>
-    <flux:modal :name="$name" class="sm:!w-1/3">
+    <flux:modal :name="$name" class="w-90! sm:1/3!">
         <flux:heading size="lg" class="font-semibold -mt-1.5!">
             Delete {{ Str::headline($heading) }}?
         </flux:heading>

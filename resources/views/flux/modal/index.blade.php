@@ -1,31 +1,54 @@
+@blaze
+
 @props([
     'dismissible' => null,
     'position' => null,
     'closable' => null,
     'trigger' => null,
     'variant' => null,
+    'flyout' => null,
     'name' => null,
 ])
 
 @php
+if ($variant === 'flyout') {
+    $flyout = true;
+    $variant = null;
+}
+
 $closable ??= $variant === 'bare' ? false : true;
 
-$classes = Flux::classes()
-    ->add(match ($variant) {
-        default => 'p-6 [:where(&)]:max-w-xl shadow-lg rounded-xl w-86 sm:w-full',
-        'flyout' => match($position) {
-            'bottom' => 'fixed m-0 p-8 min-w-[100vw] overflow-y-auto mt-auto [--fx-flyout-translate:translateY(50px)] border-t',
-            'left' => 'fixed m-0 p-8 max-h-dvh min-h-dvh md:[:where(&)]:min-w-[25rem] overflow-y-auto mr-auto [--fx-flyout-translate:translateX(-50px)] border-r',
-            default => 'fixed m-0 p-8 max-h-dvh min-h-dvh md:[:where(&)]:min-w-[25rem] overflow-y-auto ml-auto [--fx-flyout-translate:translateX(50px)] border-l',
-        },
-        'flyout' => 'fixed m-0 p-8 max-h-dvh min-h-dvh md:[:where(&)]:min-w-[25rem] overflow-y-auto ml-auto',
-        'bare' => '',
-    })
-    ->add(match ($variant) {
-        default => 'bg-white dark:bg-zinc-900 border border-transparent dark:border-zinc-700',
-        'flyout' => 'bg-white dark:bg-zinc-900 border-transparent dark:border-zinc-700',
-        'bare' => 'bg-transparent',
-    });
+if ($flyout) {
+    $classes = Flux::classes()
+        ->add(match ($variant) {
+            default => match($position) {
+                'bottom' => 'fixed m-0 p-8 min-w-[100vw] overflow-y-auto mt-auto [--flux-flyout-translate:translateY(50px)] border-t',
+                'left' => 'fixed m-0 p-8 max-h-dvh min-h-dvh md:[:where(&)]:min-w-[25rem] overflow-y-auto mr-auto [--flux-flyout-translate:translateX(-50px)] border-e rtl:mr-0 rtl:ml-auto rtl:[--flux-flyout-translate:translateX(50px)]',
+                default => 'fixed m-0 p-8 max-h-dvh min-h-dvh md:[:where(&)]:min-w-[25rem] overflow-y-auto ml-auto [--flux-flyout-translate:translateX(50px)] border-s rtl:ml-0 rtl:mr-auto rtl:[--flux-flyout-translate:translateX(-50px)]',
+            },
+            'floating' => match($position) {
+                'bottom' => 'fixed m-2 p-8 min-w-[calc(100vw-1rem)] overflow-y-auto mt-auto [--flux-flyout-translate:translateY(50px)]',
+                'left' => 'fixed m-2 p-8 max-h-[calc(100dvh-1rem)] min-h-[calc(100dvh-1rem)] md:[:where(&)]:min-w-[25rem] overflow-y-auto mr-auto [--flux-flyout-translate:translateX(-50px)] rtl:mr-0 rtl:ml-auto rtl:[--flux-flyout-translate:translateX(50px)]',
+                default => 'fixed m-2 p-8 max-h-[calc(100dvh-1rem)] min-h-[calc(100dvh-1rem)] md:[:where(&)]:min-w-[25rem] overflow-y-auto ml-auto [--flux-flyout-translate:translateX(50px)] rtl:ml-0 rtl:mr-auto rtl:[--flux-flyout-translate:translateX(-50px)]',
+            },
+            'bare' => '',
+        })
+        ->add(match ($variant) {
+            default => 'bg-white dark:bg-zinc-800 border-transparent dark:border-zinc-700',
+            'floating' => 'bg-white dark:bg-zinc-800 ring ring-black/5 dark:ring-zinc-700 shadow-lg rounded-xl',
+            'bare' => 'bg-transparent',
+        });
+} else {
+    $classes = Flux::classes()
+        ->add(match ($variant) {
+            default => 'p-6 w-90! sm:w-xl! shadow-lg rounded-xl',
+            'bare' => '',
+        })
+        ->add(match ($variant) {
+            default => 'bg-white dark:bg-zinc-800 ring ring-black/5 dark:ring-zinc-700 shadow-lg rounded-xl',
+            'bare' => 'bg-transparent',
+        });
+}
 
 // Support adding the .self modifier to the wire:model directive...
 if (($wireModel = $attributes->wire('model')) && $wireModel->directive && ! $wireModel->hasModifier('self')) {
@@ -54,7 +77,7 @@ if ($dismissible === false) {
     $attributes = $attributes->merge(['disable-click-outside' => '']);
 }
 
-[ $styleAttributes, $attributes ] = Flux::splitAttributes($attributes, ['class', 'style', 'wire:close', 'x-on:close', 'wire:cancel', 'x-on:cancel']);
+[ $styleAttributes, $attributes ] = Flux::splitAttributes($attributes, ['autofocus', 'class', 'style', 'wire:close', 'x-on:close', 'wire:cancel', 'x-on:cancel']);
 @endphp
 
 <ui-modal {{ $attributes }} data-flux-modal>
@@ -66,7 +89,7 @@ if ($dismissible === false) {
         wire:ignore.self {{-- This needs to be here because the dialog element adds a "close" attribute that isn't durable... --}}
         {{ $styleAttributes->class($classes) }}
         @if ($name) data-modal="{{ $name }}" @endif
-        @if ($variant === 'flyout') data-flux-flyout @endif
+        @if ($flyout) data-flux-flyout @endif
         x-data
         @isset($__livewire)
             x-on:modal-show.document="
@@ -85,9 +108,9 @@ if ($dismissible === false) {
         {{ $slot }}
 
         <?php if ($closable): ?>
-            <div class="absolute top-0 right-0 mt-4 mr-4">
+            <div class="absolute top-0 end-0 mt-4 me-4">
                 <flux:modal.close>
-                    <flux:button variant="ghost" icon="x-mark" size="sm" alt="Close modal" class="text-zinc-400! hover:text-zinc-800! dark:text-zinc-500! dark:hover:text-white!"></flux:button>
+                    <flux:button variant="ghost" icon="x-mark" size="sm" aria-label="Close modal" class="text-zinc-400! hover:text-zinc-800! dark:text-zinc-500! dark:hover:text-white!"></flux:button>
                 </flux:modal.close>
             </div>
         <?php endif; ?>
