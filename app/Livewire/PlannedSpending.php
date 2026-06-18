@@ -55,15 +55,15 @@ class PlannedSpending extends Component
 
             $expense->planned_amount = $expense->currentMonth?->amount ?? $expense->monthly_amount;
 
-            $expense->percentage_spent = $expense->currentMonth?->amount > 0
-                ? ($expense->total_spent / $expense->currentMonth?->amount) * 100
+            $expense->percentage_spent = $expense->planned_amount > 0
+                ? ($expense->total_spent / $expense->planned_amount) * 100
                 : 0;
         });
 
         return view('livewire.planned-spending', [
             'expenses' => $expenses,
             'total_spent' => $expenses->sum('total_spent'),
-            'total_planned' => $expenses->sum('monthly_amount')
+            'total_planned' => $expenses->sum('planned_amount')
         ]);
     }
 }
