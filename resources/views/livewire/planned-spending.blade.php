@@ -93,7 +93,7 @@
 
                                 <flux:badge
                                     size="sm"
-                                    color="emerald"
+                                    :color="$expense->type->color()"
                                 >
                                     {{ $expense->type->label() }}
                                 </flux:badge>
@@ -165,7 +165,7 @@
 
                                     <flux:badge
                                         size="sm"
-                                        color="emerald"
+                                        :color="$expense->type->color()"
                                     >
                                         {{ $expense->type->label() }}
                                     </flux:badge>

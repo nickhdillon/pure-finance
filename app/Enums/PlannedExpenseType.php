@@ -12,8 +12,16 @@ enum PlannedExpenseType: string
 	public function label(): string
 	{
 		return match ($this) {
-			self::RECURRING => 'Recurring',
+			self::RECURRING => 'Monthly',
 			self::ONE_TIME => 'One-Time'
+		};
+	}
+
+	public function color(): string
+	{
+		return match ($this) {
+			self::RECURRING => 'emerald',
+			self::ONE_TIME => 'blue'
 		};
 	}
 }
