@@ -10,8 +10,8 @@
         <flux:sidebar.header>
             <flux:sidebar.brand
                 href="{{ route('dashboard') }}"
-                logo="{{ asset('icon-circle.png') }}"
-                logo:dark="{{ asset('icon-circle-dark.png') }}"
+                logo="{{ asset('icon-circle.png') }}?v={{ filemtime(public_path('icon-circle.png')) }}"
+                logo:dark="{{ asset('icon-circle-dark.png') }}?v={{ filemtime(public_path('icon-circle-dark.png')) }}"
                 name="Pure Finance"
             />
 
