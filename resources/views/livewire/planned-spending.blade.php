@@ -57,33 +57,63 @@
         </x-card>
     @else
         <div class="space-y-4" x-data="{ view: 'grid' }">
-            <div class="flex justify-between gap-4">
-                <div class="flex flex-wrap items-center justify-between w-full gap-2 sm:gap-4">
-                    <flux:heading size="xl">
-                        Planned Spending
-                    </flux:heading>
+            <div>
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div class="flex items-center justify-between">
+                        <flux:heading size="xl">
+                            Planned Spending
+                        </flux:heading>
 
-                    <flux:radio.group variant="segmented" x-model="view" size="sm">
-                        <flux:radio value="grid" icon="squares-2x2" />
-                        <flux:radio value="list" icon="list-bullet" />
-                    </flux:radio.group>
+                        <div class="sm:hidden">
+                            <flux:modal.trigger name="add-expense">
+                                <flux:button icon="plus" variant="primary" size="sm">
+                                    Add
+                                </flux:button>
+                            </flux:modal.trigger>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <flux:dropdown size="sm" class="w-full!">
+                            <flux:button icon:trailing="chevron-down" size="sm" class="w-full">
+                                Sort by: {{ $this->sortLabel }}
+                            </flux:button>
+
+                            <flux:menu>
+                                <flux:menu.radio.group>
+                                    <flux:menu.radio wire:click="sortBy('planned_amount', 'desc')">Amount Desc</flux:menu.radio>
+                                    <flux:menu.radio wire:click="sortBy('planned_amount', 'asc')">Amount Asc</flux:menu.radio>
+                                    <flux:menu.radio wire:click="sortBy('name', 'asc')">A-Z</flux:menu.radio>
+                                    <flux:menu.radio wire:click="sortBy('name', 'desc')">Z-A</flux:menu.radio>
+                                </flux:menu.radio.group>
+                            </flux:menu>
+                        </flux:dropdown>
+
+                        <flux:radio.group variant="segmented" x-model="view" size="sm">
+                            <flux:radio value="grid" icon="squares-2x2" />
+                            <flux:radio value="list" icon="list-bullet" />
+                        </flux:radio.group>
+
+                        <div class="hidden sm:block">
+                           <flux:modal.trigger name="add-expense">
+                                <flux:button icon="plus" variant="primary" size="sm">
+                                    Add
+                                </flux:button>
+                            </flux:modal.trigger>
+                        </div>
+                    </div>
                 </div>
 
-                <div>
-                    <flux:modal.trigger name="add-expense">
-                        <flux:button icon="plus" variant="primary" size="sm">
-                            Add
-                        </flux:button>
-                    </flux:modal.trigger>
-                
-                    @livewire('planned-spending-form')
-                </div>
+                @livewire('planned-spending-form')
             </div>
 
             <div x-cloak x-show="view === 'grid'">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                     @forelse ($expenses as $expense)
-                        <a href="{{ route('planned-expense-view', $expense) }}" wire:navigate
+                        <a
+                            href="{{ route('planned-expense-view', $expense) }}"
+                            wire:key="planned-expense-{{ $expense->id }}"
+                            wire:navigate
                             class="block rounded-lg border border-zinc-200 dark:border-zinc-700 p-4 duration-200 ease-in-out hover:bg-zinc-50/80 dark:hover:bg-zinc-600/50 shadow-xs"
                         >
                             <div class="flex items-center gap-2 mb-3">
@@ -155,7 +185,10 @@
                 <x-slot:content>
                     <div class="divide-y divide-zinc-200 dark:divide-zinc-700">
                         @forelse ($expenses as $expense)
-                            <a href="{{ route('planned-expense-view', $expense) }}" wire:navigate
+                            <a
+                                href="{{ route('planned-expense-view', $expense) }}"
+                                wire:key="planned-expense-{{ $expense->id }}"
+                                wire:navigate
                                 class="flex items-center justify-between p-3 text-sm duration-200 ease-in-out first:rounded-t-[8px] last:rounded-b-[8px] hover:bg-zinc-50/80 dark:hover:bg-zinc-600/50"
                             >
                                 <div class="flex items-center gap-2">

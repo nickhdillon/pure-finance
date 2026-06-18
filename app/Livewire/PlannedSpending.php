@@ -8,11 +8,34 @@ use Livewire\Component;
 use Livewire\Attributes\On;
 use App\Models\Transaction;
 use App\Models\PlannedExpense;
+use Livewire\Attributes\Computed;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 
 class PlannedSpending extends Component
 {
+    public string $sort_by = 'planned_amount';
+
+    public string $sort_direction = 'desc';
+
+    public function sortBy(string $field, string $sort_direction = 'asc'): void
+    {
+        $this->sort_by = $field;
+        $this->sort_direction = $sort_direction;
+    }
+
+    #[Computed]
+    public function sortLabel(): string
+    {
+        return match ("{$this->sort_by}:{$this->sort_direction}") {
+            'planned_amount:desc' => 'Amount Desc',
+            'planned_amount:asc' => 'Amount Asc',
+            'name:asc' => 'A-Z',
+            'name:desc' => 'Z-A',
+            default => 'Amount Desc'
+        };
+    }
+
     #[On('planned-expense-saved')]
     public function render(): View
     {
@@ -59,6 +82,20 @@ class PlannedSpending extends Component
                 ? ($expense->total_spent / $expense->planned_amount) * 100
                 : 0;
         });
+        
+        $expenses = $expenses
+            ->sortBy(
+                fn (PlannedExpense $expense): string|float => match ($this->sort_by) {
+                    'name' => $expense->name,
+                    'planned_amount' => $expense->planned_amount,
+                    'total_spent' => $expense->total_spent,
+                    'percentage_spent' => $expense->percentage_spent,
+                    default => $expense->planned_amount
+                },
+                options: SORT_REGULAR,
+                descending: $this->sort_direction === 'desc',
+            )
+            ->values();
 
         return view('livewire.planned-spending', [
             'expenses' => $expenses,
