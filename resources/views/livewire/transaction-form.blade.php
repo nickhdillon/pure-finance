@@ -16,7 +16,7 @@
                                 <flux:field>
                                     <flux:label>Account</flux:label>
 
-                                    <flux:select variant="listbox" placeholder="Select an account" wire:model.blur='account_id' clearable>
+                                    <flux:select variant="listbox" placeholder="Select an account" wire:model='account_id' clearable>
                                         @foreach ($accounts as $account)
                                             <flux:select.option value="{{ $account->id }}">
                                                 {{ $account->name }}
