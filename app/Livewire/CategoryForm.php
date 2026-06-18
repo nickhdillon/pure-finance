@@ -11,6 +11,7 @@ use Livewire\Attributes\On;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Computed;
 use Illuminate\Contracts\View\View;
+use Illuminate\Validation\Rules\Unique;
 use Illuminate\Database\Eloquent\Collection;
 
 class CategoryForm extends Component
@@ -29,12 +30,18 @@ class CategoryForm extends Component
             'name' => [
                 'required_if:show_category_form,true',
                 'string',
-                'unique:categories,name,NULL,id,user_id,' . auth()->id(),
+                Rule::unique('categories', 'name')
+                    ->where('user_id', auth()->id())
+                    ->when(
+                        $this->parent_id,
+                        fn (Unique $rule): Unique => $rule->where('parent_id', $this->parent_id),
+                        fn (Unique $rule): Unique => $rule->whereNull('parent_id')
+                    )
+                    ->ignore($this->category['id'] ?? null),
             ],
             'parent_id' => [
                 'nullable',
                 'integer',
-                'numeric',
                 Rule::in($this->parentCategories()->pluck('id')->toArray()),
             ],
         ];
