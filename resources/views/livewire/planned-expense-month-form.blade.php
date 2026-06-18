@@ -1,3 +1,5 @@
+@use('App\Enums\PlannedExpenseType', 'PlannedExpenseType')
+
 <div x-data="{ showApplyToFutureMonths: false }">
     <flux:modal name="{{ 'edit-expense' . $expense_month->id }}">
         <form wire:submit='submit' class="space-y-6">
@@ -29,6 +31,14 @@
                 />
 
                 <flux:error name="amount" />
+            </flux:field>
+
+            <flux:field>
+                <flux:radio.group wire:model="type" label="Type">
+                    @foreach (PlannedExpenseType::cases() as $type)
+                        <flux:radio :value="$type->value" :label="$type->label()" />
+                    @endforeach
+                </flux:radio.group>
             </flux:field>
 
             <div x-cloak x-show="showApplyToFutureMonths">
