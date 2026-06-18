@@ -255,7 +255,7 @@ class TransactionForm extends Component
 
         Flux::modals()->close();
 
-        $this->redirectRoute('account-overview', $this->account, navigate: true);
+        $this->redirectRoute('transactions', navigate: true);
     }
 
     public function submit(
@@ -303,11 +303,7 @@ class TransactionForm extends Component
             text: 'Transaction successfully ' . ($this->transaction ? 'updated' : 'created'),
         );
 
-        $this->redirectRoute(
-            name: 'account-overview',
-            parameters: $this->account ?? Account::find($this->account_id),
-            navigate: true
-        );
+        $this->redirectRoute('transactions', navigate: true);
     }
 
     public function render(): View
