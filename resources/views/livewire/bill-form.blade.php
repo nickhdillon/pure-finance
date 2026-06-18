@@ -8,7 +8,7 @@
         $wire.loadBill(Number(bill_id));
     }
 " x-on:set-default-date.window="$wire.date = $event.detail.date">
-    <flux:modal wire:model.self="show_bill_form" name="bill-form" variant="flyout" class="w-[325px]!" x-on:close="$wire.resetForm()">
+    <flux:modal wire:model.self="show_bill_form" name="bill-form" flyout variant="floating" class="w-[325px]!" x-on:close="$wire.resetForm()">
         <div class="space-y-6 relative">
             <flux:heading size="lg">
                 {{ ($bill ? 'Edit' : 'Create') . ' Bill' }}
