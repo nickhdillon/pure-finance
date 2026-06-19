@@ -24,12 +24,18 @@
         </flux:button>
     </div>
 
-    <a href="{{ route('edit-transaction', $transaction) }}" @class([
-        'flex flex-col p-3 py-2.5 text-sm bg-white dark:bg-zinc-900 transform transition-transform duration-300',
-        'border-r-2 !border-r-emerald-500' => $transaction->status === true,
-        'border-r-2 !border-r-amber-500' => $transaction->status === false,
-    ])
-        x-bind:style="contentStyle">
+    <a
+        href="{{ route('edit-transaction', [
+            'transaction' => $transaction,
+            'return_url' => request()->fullUrl()
+        ]) }}"
+        @class([
+            'flex flex-col p-3 py-2.5 text-sm bg-white dark:bg-zinc-900 transform transition-transform duration-300',
+            'border-r-2 !border-r-emerald-500' => $transaction->status === true,
+            'border-r-2 !border-r-amber-500' => $transaction->status === false,
+        ])
+        x-bind:style="contentStyle"
+    >
         <div class="flex items-center justify-between font-medium">
             <p class="text-zinc-700 truncate max-w-[215px] dark:text-zinc-200">
                 {{ $transaction->payee }}
