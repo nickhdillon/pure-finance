@@ -62,6 +62,8 @@ class TransactionForm extends Component
 
     public ?Carbon $recurring_end = null;
 
+    public bool $create_another = false;
+
     protected function rules(): array
     {
         return [
@@ -302,6 +304,34 @@ class TransactionForm extends Component
             variant: 'success',
             text: 'Transaction successfully ' . ($this->transaction ? 'updated' : 'created'),
         );
+
+        if ($this->create_another) {
+            $this->reset([
+                'account_id',
+                'transfer_to',
+                'payee',
+                'type',
+                'amount',
+                'category_id',
+                'date',
+                'tags',
+                'notes',
+                'attachments',
+                'status',
+                'is_recurring',
+                'frequency',
+                'recurring_end',
+                'create_another'
+            ]);
+
+            $this->resetValidation();
+
+            $this->account_id = $this->account?->id;
+
+            $this->date = today('America/Chicago');
+
+            return;
+        }
 
         $this->redirectRoute(
             name: 'account-overview',

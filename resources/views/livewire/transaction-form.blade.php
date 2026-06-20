@@ -184,7 +184,7 @@
                 </x-card>
             </div>
                 
-            <div class="flex justify-between col-start-2">
+            <div class="flex items-center justify-between col-start-2">
                 @if ($transaction)
                     <div>
                         <flux:modal.trigger name="delete-transaction-{{ $transaction->id }}">
@@ -221,6 +221,16 @@
                             </div>
                         </flux:modal>
                     </div>
+                @endif
+
+                @if (!$transaction)
+                    <flux:field variant="inline">
+                        <flux:checkbox wire:model.boolean="create_another" />
+
+                        <flux:label>Create another</flux:label>
+
+                        <flux:error name="create_another" />
+                    </flux:field>
                 @endif
 
                 <div class="space-x-1 ml-auto text-sm text-white">

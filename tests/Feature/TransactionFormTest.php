@@ -196,6 +196,23 @@ it('can transfer from one account to another', function () {
         ->assertRedirect();
 });
 
+it('can create a transaction and create another', function () {
+    livewire(TransactionForm::class)
+        ->set('account_id', auth()->user()->accounts->first()->id)
+        ->set('account', auth()->user()->accounts->first())
+        ->set('payee', 'Test payee')
+        ->set('type', TransactionType::DEPOSIT)
+        ->set('amount', 100)
+        ->set('category_id', auth()->user()->categories->first()->id)
+        ->set('date', now())
+        ->set('notes', '')
+        ->set('status', true)
+        ->set('create_another', true)
+        ->call('submit')
+        ->assertHasNoErrors()
+        ->assertNoRedirect();
+});
+
 test('component can render with transaction', function () {
     livewire(TransactionForm::class, [
         'transaction' => auth()->user()->transactions->first(),
