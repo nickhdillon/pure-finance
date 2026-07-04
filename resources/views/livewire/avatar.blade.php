@@ -38,33 +38,40 @@
         @endif
     </div>
 
-    <template x-cloak x-if="$wire.avatar">
-        <flux:modal wire:model.self='show_crop_avatar_modal' :dismissible="false" :closable="false">
-            <form x-on:submit.prevent='saveCroppedImage' class="space-y-6">
-                <flux:heading size="lg" class="font-semibold -mt-1.5!">
-                    Crop Avatar
-                </flux:heading>
+    <flux:modal wire:model.self='show_crop_avatar_modal' :dismissible="false" :closable="false">
+        <div class="space-y-6">
+            <flux:heading size="lg" class="font-semibold -mt-1.5!">
+                Crop Avatar
+            </flux:heading>
 
-                <div>
-                    <img id="crop-avatar" src="{{ $this->avatarUrl() }}" alt="Avatar" class="w-full max-w-full" />
-                </div>             
+            <div>
+                <img id="crop-avatar" src="{{ $this->avatarUrl() }}" alt="Avatar" class="w-full max-w-full" />
+            </div>             
 
-                <div class="flex gap-2">
-                    <flux:spacer />
+            <div class="flex gap-2">
+                <flux:spacer />
 
-                    <flux:modal.close>
-                        <flux:button  variant="ghost" size="sm">
-                            Cancel
-                        </flux:button>
-                    </flux:modal.close>
-
-                    <flux:button type="submit" wire:loading.attr='disabled' wire:target='save' variant="primary" size="sm">
-                        Save
+                <flux:modal.close>
+                    <flux:button  variant="ghost" size="sm">
+                        Cancel
                     </flux:button>
-                </div>
-            </form>
-        </flux:modal>
-    </template>
+                </flux:modal.close>
+
+                <flux:button
+                    type="button"
+                    x-on:click.prevent='saveCroppedImage'
+                    wire:loading.attr='disabled'
+                    wire:target='save'
+                    variant="primary"
+                    size="sm"
+                >
+                    <span wire:loading.remove>Save</span>
+
+                    <span wire:loading>Saving...</span>
+                </flux:button>
+            </div>
+        </div>
+    </flux:modal>
 
     <flux:error name="avatar" />
 </div>
