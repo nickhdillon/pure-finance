@@ -39,13 +39,23 @@ class PlannedSpending extends Component
     #[On('planned-expense-saved')]
     public function render(): View
     {
-        $expenses = auth()->user()->planned_expenses()->with('currentMonth')->get();
-
         $timezone = 'America/Chicago';
 
         $start_of_month = now()->timezone($timezone)->startOfMonth()->toDateString();
 
         $end_of_month = now()->timezone($timezone)->endOfMonth()->toDateString();
+
+        $expenses = auth()
+            ->user()
+            ->planned_expenses()
+            ->with('currentMonth')
+            ->whereDate('starts_on', '<=', $end_of_month)
+            ->where(function (Builder $query) use ($start_of_month): void {
+                $query
+                    ->whereNull('ends_on')
+                    ->orWhereDate('ends_on', '>=', $start_of_month);
+            })
+            ->get();
 
         $totals = Transaction::query()
             ->selectRaw('

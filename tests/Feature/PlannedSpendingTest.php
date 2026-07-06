@@ -8,6 +8,15 @@ use App\Models\PlannedExpense;
 use App\Livewire\PlannedSpending;
 use function Pest\Livewire\livewire;
 
+function activeExpense(array $attributes = []): PlannedExpense
+{
+    return PlannedExpense::factory()->create([
+        'starts_on' => now()->startOfMonth()->toDateString(),
+        'ends_on' => now()->endOfMonth()->toDateString(),
+        ...$attributes,
+    ]);
+}
+
 beforeEach(function () {
     $user = User::factory()->create();
 
@@ -31,9 +40,9 @@ beforeEach(function () {
 });
 
 it('can sort expenses by amount desc', function () {
-    PlannedExpense::factory()->create(['name' => 'Low', 'monthly_amount' => 50]);
-    PlannedExpense::factory()->create(['name' => 'High', 'monthly_amount' => 200]);
-    PlannedExpense::factory()->create(['name' => 'Mid', 'monthly_amount' => 100]);
+    activeExpense(['name' => 'Low', 'monthly_amount' => 50]);
+    activeExpense(['name' => 'High', 'monthly_amount' => 200]);
+    activeExpense(['name' => 'Mid', 'monthly_amount' => 100]);
 
     livewire(PlannedSpending::class)
         ->call('sortBy', 'planned_amount', 'desc')
@@ -42,9 +51,9 @@ it('can sort expenses by amount desc', function () {
 });
 
 it('can sort expenses by amount asc', function () {
-    PlannedExpense::factory()->create(['name' => 'Low', 'monthly_amount' => 50]);
-    PlannedExpense::factory()->create(['name' => 'High', 'monthly_amount' => 200]);
-    PlannedExpense::factory()->create(['name' => 'Mid', 'monthly_amount' => 100]);
+    activeExpense(['name' => 'Low', 'monthly_amount' => 50]);
+    activeExpense(['name' => 'High', 'monthly_amount' => 200]);
+    activeExpense(['name' => 'Mid', 'monthly_amount' => 100]);
 
     livewire(PlannedSpending::class)
         ->call('sortBy', 'planned_amount', 'asc')
@@ -53,9 +62,9 @@ it('can sort expenses by amount asc', function () {
 });
 
 it('can sort expenses by name A-Z', function () {
-    PlannedExpense::factory()->create(['name' => 'Groceries']);
-    PlannedExpense::factory()->create(['name' => 'Car']);
-    PlannedExpense::factory()->create(['name' => 'Utilities']);
+    activeExpense(['name' => 'Groceries']);
+    activeExpense(['name' => 'Car']);
+    activeExpense(['name' => 'Utilities']);
 
     livewire(PlannedSpending::class)
         ->call('sortBy', 'name', 'asc')
@@ -64,9 +73,9 @@ it('can sort expenses by name A-Z', function () {
 });
 
 it('can sort expenses by name Z-A', function () {
-    PlannedExpense::factory()->create(['name' => 'Groceries']);
-    PlannedExpense::factory()->create(['name' => 'Car']);
-    PlannedExpense::factory()->create(['name' => 'Utilities']);
+    activeExpense(['name' => 'Groceries']);
+    activeExpense(['name' => 'Car']);
+    activeExpense(['name' => 'Utilities']);
 
     livewire(PlannedSpending::class)
         ->call('sortBy', 'name', 'desc')
