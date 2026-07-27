@@ -4,6 +4,8 @@
             <livewire:monthly-spending-overview />
         @endif
 
+        <livewire:net-worth-history />
+
         <livewire:accounts />
 
         <livewire:planned-spending />

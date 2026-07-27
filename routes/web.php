@@ -14,6 +14,7 @@ use App\Livewire\SavingsGoals;
 use App\Livewire\CategoryTable;
 use App\Livewire\AccountOverview;
 use App\Livewire\PlannedSpending;
+use App\Livewire\NetWorthHistory;
 use App\Livewire\SavingsGoalForm;
 use App\Livewire\SavingsGoalView;
 use App\Livewire\TransactionForm;
@@ -26,6 +27,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    Route::get('net-worth', NetWorthHistory::class)->name('net-worth');
 
     Route::get('accounts', Accounts::class)->name('accounts');
 
