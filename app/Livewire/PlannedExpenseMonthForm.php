@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
-use Flux\Flux;
-use Livewire\Component;
-use Livewire\Attributes\On;
-use Illuminate\Validation\Rule;
-use Livewire\Attributes\Validate;
 use App\Enums\PlannedExpenseType;
-use Illuminate\Contracts\View\View;
 use App\Models\PlannedExpenseMonth;
+use Flux\Flux;
+use Illuminate\Contracts\View\View;
+use Illuminate\Validation\Rule;
+use Livewire\Attributes\On;
+use Livewire\Attributes\Validate;
+use Livewire\Component;
 
 class PlannedExpenseMonthForm extends Component
 {
@@ -81,7 +81,7 @@ class PlannedExpenseMonthForm extends Component
             'type' => $this->type,
             'ends_on' => $this->type === PlannedExpenseType::ONE_TIME
                 ? $this->expense_month->month
-                : null
+                : null,
         ]);
 
         $this->expense_month->update(['amount' => $this->amount]);
@@ -98,7 +98,10 @@ class PlannedExpenseMonthForm extends Component
 
     public function delete(): void
     {
-        $this->expense_month->delete();
+        $planned_expense = $this->expense_month->plannedExpense;
+
+        $planned_expense->months()->delete();
+        $planned_expense->delete();
 
         Flux::toast(
             variant: 'success',
