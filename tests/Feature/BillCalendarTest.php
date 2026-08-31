@@ -84,6 +84,8 @@ test('list view groups bills by date and shows their total', function () {
         ->assertSee('Today')
         ->assertSee('$200.00')
         ->assertSeeHtml('flex flex-col gap-2')
+        ->assertSeeHtml('grow min-h-0 overflow-y-auto')
+        ->assertSeeHtml('shrink-0 flex items-center justify-between')
         ->assertSeeHtml('bg-amber-400/25')
         ->assertSeeHtml('bg-emerald-400/25')
         ->assertHasNoErrors();

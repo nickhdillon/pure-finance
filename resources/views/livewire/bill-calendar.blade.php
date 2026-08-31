@@ -150,7 +150,7 @@
             </x-slot:content>
         </x-card>
     @else
-        <x-card>
+        <x-card dynamic-height>
             <x-slot:content>
                 <div class="p-3 gap-2.5 flex items-center justify-between dark:bg-zinc-900 border-b border-zinc-200 dark:border-white/10 rounded-t-[8px]">
                     <flux:heading class="text-xl" x-text="monthLabel"></flux:heading>
@@ -171,7 +171,7 @@
                     </flux:button.group>
                 </div>
 
-                <div class="divide-y divide-zinc-200 dark:divide-white/10">
+                <div class="grow min-h-0 overflow-y-auto divide-y divide-zinc-200 dark:divide-white/10">
                     @foreach ($bill_groups as $date => $group)
                         <section
                             wire:key="bill-date-{{ $date }}"
@@ -212,11 +212,11 @@
                     >
                         No bills this month
                     </p>
+                </div>
 
-                    <div class="flex items-center justify-between gap-4 p-3 px-4 text-sm font-medium">
-                        <span>Total</span>
-                        <span x-cloak x-text="formatAmount(currentMonthTotal)">${{ Number::format($bill_total, 2) }}</span>
-                    </div>
+                <div class="shrink-0 flex items-center justify-between gap-4 border-t border-zinc-200 p-3 px-4 text-sm font-medium dark:border-white/10">
+                    <span>Total</span>
+                    <span x-cloak x-text="formatAmount(currentMonthTotal)">${{ Number::format($bill_total, 2) }}</span>
                 </div>
             </x-slot:content>
         </x-card>
