@@ -2,14 +2,16 @@
 
 declare(strict_types=1);
 
-use App\Models\Bill;
-use App\Models\User;
-use App\Models\Account;
-use App\Models\Category;
-use App\Livewire\BillForm;
-use App\Enums\TransactionType;
 use App\Enums\RecurringFrequency;
+use App\Enums\TransactionType;
+use App\Livewire\BillForm;
+use App\Models\Account;
+use App\Models\Bill;
+use App\Models\Category;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\UploadedFile;
+
 use function Pest\Livewire\livewire;
 
 beforeEach(function () {
@@ -60,6 +62,91 @@ it('can create a bill', function () {
         ->assertRedirectToRoute('bill-calendar');
 });
 
+it('creates monthly bills on the last day of each month when starting at month end', function () {
+    Carbon::setTestNow(Carbon::parse('2026-08-01 12:00:00', 'America/Chicago'));
+
+    $user = User::first();
+
+    livewire(BillForm::class)
+        ->set('account_id', $user->accounts()->first()->id)
+        ->set('name', 'Month End Bill')
+        ->set('type', TransactionType::DEBIT)
+        ->set('category_id', $user->categories()->first()->id)
+        ->set('amount', 100)
+        ->set('date', '2026-08-31')
+        ->set('frequency', RecurringFrequency::MONTHLY)
+        ->call('submit')
+        ->assertHasNoErrors();
+
+    $bill = Bill::where('name', 'Month End Bill')->whereNull('parent_id')->firstOrFail();
+
+    expect($bill->children()->orderBy('date')->pluck('date')->map->toDateString()->all())
+        ->toBe([
+            '2026-09-30',
+            '2026-10-31',
+            '2026-11-30',
+            '2026-12-31',
+        ]);
+
+    Carbon::setTestNow();
+});
+
+it('keeps calendar-based recurring bills at month end', function (
+    RecurringFrequency $frequency,
+    string $start_date,
+    string $expected_date,
+) {
+    Carbon::setTestNow(Carbon::parse('2026-01-01 12:00:00', 'America/Chicago'));
+
+    $user = User::first();
+
+    livewire(BillForm::class)
+        ->set('account_id', $user->accounts()->first()->id)
+        ->set('name', 'Calendar Month End Bill')
+        ->set('type', TransactionType::DEBIT)
+        ->set('category_id', $user->categories()->first()->id)
+        ->set('amount', 100)
+        ->set('date', $start_date)
+        ->set('frequency', $frequency)
+        ->call('submit')
+        ->assertHasNoErrors();
+
+    $bill = Bill::where('name', 'Calendar Month End Bill')->whereNull('parent_id')->firstOrFail();
+
+    expect($bill->children()->orderBy('date')->firstOrFail()->date->toDateString())
+        ->toBe($expected_date);
+
+    Carbon::setTestNow();
+})->with([
+    'quarterly' => [RecurringFrequency::QUARTERLY, '2026-01-31', '2026-04-30'],
+    'semi-annually' => [RecurringFrequency::SEMI_ANNUALLY, '2026-01-31', '2026-07-31'],
+    'yearly from leap day' => [RecurringFrequency::YEARLY, '2024-02-29', '2025-02-28'],
+]);
+
+it('keeps bi-weekly bills on an exact two-week interval', function () {
+    Carbon::setTestNow(Carbon::parse('2026-08-01 12:00:00', 'America/Chicago'));
+
+    $user = User::first();
+
+    livewire(BillForm::class)
+        ->set('account_id', $user->accounts()->first()->id)
+        ->set('name', 'Bi-weekly Bill')
+        ->set('type', TransactionType::DEBIT)
+        ->set('category_id', $user->categories()->first()->id)
+        ->set('amount', 100)
+        ->set('date', '2026-08-31')
+        ->set('frequency', RecurringFrequency::BI_WEEKLY)
+        ->call('submit')
+        ->assertHasNoErrors();
+
+    $bill = Bill::where('name', 'Bi-weekly Bill')->whereNull('parent_id')->firstOrFail();
+
+    expect($bill->children()->orderBy('date')->firstOrFail()->date->toDateString())
+        ->toBe('2026-09-14');
+
+    Carbon::setTestNow();
+});
+
 it('can edit a bill', function () {
     livewire(BillForm::class)
         ->call('loadBill', auth()->user()->bills->first()->id)
@@ -107,7 +194,7 @@ it('can create a bill and update all children', function () {
 
 it('can set the category on event', function () {
     $category = auth()->user()->categories()->create([
-        'name' => 'Test'
+        'name' => 'Test',
     ]);
 
     livewire(BillForm::class)
