@@ -171,7 +171,7 @@
                     </flux:button.group>
                 </div>
 
-                <div class="grow min-h-0 overflow-y-auto divide-y divide-zinc-200 dark:divide-white/10">
+                <div class="grow min-h-0 overflow-y-auto divide-y divide-zinc-200 dark:divide-white/10 last:divide-y-0">
                     @foreach ($bill_groups as $date => $group)
                         <section
                             wire:key="bill-date-{{ $date }}"
