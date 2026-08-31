@@ -171,11 +171,12 @@
                     </flux:button.group>
                 </div>
 
-                <div class="grow min-h-0 overflow-y-auto divide-y divide-zinc-200 dark:divide-white/10 last:divide-y-0">
+                <div class="grow min-h-0 overflow-y-auto">
                     @foreach ($bill_groups as $date => $group)
                         <section
                             wire:key="bill-date-{{ $date }}"
                             x-show="current && '{{ $date }}'.startsWith(formatDate(current).substring(0, 7))"
+                            x-bind:class="{ 'border-b border-zinc-200 dark:border-white/10': currentMonthBills.at(-1)?.date !== '{{ $date }}' }"
                             class="pt-2 px-3 pb-3 sm:pt-3 sm:px-4 sm:pb-4"
                         >
                             <flux:heading size="sm" class="mb-2">
