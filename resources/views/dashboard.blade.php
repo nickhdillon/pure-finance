@@ -6,13 +6,13 @@
 
         <livewire:accounts />
 
+        <livewire:transaction-table defer />
+
         <livewire:planned-spending />
 
         <livewire:savings-goals />
 
         <livewire:upcoming-bills />
-
-        <livewire:transaction-table defer />
 
         <livewire:net-worth-history />
     </div>

@@ -29,6 +29,11 @@
                 Accounts
             </flux:sidebar.item>
 
+            <flux:sidebar.item icon="scroll-text" :href="route('transactions')"
+                :current="request()->routeIs('transactions')" wire:navigate>
+                Transactions
+            </flux:sidebar.item>
+
             <flux:sidebar.item icon="currency-dollar" :href="route('planned-spending')"
                 :current="request()->routeIs('planned-spending')" wire:navigate>
                 Planned Spending
@@ -42,11 +47,6 @@
             <flux:sidebar.item icon="calendar-days" :href="route('bill-calendar')"
                 :current="request()->routeIs('bill-calendar')" wire:navigate>
                 Bill Calendar
-            </flux:sidebar.item>
-
-            <flux:sidebar.item icon="scroll-text" :href="route('transactions')"
-                :current="request()->routeIs('transactions')" wire:navigate>
-                Transactions
             </flux:sidebar.item>
 
             <flux:sidebar.item icon="chart-no-axes-combined" :href="route('net-worth')"
