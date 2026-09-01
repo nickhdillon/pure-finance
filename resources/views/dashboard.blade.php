@@ -4,8 +4,6 @@
             <livewire:monthly-spending-overview />
         @endif
 
-        <livewire:net-worth-history />
-
         <livewire:accounts />
 
         <livewire:planned-spending />
@@ -14,6 +12,8 @@
 
         <livewire:upcoming-bills />
 
-        <livewire:transaction-table lazy />
+        <livewire:transaction-table defer />
+
+        <livewire:net-worth-history />
     </div>
 </x-layouts.app>

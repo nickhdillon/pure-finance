@@ -24,11 +24,6 @@
                 Dashboard
             </flux:sidebar.item>
 
-            <flux:sidebar.item icon="chart-no-axes-combined" :href="route('net-worth')"
-                :current="request()->routeIs('net-worth')" wire:navigate>
-                Net Worth
-            </flux:sidebar.item>
-
             <flux:sidebar.item icon="user" :href="route('accounts')"
                 :current="request()->routeIs('accounts')" wire:navigate>
                 Accounts
@@ -52,6 +47,11 @@
             <flux:sidebar.item icon="scroll-text" :href="route('transactions')"
                 :current="request()->routeIs('transactions')" wire:navigate>
                 Transactions
+            </flux:sidebar.item>
+
+            <flux:sidebar.item icon="chart-no-axes-combined" :href="route('net-worth')"
+                :current="request()->routeIs('net-worth')" wire:navigate>
+                Net Worth
             </flux:sidebar.item>
 
             <flux:sidebar.item icon="chart-column" :href="route('reports')"
