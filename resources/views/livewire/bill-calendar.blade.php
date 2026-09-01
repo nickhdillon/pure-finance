@@ -27,6 +27,69 @@
         </flux:radio.group>
     </div>
 
+    <section aria-label="Monthly bill overview" class="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
+        <flux:card class="p-3 space-y-0.25">
+            <p class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Bills</p>
+
+            <p
+                class="text-lg font-semibold text-zinc-900 dark:text-white"
+                x-text="currentMonthBillCount"
+            >
+            </p>
+
+            <p
+                class="text-xs text-zinc-500 dark:text-zinc-400"
+                x-text="currentMonthBillCount === 1 ? Scheduled bill' : 'Scheduled bills'"
+            >
+                Scheduled bills
+            </p>
+        </flux:card>
+
+        <flux:card class="p-3 space-y-0.25">
+            <p class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Monthly total</p>
+
+            <p
+                class="text-lg font-semibold text-zinc-900 dark:text-white"
+                x-text="formatAmount(currentMonthTotal)"
+            >
+            </p>
+
+            <p class="text-xs text-zinc-500 dark:text-zinc-400">Scheduled</p>
+        </flux:card>
+
+        <flux:card class="border-emerald-200! bg-emerald-50/50! p-3 dark:border-emerald-400/20! dark:bg-emerald-400/10! space-y-0.25">
+            <p class="text-xs font-medium text-emerald-700 dark:text-emerald-300">Paid</p>
+
+            <p
+                class="text-lg font-semibold text-emerald-700 dark:text-emerald-200"
+                x-text="formatAmount(currentMonthPaidTotal)"
+            >
+            </p>
+
+            <p
+                class="text-xs text-emerald-700/75 dark:text-emerald-300/75"
+                x-text="billCountLabel(currentMonthPaidCount)"
+            >
+            </p>
+        </flux:card>
+
+        <flux:card class="border-amber-200! bg-amber-50/50! p-3 dark:border-amber-400/20! dark:bg-amber-400/10! space-y-0.25">
+            <p class="text-xs font-medium text-amber-700 dark:text-amber-300">Unpaid</p>
+
+            <p
+                class="text-lg font-semibold text-amber-700 dark:text-amber-200"
+                x-text="formatAmount(currentMonthUnpaidTotal)"
+            >
+            </p>
+
+            <p
+                class="text-xs text-amber-700/75 dark:text-amber-300/75"
+                x-text="billCountLabel(currentMonthUnpaidCount)"
+            >
+            </p>
+        </flux:card>
+    </section>
+
     @if ($view === 'calendar')
         <x-card dynamic-height>
             <x-slot:content>
@@ -368,6 +431,34 @@
 
                 get currentMonthTotal() {
                     return this.currentMonthBills.reduce((total, bill) => total + Number(bill.amount), 0);
+                },
+
+                get currentMonthBillCount() {
+                    return this.currentMonthBills.length;
+                },
+
+                get currentMonthPaidBills() {
+                    return this.currentMonthBills.filter(bill => bill.paid);
+                },
+
+                get currentMonthPaidCount() {
+                    return this.currentMonthPaidBills.length;
+                },
+
+                get currentMonthPaidTotal() {
+                    return this.currentMonthPaidBills.reduce((total, bill) => total + Number(bill.amount), 0);
+                },
+
+                get currentMonthUnpaidCount() {
+                    return this.currentMonthBillCount - this.currentMonthPaidCount;
+                },
+
+                get currentMonthUnpaidTotal() {
+                    return this.currentMonthTotal - this.currentMonthPaidTotal;
+                },
+
+                billCountLabel(count) {
+                    return `${count} ${count === 1 ? 'bill' : 'bills'}`;
                 },
 
                 formatAmount(amount) {
