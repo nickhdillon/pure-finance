@@ -251,8 +251,8 @@
                                     x-cloak
                                     x-show="'{{ $date }}' === formatDate(today)"
                                     size="sm"
-                                    color="emerald"
-                                    variant="pill"
+                                    variant="solid"
+                                    class="py-0.5! px-1.75! rounded-[5px]! bg-zinc-800 dark:bg-white! dark:text-zinc-800!"
                                 >
                                     Today
                                 </flux:badge>
