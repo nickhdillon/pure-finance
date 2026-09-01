@@ -39,7 +39,7 @@
 
             <p
                 class="text-xs text-zinc-500 dark:text-zinc-400"
-                x-text="currentMonthBillCount === 1 ? Scheduled bill' : 'Scheduled bills'"
+                x-text="currentMonthBillCount === 1 ? 'Scheduled bill' : 'Scheduled bills'"
             >
                 Scheduled bills
             </p>
@@ -127,7 +127,7 @@
                     <div class="grid grid-cols-7 gap-y-px sm:gap-x-px sm:bg-zinc-200 sm:dark:bg-zinc-600">
                         <template x-for="(day, index) in days" :key="index">
                             <div class="p-1 max-h-[56px] sm:min-h-[140px] sm:overflow-scroll text-sm text-left flex flex-col"
-                                x-on:click="!day.blank && (selectedDay = day); changeDefaultDate(day.date)"
+                                x-on:click="!day.blank && selectDay(day)"
                                 :class="{
                                     'bg-white dark:bg-zinc-900': !day.blank,
                                     'text-zinc-400 dark:text-zinc-500 bg-striped dark:bg-striped': day.blank,
@@ -138,7 +138,7 @@
                                         :class="{
                                             'bg-emerald-500 text-white': selectedDay && selectedDay.date === day.date && day.isToday,
                                             'text-emerald-500 sm:bg-emerald-500 sm:text-white': day.isToday && (!selectedDay || selectedDay.date !== day.date),
-                                            'bg-zinc-700 dark:bg-zinc-100 text-white dark:text-zinc-800! sm:bg-transparent! sm:dark:text-white! sm:text-zinc-900': selectedDay && selectedDay.date === day.date && !day.isToday
+                                            'bg-zinc-700 text-white dark:bg-zinc-100 dark:text-zinc-800! sm:bg-emerald-500! sm:text-white! sm:dark:bg-emerald-500! sm:dark:text-white!': selectedDay && selectedDay.date === day.date && !day.isToday
                                         }"
                                         x-text="day.day">
                                     </div>
@@ -242,9 +242,21 @@
                             x-bind:class="{ 'border-b border-zinc-200 dark:border-white/10': currentMonthBills.at(-1)?.date !== '{{ $date }}' }"
                             class="pt-2 px-3 pb-3 sm:pt-3 sm:px-4 sm:pb-4"
                         >
-                            <flux:heading size="sm" class="mb-2">
-                                {{ Carbon::parse($date)->format('l, F j, Y') }}
-                            </flux:heading>
+                            <div class="mb-2 flex items-center gap-2">
+                                <flux:heading size="sm">
+                                    {{ Carbon::parse($date)->format('l, F j, Y') }}
+                                </flux:heading>
+
+                                <flux:badge
+                                    x-cloak
+                                    x-show="'{{ $date }}' === formatDate(today)"
+                                    size="sm"
+                                    color="emerald"
+                                    variant="pill"
+                                >
+                                    Today
+                                </flux:badge>
+                            </div>
 
                             <div class="flex flex-col gap-2">
                                 @foreach ($group as $bill)
@@ -296,12 +308,15 @@
                 today: new Date(),
                 current: null,
                 selectedDay: null,
+                preferredDay: null,
                 dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
                 days: [],
                 monthLabel: '',
                 bills: @js($bills),
 
                 init() {
+                    this.preferredDay = this.today.getDate();
+
                     if (storedMonth = sessionStorage.getItem('calendarMonth')) {
                         const [year, month] = storedMonth.split('-').map(Number);
 
@@ -316,6 +331,7 @@
                 },
 
                 goToToday() {
+                    this.preferredDay = this.today.getDate();
                     this.current = this.getMonthStart(this.today);
                     this.refresh();
                 },
@@ -331,7 +347,7 @@
                     this.current = this.getMonthStart(new Date(this.current.getFullYear(), this.current.getMonth() + offset, 1));
                     this.refresh();
 
-                    this.$dispatch('set-default-date', { date: this.formatDate(this.current) });
+                    this.changeDefaultDate(this.selectedDay.date);
                 },
 
                 refresh() {                    
@@ -342,18 +358,16 @@
 
                     this.days = this.generateDays();
 
-                    // Auto-select today if it's in this month
-                    const todayStr = this.formatDate(this.today);
+                    const lastDay = new Date(
+                        this.current.getFullYear(),
+                        this.current.getMonth() + 1,
+                        0,
+                    ).getDate();
+                    const selectedDayNumber = Math.min(this.preferredDay, lastDay);
 
-                    const todayInView = this.days.find(day =>
-                        !day.blank && day.date === todayStr
-                    );
-
-                    if (todayInView) {
-                        this.selectedDay = todayInView;
-                    } else {
-                        this.selectedDay = null; // In case today is not visible
-                    }
+                    this.selectedDay = this.days.find(day =>
+                        !day.blank && day.day === selectedDayNumber
+                    ) ?? null;
                 },
 
                 getMonthStart(date) {
@@ -417,6 +431,16 @@
 
                 changeDefaultDate(date) {
                     this.$dispatch('set-default-date', { date });
+                },
+
+                selectDay(day) {
+                    if (window.matchMedia('(min-width: 640px)').matches) {
+                        return;
+                    }
+
+                    this.selectedDay = day;
+                    this.preferredDay = day.day;
+                    this.changeDefaultDate(day.date);
                 },
 
                 get currentMonthBills() {
