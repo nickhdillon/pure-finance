@@ -271,7 +271,7 @@ class BillForm extends Component
 
         Flux::modal('bill-form')->close();
 
-        $this->redirectRoute('bill-calendar', navigate: true);
+        $this->redirectRoute('bills', navigate: true);
     }
 
     public function submit(CreateRecurringBills $recurring_action, ?bool $all = null): void
@@ -318,7 +318,7 @@ class BillForm extends Component
 
         Flux::modal('bill-form')->close();
 
-        $this->redirectRoute('bill-calendar', navigate: true);
+        $this->redirectRoute('bills', navigate: true);
     }
 
     public function delete(?bool $all = null): void
@@ -338,7 +338,7 @@ class BillForm extends Component
             text: 'Successfully deleted bill',
         );
 
-        $this->redirectRoute('bill-calendar', navigate: true);
+        $this->redirectRoute('bills', navigate: true);
     }
 
     public function render(): View

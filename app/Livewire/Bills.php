@@ -10,7 +10,7 @@ use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 
-class BillCalendar extends Component
+class Bills extends Component
 {
     #[Url(except: 'calendar')]
     public string $view = 'calendar';
@@ -23,7 +23,7 @@ class BillCalendar extends Component
 
         $bills = auth()->user()->bills()->orderBy('date')->orderBy('name')->get();
 
-        return view('livewire.bill-calendar', [
+        return view('livewire.bills', [
             'bills' => $bills->map(function (Bill $bill): array {
                 return [
                     ...$bill->toArray(),

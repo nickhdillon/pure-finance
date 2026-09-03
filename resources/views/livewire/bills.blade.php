@@ -3,7 +3,7 @@
 <div x-data="calendar" x-on:bill-submitted.window="setCurrentMonth" class="space-y-4 w-full">
     <div class="flex items-center justify-between">
         <flux:heading size="xl">
-            Bill Calendar
+            Bills
         </flux:heading>
 
         <flux:modal.trigger x-on:click="setCurrentMonth(); $flux.modal('bill-form').show()">

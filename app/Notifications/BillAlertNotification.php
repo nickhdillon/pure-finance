@@ -32,7 +32,7 @@ class BillAlertNotification extends Notification implements ShouldQueue
             BillAlert::ONE_WEEK_BEFORE => 'in one week',
         };
 
-        $route = route('bill-calendar', $this->bill);
+        $route = route('bills', $this->bill);
 
         return (new VonageMessage)
             ->content('Pure Finance - Bill Reminder: Your ' . trim($this->bill->name) . " bill is due {$message}. {$route}. See details.");

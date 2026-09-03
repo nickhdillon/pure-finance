@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Livewire\BillCalendar;
+use App\Livewire\Bills;
 use App\Models\Account;
 use App\Models\Bill;
 use App\Models\Category;
@@ -42,19 +42,19 @@ beforeEach(function () {
 });
 
 test('component can render', function () {
-    livewire(BillCalendar::class)
+    livewire(Bills::class)
         ->assertHasNoErrors();
 });
 
 test('calendar is the default view and list view is stored in the url', function () {
-    livewire(BillCalendar::class)
+    livewire(Bills::class)
         ->assertSet('view', 'calendar')
         ->set('view', 'list')
         ->assertSet('view', 'list')
         ->assertHasNoErrors();
 
     Livewire::withQueryParams(['view' => 'list'])
-        ->test(BillCalendar::class)
+        ->test(Bills::class)
         ->assertSet('view', 'list');
 });
 
@@ -77,7 +77,7 @@ test('list view groups bills by date and shows their total', function () {
         'paid' => true,
     ]);
 
-    livewire(BillCalendar::class, ['view' => 'list'])
+    livewire(Bills::class, ['view' => 'list'])
         ->assertSee('Thursday, September 10, 2026')
         ->assertSee('Internet')
         ->assertSee('Electricity')

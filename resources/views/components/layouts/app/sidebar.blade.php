@@ -44,9 +44,9 @@
                 Savings Goals
             </flux:sidebar.item>
 
-            <flux:sidebar.item icon="calendar-days" :href="route('bill-calendar')"
-                :current="request()->routeIs('bill-calendar')" wire:navigate>
-                Bill Calendar
+            <flux:sidebar.item icon="calendar-days" :href="route('bills')"
+                :current="request()->routeIs('bills')" wire:navigate>
+                Bills
             </flux:sidebar.item>
 
             <flux:sidebar.item icon="chart-no-axes-combined" :href="route('net-worth')"

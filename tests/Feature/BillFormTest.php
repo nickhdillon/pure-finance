@@ -59,7 +59,7 @@ it('can create a bill', function () {
         ->set('frequency', RecurringFrequency::MONTHLY)
         ->call('submit')
         ->assertHasNoErrors()
-        ->assertRedirectToRoute('bill-calendar');
+        ->assertRedirectToRoute('bills');
 });
 
 it('creates monthly bills on the last day of each month when starting at month end', function () {
@@ -153,7 +153,7 @@ it('can edit a bill', function () {
         ->set('name', 'Test Bill Updated')
         ->call('submit')
         ->assertHasNoErrors()
-        ->assertRedirectToRoute('bill-calendar');
+        ->assertRedirectToRoute('bills');
 });
 
 it('can see validation error when only second alert is set', function () {
@@ -180,7 +180,7 @@ it('can create a bill and update all children', function () {
         ->set('frequency', RecurringFrequency::MONTHLY)
         ->call('submit')
         ->assertHasNoErrors()
-        ->assertRedirectToRoute('bill-calendar');
+        ->assertRedirectToRoute('bills');
 
     $bill = Bill::where('name', 'New Test Bill')->first();
 
@@ -189,7 +189,7 @@ it('can create a bill and update all children', function () {
         ->set('name', 'New Test Bill Updated')
         ->call('submit', all: true)
         ->assertHasNoErrors()
-        ->assertRedirectToRoute('bill-calendar');
+        ->assertRedirectToRoute('bills');
 });
 
 it('can set the category on event', function () {
@@ -238,7 +238,7 @@ it('can mark a bill as paid', function () {
         ->call('loadBill', auth()->user()->bills->first()->id)
         ->call('changePaidStatus', create_related_transaction: true)
         ->assertHasNoErrors()
-        ->assertRedirectToRoute('bill-calendar');
+        ->assertRedirectToRoute('bills');
 });
 
 it('can mark a bill as unpaid', function () {
@@ -247,7 +247,7 @@ it('can mark a bill as unpaid', function () {
         ->set('paid', true)
         ->call('changePaidStatus')
         ->assertHasNoErrors()
-        ->assertRedirectToRoute('bill-calendar');
+        ->assertRedirectToRoute('bills');
 });
 
 it('can delete a bill', function () {
@@ -255,7 +255,7 @@ it('can delete a bill', function () {
         ->set('bill', auth()->user()->bills->first())
         ->call('delete')
         ->assertHasNoErrors()
-        ->assertRedirectToRoute('bill-calendar');
+        ->assertRedirectToRoute('bills');
 });
 
 it('can delete a bill and its children', function () {
@@ -263,7 +263,7 @@ it('can delete a bill and its children', function () {
         ->set('bill', auth()->user()->bills->first())
         ->call('delete', all: true)
         ->assertHasNoErrors()
-        ->assertRedirectToRoute('bill-calendar');
+        ->assertRedirectToRoute('bills');
 });
 
 test('component can render', function () {
