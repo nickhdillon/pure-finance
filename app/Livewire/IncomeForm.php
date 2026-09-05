@@ -63,8 +63,11 @@ class IncomeForm extends Component
     public function resetForm(): void
     {
         $this->reset(['income', 'name', 'amount', 'notes', 'received']);
+
         $this->type = IncomeType::EXPECTED;
+
         $this->date = today('America/Chicago')->toDateString();
+        
         $this->resetValidation();
     }
 
@@ -85,7 +88,9 @@ class IncomeForm extends Component
         );
 
         $this->resetForm();
+
         Flux::modals()->close();
+
         $this->dispatch('income-saved');
     }
 

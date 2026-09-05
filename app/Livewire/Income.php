@@ -145,7 +145,6 @@ class Income extends Component
         $incomes = auth()
             ->user()
             ->incomes()
-            ->with('transaction')
             ->latest('date')
             ->latest('id')
             ->get();

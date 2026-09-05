@@ -9,16 +9,25 @@
         </x-slot:button>
     
         <x-slot:content>
+            @php
+                $incomeCards = $this->incomeCards;
+                $showGroups = count($incomeCards) > 1;
+            @endphp
+
             <div class="divide-y divide-zinc-200 dark:divide-zinc-700">
-                @forelse ($this->incomeCards as $income_group)
+                @forelse ($incomeCards as $income_group)
                     <div class="divide-y divide-zinc-200 dark:divide-zinc-700">
-                        <p @class([
-                            'text-emerald-600 dark:text-emerald-400' => $income_group['name'] === 'Expected',
-                            'text-amber-500 dark:text-amber-500' => $income_group['name'] === 'Unplanned',
-                            'text-sm px-3 py-2.5 font-semibold uppercase'
-                        ])>
-                            {{ $income_group['name'] }}
-                        </p>
+                        @if ($showGroups)
+                            <p
+                                @class([
+                                    'text-emerald-600 dark:text-emerald-400' => $income_group['name'] === 'Expected',
+                                    'text-amber-500 dark:text-amber-500' => $income_group['name'] === 'Unplanned',
+                                    'text-sm px-3 py-2.5 font-semibold uppercase'
+                                ])
+                            >
+                                {{ $income_group['name'] }}
+                            </p>
+                        @endif
 
                         <div class="divide-y divide-zinc-200 dark:divide-zinc-700">
                             @forelse ($income_group['incomes'] as $income)
@@ -88,13 +97,13 @@
                             @endforelse
                         </div>
 
-                        <div class="flex items-center justify-between py-2.5 px-3 gap-2 text-sm w-full bg-zinc-100/50 dark:bg-zinc-800">
-                            <p class="font-medium">
-                                Total {{ $income_group['name'] }}:
-                            </p>
+                        @if ($showGroups)
+                            <div class="flex w-full items-center justify-between gap-2 bg-zinc-100/50 px-3 py-2.5 text-sm dark:bg-zinc-800">
+                                <p class="font-medium">Total {{ $income_group['name'] }}: </p>
 
-                            <p class="font-medium">${{ Number::format($income_group['total'], 2) }}</p>
-                        </div>
+                                <p class="font-medium"> ${{ Number::format($income_group['total'], 2) }}</p>
+                            </div>
+                        @endif
                     </div>
                 @empty
                     <div
