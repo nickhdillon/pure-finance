@@ -2,26 +2,27 @@
 
 declare(strict_types=1);
 
-use App\Livewire\Bills;
-use Livewire\Volt\Volt;
-use App\Livewire\Reports;
-use App\Livewire\Accounts;
-use App\Livewire\TagTable;
-use App\Models\Transaction;
-use App\Livewire\ReportForm;
-use App\Livewire\ReportView;
-use App\Livewire\SavingsGoals;
-use App\Livewire\CategoryTable;
+use App\Http\Controllers\PrintReportController;
 use App\Livewire\AccountOverview;
-use App\Livewire\PlannedSpending;
+use App\Livewire\Accounts;
+use App\Livewire\Bills;
+use App\Livewire\CategoryTable;
+use App\Livewire\Income;
 use App\Livewire\NetWorthHistory;
+use App\Livewire\PlannedExpenseView;
+use App\Livewire\PlannedSpending;
+use App\Livewire\ReportForm;
+use App\Livewire\Reports;
+use App\Livewire\ReportView;
 use App\Livewire\SavingsGoalForm;
+use App\Livewire\SavingsGoals;
 use App\Livewire\SavingsGoalView;
+use App\Livewire\TagTable;
 use App\Livewire\TransactionForm;
 use App\Livewire\TransactionTable;
-use App\Livewire\PlannedExpenseView;
+use App\Models\Transaction;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PrintReportController;
+use Livewire\Volt\Volt;
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/', function () {
@@ -41,6 +42,8 @@ Route::middleware(['auth'])->group(function () {
         ->name('account.transaction-form');
 
     Route::get('planned-spending', PlannedSpending::class)->name('planned-spending');
+
+    Route::get('income', Income::class)->name('income');
 
     Route::get('planned-expense/{expense:slug}', PlannedExpenseView::class)
         ->name('planned-expense-view');
@@ -99,4 +102,4 @@ Route::view('privacy-policy', 'legal.privacy-policy')->name('privacy-policy');
 
 Route::view('terms-and-conditions', 'legal.terms-and-conditions')->name('terms-and-conditions');
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

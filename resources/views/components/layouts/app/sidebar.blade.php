@@ -19,53 +19,102 @@
         </flux:sidebar.header>
 
         <flux:sidebar.nav>
-            <flux:sidebar.item icon="layout-dashboard" :href="route('dashboard')"
-                :current="request()->routeIs('dashboard')" wire:navigate>
+            <flux:sidebar.item
+                icon="layout-dashboard"
+                :href="route('dashboard')"
+                :current="request()->routeIs('dashboard')"
+                wire:navigate
+            >
                 Dashboard
             </flux:sidebar.item>
 
-            <flux:sidebar.item icon="user" :href="route('accounts')"
-                :current="request()->routeIs('accounts')" wire:navigate>
+            <flux:sidebar.item
+                icon="user"
+                :href="route('accounts')"
+                :current="request()->routeIs('accounts')"
+                wire:navigate
+            >
                 Accounts
             </flux:sidebar.item>
 
-            <flux:sidebar.item icon="scroll-text" :href="route('transactions')"
-                :current="request()->routeIs('transactions')" wire:navigate>
+            <flux:sidebar.item
+                icon="scroll-text"
+                :href="route('transactions')"
+                :current="request()->routeIs('transactions')"
+                wire:navigate
+            >
                 Transactions
             </flux:sidebar.item>
 
-            <flux:sidebar.item icon="currency-dollar" :href="route('planned-spending')"
-                :current="request()->routeIs('planned-spending')" wire:navigate>
-                Planned Spending
+            <flux:sidebar.item
+                icon="banknotes"
+                :href="route('income')"
+                :current="request()->routeIs('income')"
+                wire:navigate
+            >
+                Income
             </flux:sidebar.item>
 
-            <flux:sidebar.item icon="target" :href="route('savings-goals')"
-                :current="request()->routeIs('savings-goals')" wire:navigate>
-                Savings Goals
-            </flux:sidebar.item>
-
-            <flux:sidebar.item icon="calendar-days" :href="route('bills')"
-                :current="request()->routeIs('bills')" wire:navigate>
+            <flux:sidebar.item
+                icon="calendar-days"
+                :href="route('bills')"
+                :current="request()->routeIs('bills')"
+                wire:navigate
+            >
                 Bills
             </flux:sidebar.item>
 
-            <flux:sidebar.item icon="chart-no-axes-combined" :href="route('net-worth')"
-                :current="request()->routeIs('net-worth')" wire:navigate>
+            <flux:sidebar.item
+                icon="currency-dollar"
+                :href="route('planned-spending')"
+                :current="request()->routeIs('planned-spending')"
+                wire:navigate
+            >
+                Planned Spending
+            </flux:sidebar.item>
+
+            <flux:sidebar.item
+                icon="target"
+                :href="route('savings-goals')"
+                :current="request()->routeIs('savings-goals')"
+                wire:navigate
+            >
+                Savings Goals
+            </flux:sidebar.item>
+
+            <flux:sidebar.item
+                icon="chart-no-axes-combined"
+                :href="route('net-worth')"
+                :current="request()->routeIs('net-worth')"
+                wire:navigate
+            >
                 Net Worth
             </flux:sidebar.item>
 
-            <flux:sidebar.item icon="chart-column" :href="route('reports')"
-                :current="request()->routeIs('reports')" wire:navigate>
+            <flux:sidebar.item
+                icon="chart-column"
+                :href="route('reports')"
+                :current="request()->routeIs('reports')"
+                wire:navigate
+            >
                 Reports
             </flux:sidebar.item>
 
-            <flux:sidebar.item icon="queue-list" :href="route('categories')"
-                :current="request()->routeIs('categories')" wire:navigate>
+            <flux:sidebar.item
+                icon="queue-list"
+                :href="route('categories')"
+                :current="request()->routeIs('categories')"
+                wire:navigate
+            >
                 Categories
             </flux:sidebar.item>
 
-            <flux:sidebar.item icon="tags" :href="route('tags')"
-                :current="request()->routeIs('tags')" wire:navigate>
+            <flux:sidebar.item
+                icon="tags"
+                :href="route('tags')"
+                :current="request()->routeIs('tags')"
+                wire:navigate
+            >
                 Tags
             </flux:sidebar.item>
         </flux:sidebar.nav>
@@ -91,8 +140,7 @@
                                 <div
                                     class="flex h-full w-full items-center justify-center rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
                                     @if (auth()->user()->avatar)
-                                        <img
-                                            src="{{ Storage::disk('s3')->url('avatars/' . auth()->user()->avatar) }}" />
+                                        <img src="{{ Storage::disk('s3')->url('avatars/' . auth()->user()->avatar) }}" />
                                     @else
                                         <p>{{ auth()->user()->initials() }}</p>
                                     @endif
@@ -159,8 +207,7 @@
                                 <span
                                     class="flex h-full w-full items-center justify-center rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
                                     @if (auth()->user()->avatar)
-                                        <img
-                                            src="{{ Storage::disk('s3')->url('avatars/' . auth()->user()->avatar) }}" />
+                                        <img src="{{ Storage::disk('s3')->url('avatars/' . auth()->user()->avatar) }}" />
                                     @else
                                         <p>{{ auth()->user()->initials() }}</p>
                                     @endif
