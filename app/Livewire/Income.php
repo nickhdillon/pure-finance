@@ -150,21 +150,31 @@ class Income extends Component
             ->latest('id')
             ->get();
 
-        $expected = $incomes->where('type', IncomeType::EXPECTED)->values();
-        $unplanned = $incomes->where('type', IncomeType::UNPLANNED)->values();
+        $expected = $incomes
+            ->where('type', IncomeType::EXPECTED)
+            ->values();
 
-        return [
+        $unplanned = $incomes
+            ->where('type', IncomeType::UNPLANNED)
+            ->values();
+
+        $cards = [
             [
                 'name' => 'Expected',
                 'total' => $expected->sum('amount'),
-                'incomes' => $expected
-            ],
-            [
-                'name' => 'Unplanned',
-                'total' => $unplanned->sum('amount'),
-                'incomes' => $unplanned
+                'incomes' => $expected,
             ],
         ];
+
+        if ($unplanned->isNotEmpty()) {
+            $cards[] = [
+                'name' => 'Unplanned',
+                'total' => $unplanned->sum('amount'),
+                'incomes' => $unplanned,
+            ];
+        }
+
+        return $cards;
     }
 
     #[Computed]
