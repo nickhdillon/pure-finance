@@ -8,11 +8,13 @@
 
         <livewire:transaction-table defer />
 
+        <livewire:income />
+
+        <livewire:upcoming-bills />
+
         <livewire:planned-spending />
 
         <livewire:savings-goals />
-
-        <livewire:upcoming-bills />
 
         <livewire:net-worth-history />
     </div>

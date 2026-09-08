@@ -1,7 +1,7 @@
 @use('App\Enums\TransactionType', 'TransactionType')
 
-<div x-on:account-saved.window="$wire.$refresh" class="space-y-4">
-    <div class="flex items-center justify-between">
+<div x-on:account-saved.window="$wire.$refresh">
+    <div class="flex items-center justify-between pb-4">
         <flux:heading size="xl">
             Transactions
         </flux:heading>
@@ -16,8 +16,8 @@
         @endif
     </div>
 
-    <x-card>
-        <x-slot:content>                
+    <x-card @class(['mb-4' => request()->routeIs('transactions')])>
+        <x-slot:content>
             <div class="p-3 gap-2.5 flex items-center justify-between dark:bg-zinc-900 rounded-t-[8px]">
                 <flux:input icon="magnifying-glass" placeholder="Search transactions..." wire:model.live.debounce.300ms='search' clearable />
 
