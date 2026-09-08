@@ -46,16 +46,16 @@ test('component can render', function () {
         ->assertHasNoErrors();
 });
 
-test('calendar is the default view and list view is stored in the url', function () {
+test('list is the default view and calendar view is stored in the url', function () {
     livewire(Bills::class)
-        ->assertSet('view', 'calendar')
-        ->set('view', 'list')
         ->assertSet('view', 'list')
+        ->set('view', 'calendar')
+        ->assertSet('view', 'calendar')
         ->assertHasNoErrors();
 
-    Livewire::withQueryParams(['view' => 'list'])
+    Livewire::withQueryParams(['view' => 'calendar'])
         ->test(Bills::class)
-        ->assertSet('view', 'list');
+        ->assertSet('view', 'calendar');
 });
 
 test('list view groups bills by date and shows their total', function () {

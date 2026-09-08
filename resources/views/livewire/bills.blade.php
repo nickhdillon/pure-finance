@@ -22,8 +22,8 @@
         </div>
 
         <flux:radio.group wire:model.live="view" variant="segmented" size="sm" aria-label="Bill calendar view">
-            <flux:radio value="calendar" icon="calendar-days" />
             <flux:radio value="list" icon="list-bullet" />
+            <flux:radio value="calendar" icon="calendar-days" />
         </flux:radio.group>
     </div>
 
@@ -90,7 +90,91 @@
         </flux:card>
     </section>
 
-    @if ($view === 'calendar')
+    @if ($view === 'list')
+        <x-card dynamic-height>
+            <x-slot:content>
+                <div class="p-3 gap-2.5 flex items-center justify-between dark:bg-zinc-900 border-b border-zinc-200 dark:border-white/10 rounded-t-[8px]">
+                    <flux:heading class="text-xl" x-text="monthLabel"></flux:heading>
+
+                    <flux:button.group>
+                        <flux:button x-on:click="changeMonth(-1)" class="h-7! sm:h-8! px-1.5! sm:px-2!" variant="outline" size="sm">
+                            <flux:icon.chevron-left icon-variant="outline" class="h-[14px] w-[14px] stroke-2" />
+                        </flux:button>
+
+                        <flux:button size="sm" x-on:click="goToToday" class="h-7! sm:h-8! px-2! sm:px-4!">
+                            <span class="hidden sm:block">Today</span>
+                            <flux:icon.calendar icon-variant="outline" class="sm:hidden h-4 w-4 stroke-2" />
+                        </flux:button>
+
+                        <flux:button x-on:click="changeMonth(1)" class="h-7! sm:h-8! px-1.5! sm:px-2!" variant="outline" size="sm">
+                            <flux:icon.chevron-right icon-variant="outline" class="h-[14px] w-[14px] stroke-2" />
+                        </flux:button>
+                    </flux:button.group>
+                </div>
+
+                <div class="grow min-h-0 overflow-y-auto">
+                    @foreach ($bill_groups as $date => $group)
+                        <section
+                            wire:key="bill-date-{{ $date }}"
+                            x-show="current && '{{ $date }}'.startsWith(formatDate(current).substring(0, 7))"
+                            x-bind:class="{ 'border-b border-zinc-200 dark:border-white/10': currentMonthBills.at(-1)?.date !== '{{ $date }}' }"
+                            class="pt-2 px-3 pb-3 sm:pt-3 sm:px-4 sm:pb-4"
+                        >
+                            <div class="mb-2 flex items-center gap-2">
+                                <flux:heading size="sm">
+                                    {{ Carbon::parse($date)->format('l, F j, Y') }}
+                                </flux:heading>
+
+                                <flux:badge
+                                    x-cloak
+                                    x-show="'{{ $date }}' === formatDate(today)"
+                                    size="sm"
+                                    variant="solid"
+                                    class="py-0.5! px-1.75! rounded-[5px]! bg-zinc-800 dark:bg-white! dark:text-zinc-800!"
+                                >
+                                    Today
+                                </flux:badge>
+                            </div>
+
+                            <div class="flex flex-col gap-2">
+                                @foreach ($group as $bill)
+                                    <flux:modal.trigger
+                                        wire:key="bill-list-{{ $bill->id }}"
+                                        x-on:click="setCurrentMonth(); $dispatch('load-bill', { bill_id: {{ $bill->id }} })"
+                                    >
+                                        <button
+                                            type="button"
+                                            @class([
+                                                'flex w-full items-center justify-between gap-4 rounded-md px-2 py-1 text-left text-xs font-medium',
+                                                'bg-emerald-400/25 text-emerald-700 hover:bg-emerald-400/35 dark:bg-emerald-400/40 dark:text-emerald-200 dark:hover:bg-emerald-400/50' => $bill->paid,
+                                                'bg-amber-400/25 text-amber-700 hover:bg-amber-400/35 dark:bg-amber-400/40 dark:text-amber-200 dark:hover:bg-amber-400/50' => ! $bill->paid,
+                                            ])
+                                        >
+                                            <span class="min-w-0 truncate">{{ $bill->name }}</span>
+                                            <span class="shrink-0">${{ Number::format($bill->amount, 2) }}</span>
+                                        </button>
+                                    </flux:modal.trigger>
+                                @endforeach
+                            </div>
+                        </section>
+                    @endforeach
+
+                    <p
+                        x-cloak
+                        x-show="currentMonthBills.length === 0"
+                        class="p-8 text-center text-sm text-zinc-500 dark:text-zinc-400"
+                    >
+                        No bills this month
+                    </p>
+                </div>
+
+                <div class="shrink-0 flex items-center justify-between gap-4 border-t border-zinc-200 p-3 px-4 text-sm font-medium dark:border-white/10">
+                    <span>Total</span>
+                    <span x-cloak x-text="formatAmount(currentMonthTotal)">${{ Number::format($bill_total, 2) }}</span>
+                </div>
+            </x-slot:content>
+        </x-card>
+    @else
         <x-card dynamic-height>
             <x-slot:content>
                 <div class="shrink-0">
@@ -212,93 +296,9 @@
                 </div>
             </x-slot:content>
         </x-card>
-    @else
-        <x-card dynamic-height>
-            <x-slot:content>
-                <div class="p-3 gap-2.5 flex items-center justify-between dark:bg-zinc-900 border-b border-zinc-200 dark:border-white/10 rounded-t-[8px]">
-                    <flux:heading class="text-xl" x-text="monthLabel"></flux:heading>
-
-                    <flux:button.group>
-                        <flux:button x-on:click="changeMonth(-1)" class="h-7! sm:h-8! px-1.5! sm:px-2!" variant="outline" size="sm">
-                            <flux:icon.chevron-left icon-variant="outline" class="h-[14px] w-[14px] stroke-2" />
-                        </flux:button>
-
-                        <flux:button size="sm" x-on:click="goToToday" class="h-7! sm:h-8! px-2! sm:px-4!">
-                            <span class="hidden sm:block">Today</span>
-                            <flux:icon.calendar icon-variant="outline" class="sm:hidden h-4 w-4 stroke-2" />
-                        </flux:button>
-
-                        <flux:button x-on:click="changeMonth(1)" class="h-7! sm:h-8! px-1.5! sm:px-2!" variant="outline" size="sm">
-                            <flux:icon.chevron-right icon-variant="outline" class="h-[14px] w-[14px] stroke-2" />
-                        </flux:button>
-                    </flux:button.group>
-                </div>
-
-                <div class="grow min-h-0 overflow-y-auto">
-                    @foreach ($bill_groups as $date => $group)
-                        <section
-                            wire:key="bill-date-{{ $date }}"
-                            x-show="current && '{{ $date }}'.startsWith(formatDate(current).substring(0, 7))"
-                            x-bind:class="{ 'border-b border-zinc-200 dark:border-white/10': currentMonthBills.at(-1)?.date !== '{{ $date }}' }"
-                            class="pt-2 px-3 pb-3 sm:pt-3 sm:px-4 sm:pb-4"
-                        >
-                            <div class="mb-2 flex items-center gap-2">
-                                <flux:heading size="sm">
-                                    {{ Carbon::parse($date)->format('l, F j, Y') }}
-                                </flux:heading>
-
-                                <flux:badge
-                                    x-cloak
-                                    x-show="'{{ $date }}' === formatDate(today)"
-                                    size="sm"
-                                    variant="solid"
-                                    class="py-0.5! px-1.75! rounded-[5px]! bg-zinc-800 dark:bg-white! dark:text-zinc-800!"
-                                >
-                                    Today
-                                </flux:badge>
-                            </div>
-
-                            <div class="flex flex-col gap-2">
-                                @foreach ($group as $bill)
-                                    <flux:modal.trigger
-                                        wire:key="bill-list-{{ $bill->id }}"
-                                        x-on:click="setCurrentMonth(); $dispatch('load-bill', { bill_id: {{ $bill->id }} })"
-                                    >
-                                        <button
-                                            type="button"
-                                            @class([
-                                                'flex w-full items-center justify-between gap-4 rounded-md px-2 py-1 text-left text-xs font-medium',
-                                                'bg-emerald-400/25 text-emerald-700 hover:bg-emerald-400/35 dark:bg-emerald-400/40 dark:text-emerald-200 dark:hover:bg-emerald-400/50' => $bill->paid,
-                                                'bg-amber-400/25 text-amber-700 hover:bg-amber-400/35 dark:bg-amber-400/40 dark:text-amber-200 dark:hover:bg-amber-400/50' => ! $bill->paid,
-                                            ])
-                                        >
-                                            <span class="min-w-0 truncate">{{ $bill->name }}</span>
-                                            <span class="shrink-0">${{ Number::format($bill->amount, 2) }}</span>
-                                        </button>
-                                    </flux:modal.trigger>
-                                @endforeach
-                            </div>
-                        </section>
-                    @endforeach
-
-                    <p
-                        x-cloak
-                        x-show="currentMonthBills.length === 0"
-                        class="p-8 text-center text-sm text-zinc-500 dark:text-zinc-400"
-                    >
-                        No bills this month
-                    </p>
-                </div>
-
-                <div class="shrink-0 flex items-center justify-between gap-4 border-t border-zinc-200 p-3 px-4 text-sm font-medium dark:border-white/10">
-                    <span>Total</span>
-                    <span x-cloak x-text="formatAmount(currentMonthTotal)">${{ Number::format($bill_total, 2) }}</span>
-                </div>
-            </x-slot:content>
-        </x-card>
     @endif
 
-    <livewire:bill-form />
+    <livewire:bill-form :$view />
 </div>
 
 @script

@@ -12,13 +12,13 @@ use Livewire\Component;
 
 class Bills extends Component
 {
-    #[Url(except: 'calendar')]
-    public string $view = 'calendar';
+    #[Url(except: 'list')]
+    public string $view = 'list';
 
     public function render(): View
     {
-        if (! in_array($this->view, ['calendar', 'list'], true)) {
-            $this->view = 'calendar';
+        if (! in_array($this->view, ['list', 'calendar'], true)) {
+            $this->view = 'list';
         }
 
         $bills = auth()->user()->bills()->orderBy('date')->orderBy('name')->get();
