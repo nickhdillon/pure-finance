@@ -7,7 +7,6 @@ namespace App\Livewire;
 use App\Models\Bill;
 use Carbon\CarbonImmutable;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Collection;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 
@@ -41,26 +40,23 @@ class MonthlyOverview extends Component
             ?: CarbonImmutable::now('America/Chicago')->startOfMonth();
     }
 
-    private function billsForMonth(CarbonImmutable $start, CarbonImmutable $end): Collection
-    {
-        return auth()->user()->bills()
-            ->with('transaction')
-            ->whereBetween('date', [$start->toDateString(), $end->toDateString()])
-            ->orderBy('date')
-            ->get();
-    }
-
     #[Computed]
     public function bills(): array
     {
-        $rows = $this->billsForMonth($this->start, $this->end)
+        $rows = auth()
+            ->user()
+            ->bills()
+            ->whereBetween('date', [$this->start->toDateString(), $this->end->toDateString()])
+            ->orderBy('date')
+            ->get()
             ->map(fn (Bill $bill): array => [
                 'id' => $bill->id,
                 'name' => $bill->name,
                 'date' => $bill->date->format('M j, Y'),
                 'amount' => (float) $bill->amount,
                 'paid' => $bill->paid,
-            ])->values();
+            ])
+            ->values();
 
         $total = (float) $rows->sum('amount');
         $paid_total = (float) $rows->where('paid', true)->sum('amount');
