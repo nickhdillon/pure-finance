@@ -14,5 +14,6 @@ beforeEach(function (): void {
 it('renders the monthly overview page', function (): void {
     $this->get(route('monthly-overview'))
         ->assertOk()
+        ->assertSee('Income')
         ->assertSee('Bills');
 });

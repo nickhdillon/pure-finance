@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
+use App\Enums\IncomeType;
 use App\Models\Bill;
 use Carbon\CarbonImmutable;
 use Illuminate\Contracts\View\View;
@@ -38,6 +39,54 @@ class MonthlyOverview extends Component
     {
         return CarbonImmutable::createFromFormat('!Y-m', $this->month, 'America/Chicago')
             ?: CarbonImmutable::now('America/Chicago')->startOfMonth();
+    }
+
+    #[Computed]
+    public function incomeCards(): array
+    {
+        $incomes = auth()
+            ->user()
+            ->incomes()
+            ->whereBetween('date', [$this->start->toDateString(), $this->end->toDateString()])
+            ->latest('date')
+            ->latest('id')
+            ->get();
+
+        if ($incomes->isEmpty()) {
+            return [];
+        }
+
+        $expected = $incomes
+            ->where('type', IncomeType::EXPECTED)
+            ->values();
+
+        $unplanned = $incomes
+            ->where('type', IncomeType::UNPLANNED)
+            ->values();
+
+        $cards = [
+            [
+                'name' => 'Expected',
+                'total' => $expected->sum('amount'),
+                'incomes' => $expected,
+            ],
+        ];
+
+        if ($unplanned->isNotEmpty()) {
+            $cards[] = [
+                'name' => 'Unplanned',
+                'total' => $unplanned->sum('amount'),
+                'incomes' => $unplanned,
+            ];
+        }
+
+        return $cards;
+    }
+
+    #[Computed]
+    public function incomeTotal(): float|int
+    {
+        return collect($this->incomeCards)->sum('total');
     }
 
     #[Computed]

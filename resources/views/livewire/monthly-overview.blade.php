@@ -22,6 +22,83 @@
         </flux:button.group>
     </div>
 
+    <x-card heading="Income">    
+        <x-slot:content>
+            @php
+                $incomeCards = $this->incomeCards;
+                $showGroups = count($incomeCards) > 1;
+            @endphp
+
+            <div class="divide-y divide-zinc-200 dark:divide-zinc-700">
+                @forelse ($incomeCards as $income_group)
+                    <div class="divide-y divide-zinc-200 dark:divide-zinc-700">
+                        @if ($showGroups)
+                            <p
+                                @class([
+                                    'text-emerald-600 dark:text-emerald-400' => $income_group['name'] === 'Expected',
+                                    'text-amber-500 dark:text-amber-500' => $income_group['name'] === 'Unplanned',
+                                    'text-sm px-3 py-2.5 font-semibold uppercase'
+                                ])
+                            >
+                                {{ $income_group['name'] }}
+                            </p>
+                        @endif
+
+                        <div class="divide-y divide-zinc-200 dark:divide-zinc-700">
+                            @forelse ($income_group['incomes'] as $income)
+                                <div class="flex items-center justify-between gap-3 p-3">
+                                    <div class="min-w-0">
+                                        <div class="flex items-center gap-1.5">
+                                            <p class="truncate text-sm font-medium">{{ $income->name }}</p>
+
+                                            @if ($income->received)
+                                                <flux:badge size="sm" color="emerald">Received</flux:badge>
+                                            @endif
+                                        </div>
+
+                                        <p class="mt-0.5 truncate text-xs text-zinc-500 dark:text-zinc-400">
+                                            {{ $income->date->format('M j, Y') }}
+
+                                            @if ($income->notes)
+                                                <span aria-hidden="true">·</span> {{ $income->notes }}
+                                            @endif
+                                        </p>
+                                    </div>
+
+                                    <p class="text-sm font-medium text-emerald-600 dark:text-emerald-400">
+                                        +${{ Number::format($income->amount, 2) }}
+                                    </p>
+                                </div>
+                            @empty
+                                <p class="p-5 text-center text-sm text-zinc-500 dark:text-zinc-400">
+                                    No income for this month.
+                                </p>
+                            @endforelse
+                        </div>
+
+                        @if ($showGroups)
+                            <div class="flex w-full items-center justify-between gap-2 bg-zinc-100/50 px-3 py-2.5 text-sm dark:bg-zinc-800">
+                                <p class="font-medium">Total {{ $income_group['name'] }}: </p>
+
+                                <p class="font-medium"> ${{ Number::format($income_group['total'], 2) }}</p>
+                            </div>
+                        @endif
+                    </div>
+                @empty
+                    <flux:text class="p-3 text-center">No income for this month.</flux:text>
+                @endforelse
+
+                @if (!empty($incomeCards))
+                    <div class="flex items-center font-medium justify-between bg-zinc-100/50 dark:bg-zinc-800 space-x-1 py-2.5 px-3 text-sm w-full">
+                        <p>Total Income:</p>
+
+                        <p>${{ Number::format($this->incomeTotal ?? 0, 2) }}</p>
+                    </div>
+                @endif
+            </div>
+        </x-slot:content>
+    </x-card>
+
     <x-card heading="Bills">
         <x-slot:content>
             <div class="divide-y divide-zinc-200 dark:divide-zinc-700">
