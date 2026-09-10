@@ -92,26 +92,30 @@
 
     @if ($view === 'list')
         <x-card dynamic-height>
+            <x-slot:heading>
+                <flux:heading class="text-xl">
+                    <p x-text="monthLabel"></p>
+                </flux:heading>
+            </x-slot:heading>
+
+            <x-slot:button>
+                <flux:button.group>
+                    <flux:button x-on:click="changeMonth(-1)" class="h-7! sm:h-8! px-1.5! sm:px-2!" variant="outline" size="sm">
+                        <flux:icon.chevron-left icon-variant="outline" class="h-[14px] w-[14px] stroke-2" />
+                    </flux:button>
+
+                    <flux:button size="sm" x-on:click="goToToday" class="h-7! sm:h-8! px-2! sm:px-4!">
+                        <span class="hidden sm:block">Today</span>
+                        <flux:icon.calendar icon-variant="outline" class="sm:hidden h-4 w-4 stroke-2" />
+                    </flux:button>
+
+                    <flux:button x-on:click="changeMonth(1)" class="h-7! sm:h-8! px-1.5! sm:px-2!" variant="outline" size="sm">
+                        <flux:icon.chevron-right icon-variant="outline" class="h-[14px] w-[14px] stroke-2" />
+                    </flux:button>
+                </flux:button.group>
+            </x-slot:button>
+
             <x-slot:content>
-                <div class="p-3 gap-2.5 flex items-center justify-between dark:bg-zinc-900 border-b border-zinc-200 dark:border-white/10 rounded-t-[8px]">
-                    <flux:heading class="text-xl" x-text="monthLabel"></flux:heading>
-
-                    <flux:button.group>
-                        <flux:button x-on:click="changeMonth(-1)" class="h-7! sm:h-8! px-1.5! sm:px-2!" variant="outline" size="sm">
-                            <flux:icon.chevron-left icon-variant="outline" class="h-[14px] w-[14px] stroke-2" />
-                        </flux:button>
-
-                        <flux:button size="sm" x-on:click="goToToday" class="h-7! sm:h-8! px-2! sm:px-4!">
-                            <span class="hidden sm:block">Today</span>
-                            <flux:icon.calendar icon-variant="outline" class="sm:hidden h-4 w-4 stroke-2" />
-                        </flux:button>
-
-                        <flux:button x-on:click="changeMonth(1)" class="h-7! sm:h-8! px-1.5! sm:px-2!" variant="outline" size="sm">
-                            <flux:icon.chevron-right icon-variant="outline" class="h-[14px] w-[14px] stroke-2" />
-                        </flux:button>
-                    </flux:button.group>
-                </div>
-
                 <div class="grow min-h-0 overflow-y-auto">
                     @foreach ($bill_groups as $date => $group)
                         <section
@@ -176,29 +180,32 @@
         </x-card>
     @else
         <x-card dynamic-height>
+            <x-slot:heading>
+                <flux:heading class="text-xl">
+                    <p x-text="monthLabel"></p>
+                </flux:heading>
+            </x-slot:heading>
+
+            <x-slot:button>
+                <flux:button.group>
+                    <flux:button x-on:click="changeMonth(-1)" class="h-7! sm:h-8! px-1.5! sm:px-2!" variant="outline" size="sm">
+                        <flux:icon.chevron-left icon-variant="outline" class="h-[14px] w-[14px] stroke-2" />
+                    </flux:button>
+
+                    <flux:button size="sm" x-on:click="goToToday" class="h-7! sm:h-8! px-2! sm:px-4!">
+                        <span class="hidden sm:block">Today</span>
+                        <flux:icon.calendar icon-variant="outline" class="sm:hidden h-4 w-4 stroke-2" />
+                    </flux:button>
+
+                    <flux:button x-on:click="changeMonth(1)" class="h-7! sm:h-8! px-1.5! sm:px-2!" variant="outline" size="sm">
+                        <flux:icon.chevron-right icon-variant="outline" class="h-[14px] w-[14px] stroke-2" />
+                    </flux:button>
+                </flux:button.group>
+            </x-slot:button>
+
             <x-slot:content>
                 <div class="shrink-0">
-                    <div class="p-3 gap-2.5 flex items-center justify-between dark:bg-zinc-900 rounded-t-[8px]">
-                        <flux:heading class="text-xl" x-text="monthLabel"></flux:heading>
-
-                        <flux:button.group>
-                            <flux:button x-on:click="changeMonth(-1)" class="h-7! sm:h-8! px-1.5! sm:px-2!" variant="outline" size="sm">
-                                <flux:icon.chevron-left icon-variant="outline" class="h-[14px] w-[14px] stroke-2" />
-                            </flux:button>
-
-                            <flux:button size="sm" x-on:click="goToToday" class="h-7! sm:h-8! px-2! sm:px-4!">
-                                <span class="hidden sm:block">Today</span>
-
-                                <flux:icon.calendar icon-variant="outline" class="sm:hidden h-4 w-4 stroke-2" />
-                            </flux:button>
-
-                            <flux:button x-on:click="changeMonth(1)" class="h-7! sm:h-8! px-1.5! sm:px-2!" variant="outline" size="sm">
-                                <flux:icon.chevron-right icon-variant="outline" class="h-[14px] w-[14px] stroke-2" />
-                            </flux:button>
-                        </flux:button.group>
-                    </div>
-
-                    <div class="grid grid-cols-7 border-y border-zinc-200 dark:border-white/20 text-center font-medium bg-zinc-100 sm:text-sm dark:bg-zinc-800 text-xs py-1.5 sm:py-2">
+                    <div class="grid grid-cols-7 border-b border-zinc-200 dark:border-white/20 text-center font-medium bg-zinc-100 sm:text-sm dark:bg-zinc-800 text-xs py-1.5 sm:py-2">
                         <template x-for="(day, index) in dayNames" :key="index">
                             <div>
                                 <div class="text-zinc-800 dark:text-zinc-100 text-xs sm:text-sm font-medium text-center sm:hidden" x-text="day.substring(0,1)"></div>
