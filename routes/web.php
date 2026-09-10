@@ -8,6 +8,7 @@ use App\Livewire\Accounts;
 use App\Livewire\Bills;
 use App\Livewire\CategoryTable;
 use App\Livewire\Income;
+use App\Livewire\MonthlyOverview;
 use App\Livewire\NetWorthHistory;
 use App\Livewire\PlannedExpenseView;
 use App\Livewire\PlannedSpending;
@@ -44,6 +45,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('planned-spending', PlannedSpending::class)->name('planned-spending');
 
     Route::get('income', Income::class)->name('income');
+
+    Route::get('monthly-overview', MonthlyOverview::class)->name('monthly-overview');
 
     Route::get('planned-expense/{expense:slug}', PlannedExpenseView::class)
         ->name('planned-expense-view');

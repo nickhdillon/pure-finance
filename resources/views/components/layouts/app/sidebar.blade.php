@@ -65,6 +65,15 @@
             </flux:sidebar.item>
 
             <flux:sidebar.item
+                icon="scroll-text"
+                :href="route('monthly-overview')"
+                :current="request()->routeIs('monthly-overview')"
+                wire:navigate
+            >
+                Monthly Overview
+            </flux:sidebar.item>
+
+            <flux:sidebar.item
                 icon="currency-dollar"
                 :href="route('planned-spending')"
                 :current="request()->routeIs('planned-spending')"

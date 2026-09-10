@@ -1,0 +1,109 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Livewire;
+
+use App\Models\Bill;
+use Carbon\CarbonImmutable;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Collection;
+use Livewire\Attributes\Computed;
+use Livewire\Component;
+
+class MonthlyOverview extends Component
+{
+    public string $month = '';
+
+    public function mount(): void
+    {
+        $this->month = now('America/Chicago')->format('Y-m');
+    }
+
+    public function previousMonth(): void
+    {
+        $this->month = $this->selectedMonth()->subMonth()->format('Y-m');
+    }
+
+    public function nextMonth(): void
+    {
+        $this->month = $this->selectedMonth()->addMonth()->format('Y-m');
+    }
+
+    public function currentMonth(): void
+    {
+        $this->month = now('America/Chicago')->format('Y-m');
+    }
+
+    private function selectedMonth(): CarbonImmutable
+    {
+        return CarbonImmutable::createFromFormat('!Y-m', $this->month, 'America/Chicago')
+            ?: CarbonImmutable::now('America/Chicago')->startOfMonth();
+    }
+
+    private function billsForMonth(CarbonImmutable $start, CarbonImmutable $end): Collection
+    {
+        return auth()->user()->bills()
+            ->with('transaction')
+            ->whereBetween('date', [$start->toDateString(), $end->toDateString()])
+            ->orderBy('date')
+            ->get();
+    }
+
+    #[Computed]
+    public function bills(): array
+    {
+        $rows = $this->billsForMonth($this->start, $this->end)
+            ->map(fn (Bill $bill): array => [
+                'id' => $bill->id,
+                'name' => $bill->name,
+                'date' => $bill->date->format('M j, Y'),
+                'amount' => (float) $bill->amount,
+                'paid' => $bill->paid,
+            ])->values();
+
+        $total = (float) $rows->sum('amount');
+        $paid_total = (float) $rows->where('paid', true)->sum('amount');
+        $unpaid_total = $total - $paid_total;
+
+        return [
+            'rows' => $rows,
+            'total' => $total,
+            'paid_total' => $paid_total,
+            'unpaid_total' => $unpaid_total,
+        ];
+    }
+
+    #[Computed]
+    public function start(): CarbonImmutable
+    {
+        return $this->selectedMonth()->startOfMonth();
+    }
+ 
+    #[Computed]
+    public function end(): CarbonImmutable
+    {
+        return $this->start()->endOfMonth();
+    }
+ 
+    #[Computed]
+    public function currentDate(): CarbonImmutable
+    {
+        $today = CarbonImmutable::now('America/Chicago');
+ 
+        if ($today->lessThan($this->start())) {
+            return $this->start()->subDay();
+        }
+ 
+        if ($today->greaterThan($this->end())) {
+            return $this->end();
+        }
+ 
+        return $today;
+    }
+
+    public function render(): View
+    {
+        return view('livewire.monthly-overview');
+    }
+}
