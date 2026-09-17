@@ -149,6 +149,8 @@ class Income extends Component
             ->latest('id')
             ->get();
 
+        if ($incomes->isEmpty()) return [];
+
         $expected = $incomes
             ->where('type', IncomeType::EXPECTED)
             ->values();

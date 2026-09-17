@@ -91,9 +91,9 @@
                                     </div>
                                 </div>
                             @empty
-                                <p class="p-5 text-center text-xs text-zinc-500 dark:text-zinc-400">
-                                    No {{ Str::lower($income_group['name']) }} yet.
-                                </p>
+                                <div class="p-2.5 text-sm italic font-medium text-center text-zinc-800 whitespace-nowrap dark:text-zinc-200">
+                                    No {{ Str::lower($income_group['name']) }} income yet...
+                                </div>
                             @endforelse
                         </div>
 
@@ -106,17 +106,18 @@
                         @endif
                     </div>
                 @empty
-                    <div
-                        class="p-2.5 text-sm italic font-medium text-center text-zinc-800 whitespace-nowrap dark:text-zinc-200">
+                    <div class="p-2.5 text-sm italic font-medium text-center text-zinc-800 whitespace-nowrap dark:text-zinc-200">
                         No income found...
                     </div>
                 @endforelse
 
-                <div class="flex items-center font-medium justify-between space-x-1 py-2.5 px-3 text-sm w-full">
-                    <p>Total Income:</p>
-
-                    <p>${{ Number::format($this->incomeTotal ?? 0, 2) }}</p>
-                </div>
+                @if (filled($incomeCards))
+                    <div class="flex items-center font-medium justify-between space-x-1 py-2.5 px-3 text-sm w-full">
+                        <p>Total Income:</p>
+    
+                        <p>${{ Number::format($this->incomeTotal ?? 0, 2) }}</p>
+                    </div>
+                @endif
             </div>
         </x-slot:content>
     </x-card>
