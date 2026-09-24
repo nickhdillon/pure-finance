@@ -94,8 +94,8 @@ class Bill extends Model
     {
         return Attribute::make(
             get: fn () => match (true) {
-                ! $this->paid => 'unpaid',
-                (bool) $this->transaction?->status => 'cleared',
+                ! $this->transaction => 'unpaid',
+                (bool) $this->transaction->status => 'cleared',
                 default => 'pending',
             }
         );
