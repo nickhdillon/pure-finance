@@ -21,13 +21,20 @@ class Bills extends Component
             $this->view = 'list';
         }
 
-        $bills = auth()->user()->bills()->orderBy('date')->orderBy('name')->get();
+        $bills = auth()
+            ->user()
+            ->bills()
+            ->with('transaction')
+            ->orderBy('date')
+            ->orderBy('name')
+            ->get();
 
         return view('livewire.bills', [
             'bills' => $bills->map(function (Bill $bill): array {
                 return [
                     ...$bill->toArray(),
                     'date' => Carbon::parse($bill->date)->toDateString(),
+                    'state' => $bill->color_state,
                 ];
             }),
             'bill_groups' => $bills->groupBy(fn (Bill $bill): string => $bill->date->toDateString()),

@@ -17,8 +17,9 @@
         {{-- <flux:input icon="magnifying-glass" placeholder="Search bills..." class="max-w-[250px]" /> --}}
 
         <div class="flex items-center gap-1.5">
-            <flux:badge variant="pill" color="emerald" class="h-6!">Paid</flux:badge>
-            <flux:badge variant="pill" color="amber" class="h-6!">Unpaid</flux:badge>
+            <flux:badge variant="pill" color="zinc" class="h-6!">Unpaid</flux:badge>
+            <flux:badge variant="pill" color="emerald" class="h-6!">Cleared</flux:badge>
+            <flux:badge variant="pill" color="amber" class="h-6!">Pending</flux:badge>
         </div>
 
         <flux:radio.group wire:model.live="view" variant="segmented" size="sm" aria-label="Bill calendar view">
@@ -29,23 +30,6 @@
 
     <section aria-label="Monthly bill overview" class="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
         <flux:card class="p-3 space-y-0.25">
-            <p class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Bills</p>
-
-            <p
-                class="text-lg font-semibold text-zinc-900 dark:text-white"
-                x-text="currentMonthBillCount"
-            >
-            </p>
-
-            <p
-                class="text-xs text-zinc-500 dark:text-zinc-400"
-                x-text="currentMonthBillCount === 1 ? 'Scheduled bill' : 'Scheduled bills'"
-            >
-                Scheduled bills
-            </p>
-        </flux:card>
-
-        <flux:card class="p-3 space-y-0.25">
             <p class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Monthly total</p>
 
             <p
@@ -54,36 +38,57 @@
             >
             </p>
 
-            <p class="text-xs text-zinc-500 dark:text-zinc-400">Scheduled</p>
+            <p
+                class="text-xs text-zinc-500 dark:text-zinc-400"
+                x-text="billCountLabel(currentMonthBillCount)"
+            >
+                Scheduled bills
+            </p>
         </flux:card>
 
         <flux:card class="border-emerald-200! bg-emerald-50/50! p-3 dark:border-emerald-400/20! dark:bg-emerald-400/10! space-y-0.25">
-            <p class="text-xs font-medium text-emerald-700 dark:text-emerald-300">Paid</p>
+            <p class="text-xs font-medium text-emerald-700 dark:text-emerald-300">Cleared</p>
 
             <p
                 class="text-lg font-semibold text-emerald-700 dark:text-emerald-200"
-                x-text="formatAmount(currentMonthPaidTotal)"
+                x-text="formatAmount(currentMonthClearedTotal)"
             >
             </p>
 
             <p
                 class="text-xs text-emerald-700/75 dark:text-emerald-300/75"
-                x-text="billCountLabel(currentMonthPaidCount)"
+                x-text="billCountLabel(currentMonthClearedCount)"
             >
             </p>
         </flux:card>
 
         <flux:card class="border-amber-200! bg-amber-50/50! p-3 dark:border-amber-400/20! dark:bg-amber-400/10! space-y-0.25">
-            <p class="text-xs font-medium text-amber-700 dark:text-amber-300">Unpaid</p>
+            <p class="text-xs font-medium text-amber-700 dark:text-amber-300">Pending</p>
 
             <p
                 class="text-lg font-semibold text-amber-700 dark:text-amber-200"
-                x-text="formatAmount(currentMonthUnpaidTotal)"
+                x-text="formatAmount(currentMonthPendingTotal)"
             >
             </p>
 
             <p
                 class="text-xs text-amber-700/75 dark:text-amber-300/75"
+                x-text="billCountLabel(currentMonthPendingCount)"
+            >
+            </p>
+        </flux:card>
+
+        <flux:card class="p-3 space-y-0.25">
+            <p class="text-xs font-medium text-zinc-500 dark:text-zinc-400">Unpaid</p>
+
+            <p
+                class="text-lg font-semibold text-zinc-900 dark:text-white"
+                x-text="formatAmount(currentMonthUnpaidTotal)"
+            >
+            </p>
+
+            <p
+                class="text-xs text-zinc-500 dark:text-zinc-400"
                 x-text="billCountLabel(currentMonthUnpaidCount)"
             >
             </p>
@@ -150,8 +155,9 @@
                                             type="button"
                                             @class([
                                                 'flex w-full items-center justify-between gap-4 rounded-md px-2 py-1 text-left text-xs font-medium',
-                                                'bg-emerald-400/25 text-emerald-700 hover:bg-emerald-400/35 dark:bg-emerald-400/40 dark:text-emerald-200 dark:hover:bg-emerald-400/50' => $bill->paid,
-                                                'bg-amber-400/25 text-amber-700 hover:bg-amber-400/35 dark:bg-amber-400/40 dark:text-amber-200 dark:hover:bg-amber-400/50' => ! $bill->paid,
+                                                'bg-emerald-400/25 text-emerald-700 hover:bg-emerald-400/35 dark:bg-emerald-400/40 dark:text-emerald-200 dark:hover:bg-emerald-400/50' => $bill->color_state === 'cleared',
+                                                'bg-amber-400/25 text-amber-700 hover:bg-amber-400/35 dark:bg-amber-400/40 dark:text-amber-200 dark:hover:bg-amber-400/50' => $bill->color_state === 'pending',
+                                                'bg-zinc-400/25 text-zinc-700 hover:bg-zinc-400/35 dark:bg-zinc-400/40 dark:text-zinc-200 dark:hover:bg-zinc-400/50' => $bill->color_state === 'unpaid',
                                             ])
                                         >
                                             <span class="min-w-0 truncate">{{ $bill->name }}</span>
@@ -244,8 +250,9 @@
                                             >
                                                 <button type="button" class="text-xs text-left px-1 py-0.5 rounded cursor-pointer"
                                                 :class="{
-                                                    'bg-amber-400/25 dark:bg-amber-400/40 text-amber-700 dark:text-amber-200': !bill.paid,
-                                                    'bg-emerald-400/25 dark:bg-emerald-400/40 text-emerald-700 dark:text-emerald-200': bill.paid
+                                                    'bg-amber-400/25 dark:bg-amber-400/40 text-amber-700 dark:text-amber-200': bill.state === 'pending',
+                                                    'bg-emerald-400/25 dark:bg-emerald-400/40 text-emerald-700 dark:text-emerald-200': bill.state === 'cleared',
+                                                    'bg-zinc-400/25 dark:bg-zinc-400/40 text-zinc-700 dark:text-zinc-200': bill.state === 'unpaid'
                                                 }">
                                                     <p x-text="bill.name" class="truncate font-medium"></p>
                                                 </button>
@@ -255,8 +262,12 @@
 
                                     <div class="flex items-center justify-center mt-1 mb-0.5 sm:hidden">
                                         <span x-cloak x-show="day.bills.length"
-                                            class="min-w-1.5 min-h-1.5 aspect-square rounded-full bg-zinc-800 dark:bg-white"
-                                            :class="{ 'bg-emerald-500!': day.bills.every(bill => bill.paid) }"
+                                            class="min-w-1.5 min-h-1.5 aspect-square rounded-full"
+                                            :class="{
+                                                'bg-emerald-500': day.bills.every(bill => bill.state === 'cleared'),
+                                                'bg-amber-500': day.bills.some(bill => bill.state === 'pending') && !day.bills.some(bill => bill.state === 'unpaid'),
+                                                'bg-zinc-800 dark:bg-white': day.bills.some(bill => bill.state === 'unpaid')
+                                            }"
                                         ></span>
                                     </div>
                                 </div>
@@ -282,8 +293,9 @@
                                 >
                                     <button type="button" class="text-xs text-left flex items-center justify-between p-1.5 rounded-md cursor-pointer"
                                     :class="{
-                                        'bg-amber-400/25 dark:bg-amber-400/40 text-amber-700 dark:text-amber-200': !bill.paid,
-                                        'bg-emerald-400/25 dark:bg-emerald-400/40 text-emerald-700 dark:text-emerald-200': bill.paid
+                                        'bg-amber-400/25 dark:bg-amber-400/40 text-amber-700 dark:text-amber-200': bill.state === 'pending',
+                                        'bg-emerald-400/25 dark:bg-emerald-400/40 text-emerald-700 dark:text-emerald-200': bill.state === 'cleared',
+                                        'bg-zinc-400/25 dark:bg-zinc-400/40 text-zinc-700 dark:text-zinc-200': bill.state === 'unpaid'
                                     }">
                                         <p x-text="bill.name" class="truncate font-medium"></p>
                                         <p x-text="'$' + bill.amount" class="truncate font-medium"></p>
@@ -468,24 +480,40 @@
                     return this.currentMonthBills.length;
                 },
 
-                get currentMonthPaidBills() {
-                    return this.currentMonthBills.filter(bill => bill.paid);
+                get currentMonthClearedBills() {
+                    return this.currentMonthBills.filter(bill => bill.state === 'cleared');
                 },
 
-                get currentMonthPaidCount() {
-                    return this.currentMonthPaidBills.length;
+                get currentMonthClearedCount() {
+                    return this.currentMonthClearedBills.length;
                 },
 
-                get currentMonthPaidTotal() {
-                    return this.currentMonthPaidBills.reduce((total, bill) => total + Number(bill.amount), 0);
+                get currentMonthClearedTotal() {
+                    return this.currentMonthClearedBills.reduce((total, bill) => total + Number(bill.amount), 0);
+                },
+
+                get currentMonthPendingBills() {
+                    return this.currentMonthBills.filter(bill => bill.state === 'pending');
+                },
+
+                get currentMonthPendingCount() {
+                    return this.currentMonthPendingBills.length;
+                },
+
+                get currentMonthPendingTotal() {
+                    return this.currentMonthPendingBills.reduce((total, bill) => total + Number(bill.amount), 0);
+                },
+
+                get currentMonthUnpaidBills() {
+                    return this.currentMonthBills.filter(bill => bill.state === 'unpaid');
                 },
 
                 get currentMonthUnpaidCount() {
-                    return this.currentMonthBillCount - this.currentMonthPaidCount;
+                    return this.currentMonthUnpaidBills.length;
                 },
 
                 get currentMonthUnpaidTotal() {
-                    return this.currentMonthTotal - this.currentMonthPaidTotal;
+                    return this.currentMonthUnpaidBills.reduce((total, bill) => total + Number(bill.amount), 0);
                 },
 
                 billCountLabel(count) {
